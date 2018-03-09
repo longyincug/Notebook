@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			body,div,ul,li,dl,dd,dt,img,a,input,span{
+				margin: 0;
+				padding: 0;
+			}
+			
+			a{
+				text-decoration: none;
+				
+			}
+			
+			li{
+				list-style: none;
+			}
+			
+			input{
+				border: 0 none;
+				outline-style: none;
+			}
+			/*给fl、fr统一设置浮动*/
+			.fl{
+				float: left;
+			}
+			
+			.fr{
+				float: right;
+			}
+			
+			.header{
+				width: 980px;
+				height: 63px;
+				margin: 24px auto 0;
+			}
+			
+			input[type="text"]{
+				padding-left: 4px;
+				height: 28px;
+				border: 1px solid #ECECEC;
+				vertical-align: top;
+			}
+			
+			input[type="button"]{
+				height: 30px;
+				width: 33px;
+				background: url(images/search2.jpg);
+				vertical-align: top;
+				margin-left: -5px;
+			}
+			
+			.nav{
+				height: 41px;
+				border-top: 1px solid #E1E1E1;
+				background: url(images/nav_bg.png) repeat-x;
+			}
+			
+			.nav ul{
+				width: 980px;
+				margin: 0 auto;
+			}
+			
+			.nav ul li{
+				float: left;
+				/*padding-right: 45px;
+				padding-left: 45px;*/
+				border-right: 1px solid #E1E1E1;
+			}
+			
+			.nav li a{
+				color: #000;
+				padding-right: 45px;
+				padding-left: 45px;
+				font: bold 12px/40px simsun;
+				display: inline-block;
+			}
+			
+			.nav li a:hover{
+				color: #9CB609;
+			}	
+			
+			.banner{
+				width: 980px;
+				margin: 0 auto;
+			}
+			
+			.inform{
+				height: 29px;
+				background-color: #FBFBFB;
+				border-top: 1px solid #EFEFEF;
+				border-bottom: 1px solid #EFEFEF;
+				font: 12px/29px simsun;
+			}
+						
+			.mid{
+				width: 980px;
+				margin: 0 auto;
+			}
+			
+			.mid .images img{
+				vertical-align: middle;
+			}
+			
+			.clearfix:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			.clearfix{
+				zoom: 1;
+			}
+			
+			.newslist{
+				width: 980px;
+				margin: 15px auto 0;
+				font: 12px simsun;
+			}
+			
+			.newslist span{
+				color: #7AB800;
+			}
+			
+			.ico{
+				vertical-align: middle;
+				padding-left: 6px;
+				padding-right: 6px;
+			}
+			
+			.pro, .news, .tec{
+				border: 1px solid #E4E4E4;
+				padding-top: 14px;
+				
+			}
+			
+			.pro{
+				width: 336px;
+				height: 210px;
+			}
+			
+			.rela{
+				position: relative;
+			}
+			
+			.pro-pic{
+				display: block;
+				margin: 25px auto 0;
+			}
+			
+			.l{
+				position: absolute;
+				left: 23px;
+				bottom: 85px;
+			}
+			
+			.r{
+				position: absolute;
+				right: 23px;
+				bottom: 85px;
+			}
+			
+			.news{
+				width: 346px;
+				height: 210px;
+				margin-left: 12px;
+				margin-right: 12px;
+			}
+			
+			.news ul{
+				margin-top: 17px;
+			}
+			
+			.news li{
+				margin-left: 23px;
+				margin-right: 18px;
+				padding-bottom: 8px;
+				border-bottom: 1px dashed #DCDCDC;
+				margin-bottom: 7px;
+			}
+			
+			.news a{
+				color: #000000;
+			}
+			
+			.news .hot{
+				color: red;
+			}
+			
+			.tec{
+				width: 268px;
+				height: 210px;
+			}
+			
+			.tec ul{
+				margin-top: 10px;
+			}
+			
+			.tec li{
+				margin-left: 28px;
+				margin-bottom: 9px;
+				border-left: 3px solid #8CC24C;
+				padding-left: 5px;
+			}
+			
+			.tec a{
+				color: #000000;
+			}
+			
+			.tec p{
+				margin-left: 28px;
+				margin-top: 32px;
+			}
+			
+			.footer{
+				margin-top: 10px;
+				background-color: #2D2D2D;
+				overflow: hidden;
+			}
+			
+			.footer .copy{
+				margin-top: 50px;
+				border-top: 1px dashed #414141;
+				padding-top: 30px;
+				margin-bottom: 100px;
+			}
+			
+			.footer p{
+				text-align: center;
+				font: 12px simsun;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<!--header begin-->
+		<div class="header">
+			<div class="search fr">
+				<input type="text" placeholder="请输入..." />
+				<input type="button" />
+			</div>
+			<img src="images/logo.jpg" alt="" class="logo" />
+		</div>
+		<!--header end-->
+		
+		<!--nav begin-->
+		<div class="nav">
+			<ul>
+				<li><a href="#">首页</a></li>
+				<li><a href="#">智能手机</a></li>
+				<li><a href="#">平板电脑</a></li>
+				<li><a href="#">配件</a></li>
+				<li><a href="#">服务支持</a></li>
+				<li><a href="#">关于尚合</a></li>
+			</ul>
+		</div>
+		<!--nav end-->
+		
+		<!--banner begin-->
+		<div class="banner">
+			<img src="images/banner.jpg"/>
+		</div>
+		<!--banner end-->
+		
+		<!--inform begin-->
+		<div class="inform">
+			<div class="mid">
+				<div class="images fr">
+					<img src="images/zone.png" alt="" />
+					<img src="images/weibo.png" alt="" />
+					<img src="images/xinlang.png" alt="" />
+					<img src="images/renren.png" alt="" />
+				</div>
+				<span>最新公告：尚合Aone智能手机入网证已获取工信部门审批下发。尚合官网</span>
+			</div>
+		</div>
+		<!--inform end-->
+		
+		<!--newslist begin-->
+		<div class="newslist clearfix">
+			<div class="pro fl rela">
+				<img class="ico" src="images/o.jpg"/><span>新品发布</span>
+				<div>
+					<img class="pro-pic" src="images/home_hot_01.png"/>
+					<div class="l"><img src="images/left.png" alt="" /></div>
+					<div class="r"><img src="images/right.png" alt="" /></div>
+				</div>
+			</div>
+			
+			<div class="news fl">
+				<img class="ico" src="images/o.jpg"/><span>新闻中心</span>
+				<ul>
+					<li><a href="#" class="hot">致歉公告</a></li>
+					<li><a href="#">首批尚合Aonet已全部售罄!</a></li>
+					<li><a href="#">【媒体报导】国产高性价比 尚合Aonet四核手机评测</a></li>
+					<li><a href="#">我司产品已经通过了国家强制性产品3C认证</a></li>
+					<li><a href="#">尚合Aone智能手机入网证已经获工信部门审批下发.</a></li>
+					<li><a href="#">我司通过ISO9001:2008国际质量管理体系认证</a></li>
+				</ul>
+			</div>
+			
+			<div class="tec fl">
+				<img class="ico" src="images/o.jpg"/><span>技术与支持</span>
+				<ul>
+					<li><a href="#">售后服务</a></li>
+					<li><a href="#">投诉与建议</a></li>
+					<li><a href="#">联保网点</a></li>
+					<li><a href="#">常见问题FAQ</a></li>
+				</ul>
+				<p>深圳市汇聚众合科技发展有限公司<br />
+					服务热线：400-633-7922
+				</p>
+			</div>
+		</div>
+		<!--newslist end-->
+		
+		<!--footer begin-->
+		<div class="footer">
+			<div class="copy">
+				<p class="right-info">
+					深圳市会居中和优先公司深圳市会居中和优先公司深圳市会居中和优先公司深圳市<br />
+					会居中和优先公司深圳市会居中和优先公司深圳市会居中和优先公司
+				</p>
+			</div>
+		</div>
+		<!--footer end-->
+	</body>
+</html>
