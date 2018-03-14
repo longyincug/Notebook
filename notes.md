@@ -790,7 +790,7 @@ console.log(ret6);
 	- 将一个字符串全部转换为大写并返回
 
 - toLowerCase()
-	-将一个字符串转换为小写并返回
+	- 将一个字符串转换为小写并返回
 
 - `str = str.split("").reverse().join(""); //可以这样翻转字符串`
 
