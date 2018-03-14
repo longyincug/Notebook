@@ -1,5 +1,7 @@
 # exercises 
-**html/css/javascript** **:** **查漏补缺**
+**html/css/javascript** **:** **查漏补缺 日常笔记**
 
 
-[面试题每日一练](./dailycodes.md)
+[每日一练](./dailycodes.md)
+
+[知识集锦](./notes.md)
