@@ -853,3 +853,149 @@ var result = reg.test(str); //true
 <a name="8" />
 
 ### DOM
+
+- **document**
+	- 浏览器已经为我们提供了 **文档节点** 对象, 这个对象是window属性
+	- 可以在页面中直接使用，文档节点代表的是整个网页
+
+	- 浏览器在加载一个页面时，是按照自上向下的顺序加载的，读取到一行就运行一行
+	- 如果将script标签写到页面的上边，在代码执行时，页面还没有加载，那么DOM对象也没有加载, 会导致无法获取到DOM对象
+
+	- onload事件会在整个页面加载完成之后才触发
+	- 为window绑定一个onload事件
+	- 该事件对应的响应函数将会在页面加载完成之后执行，这样可以确保我们的代码执行时所有的DOM对象已经加载完毕了
+	```
+	window.onload = function(){
+		//获取id为btn的按钮
+		var btn = document.getElementById("btn");
+		//为按钮绑定一个单击响应函数
+		btn.onclick = function(){
+			alert("hello");
+		};
+	};
+	```
+
+- **dom查询**
+	- .innerHTML
+		- 用于获取元素内部的HTML代码
+		- 对于自结束标签，这个属性没有意义
+	
+	- .innerText
+		- 获取节点内部的所有文本
+	
+	- getElementById()
+		- 根据标签的id属性来找到唯一的一个节点对象
+	
+	- getElementsByTagName()
+		- 可以根据标签名来获取一组元素节点对象
+		- 这个方法会给我们返回一个类数组对象，所有查询到的元素都会封装到对象中
+		- 即使查询到的元素只有一个，也会封装到数组中返回
+
+	- getElementsByName()
+		- 根据属性名来查找节点
+		- 也会返回一组元素节点
+	
+	- .childNodes
+		- 返回元素的所有子节点(包括空白文本节点)
+	
+	- .children
+		- 返回元素的所有子元素节点
+	
+	- .firstChild
+		- 返回第一个子节点
+		- 可能返回空白文本节点
+		- lastChild 同理
+	
+	- .firstElementChild
+		- 获取当前元素的第一个子元素
+		- 不兼容IE8及以下浏览器
+		
+	- .parentNode
+		- 返回父节点
+	
+	- .previousSibling
+		- 返回前一个兄弟节点
+		- 可能是空白文本节点
+		- nextSibling 同理
+		- IE8及以下不支持
+
+- **dom查询的其他方法**
+
+	- 在document中有一个属性body，它保存的是**body的引用**
+		- `var body = document.body;`
+	
+	- document.documentElement保存的是**html根标签**
+	
+	- document.all代表页面中所有的元素
+	
+		```
+		length1 = document.all.length;
+		length2 = document.getElementsByTagName("*").length;
+		console.log(length1 === length2); //true
+		```
+	
+	- getElementsByClassName()
+		- 可以根据class属性值获取一组元素节点对象，
+		- 但是该方法不支持IE8及以下的浏览器
+	
+	- document.querySelector()
+		- 需要一个选择器的字符串作为参数，可以根据一个**CSS选择器**来查询一个元素节点对象
+		- 虽然IE8中没有getElementsByClassName(), 但是可以使用querySelector()代替
+		- 使用该方法总会返回唯一的一个元素，如果满足条件的元素有多个，那么它只会返回第一个
+
+	- document.querySelectorAll()
+		- 该方法和querySelector()用法类似，不同的是它会将符合条件的元素封装到一个数组中返回
+		- 即使符合条件的元素只有一个，它也会返回一个NodeList
+
+- **dom增删改**
+	- document.createElement()
+		- 可以用于创建一个元素节点对象
+		- 它需要一个**标签名**作为参数，将会根据该标签名创建元素节点对象，并将创建好的对象作为返回值返回
+	
+	- document.createTextNode()
+		- 可以用来创建一个文本节点对象
+		- 需要一个**文本内容**作为参数，将会根据该内容创建文本节点，并将新的节点返回
+
+	- appendChild()
+		- 向一个父节点中添加一个新的子节点
+		- 用法：父节点.appendChild(子节点);
+	
+	- insertBefore()
+		- 可以在指定的子节点前插入新的子节点
+		- 语法：父节点.insertBefore(新节点,旧节点);
+	
+	- replaceChild()
+		- 可以使用指定的子节点替换已有的子节点
+		- 语法：父节点.replaceChild(新节点,旧节点);
+		- 注意这里是新在前旧在后, 而字符串方法replace()中是旧在前新在后
+
+	- removeChild()
+		- 可以删除一个子节点
+		- 语法：父节点.removeChild(子节点);
+		- 子节点自己删除自己：子节点.parentNode.removeChild(子节点);
+
+	- 使用innerHTML也可以完成DOM的增删改的相关操作
+		- city.innerHTML += "<li>北京</li>";
+		- 相当于把原来的标签都删除然后重置，可能会影响绑定的事件
+		- 一般我们会两种方式结合使用
+		
+		```
+		var li = document.createElement("li");
+		li.innerHTML = "北京";
+		city.appendChild(li);
+		```
+
+- **如果需要读取元素节点属性**
+	- 直接使用 元素.属性名
+	- 例：元素.id 元素.name 元素.value
+	- 注意：class属性不能采用这种方式，读取class属性时需要使用 元素.className
+
+- **获取元素内部的文本**
+	- 可以innerHTML
+	- 可以innerText
+	- obj.firstChild.nodeValue
+		- 对于文本节点来说，nodeValue就是文本内容
+
+![节点的属性](images/node.png)
+
+
