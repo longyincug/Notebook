@@ -12,7 +12,7 @@
 	- [变量及对象存储](#41)
 	- [隐式全局变量](#42)
 	- [预解析](#43)
-	- [函数的定义](#44)
+	- [函数定义](#44)
 	- [声明提前](#45)
 	- [匿名函数](#46)
 	- [函数的调用](#47)
@@ -26,12 +26,17 @@
 6. [字符串](#6)
 7. [正则表达式](#7)
 8. [DOM](#8)
+	- [DOM查询](#81)
+	- [DOM增删改](#82)
+	- [DOM操作CSS](#83)
+	- [事件对象](#84)
 
 
 ***
+
 <a name="1" />
 
-### JS数据类型
+## JS数据类型
 
 - **数据类型指的就是字面量的类型，在JS中一共有六种数据类型**
 	- String 字符串
@@ -65,12 +70,52 @@
 	- Undefined（未定义）类型的值只有一个，就undefind
 		- 当声明一个变量，但是并不给变量赋值时，它的值就是undefined
 		- 使用typeof检查一个undefined时也会返回undefined
-		
+
+- **Math**
+	- Math.abs();       取绝对值
+	- Math.floor();      向下取整
+	- Math.ceil();       向上取整
+	- Math.round();     四舍五入取整
+	- Math.random();   随机数0-1
+
+- **Date**
+
+```
+var d = new Date();
+console.log(d);
+
+var d2 = new Date("12/25/2015 12:12:12");
+console.log(d2);
+
+// 获取当前日期对象 是几日
+var date1 = d.getDate();
+console.log("date="+date1);
+
+// 0是周日 1是周一
+var date2 = d.getDay();
+console.log("day="+date2);
+
+// 返回月份，0表示1月
+var date3 = d.getMonth();
+console.log("month="+date3);
+
+// 获取当前日期的年份
+var date4 = d.getFullYear();
+console.log("year="+date4);
+
+// 时间戳,从格林威治1970年1月1日，0时0分0秒开始到现在的毫秒数
+var time = d.getTime();
+console.log("time="+time/1000/60/60/24/365);
+ 
+//获取当前的时间戳
+var start = Date.now();	
+```
+
 ***
 
 <a name="2" />
 
-### 强制类型转换
+## 强制类型转换
 
 - **强制类型转换**
 	- 指将一个数据类型强制转换为其他的数据类型
@@ -138,7 +183,7 @@
 
 <a name="3" />
 
-### 运算符
+## 运算符
 
 - 运算符也叫操作符，通过运算符可以对一个或多个值进行运算,并获取运算结果
  	- 比如：typeof就是运算符，可以来获得一个值的类型
@@ -253,7 +298,7 @@
 
 <a name="4" />
 
-### 变量、函数和对象
+## 变量、函数和对象
 
 <a name="41" />
 
@@ -335,9 +380,9 @@
 <a name="46" />
 
 - **匿名函数用法：**
-	1. `(function(){...})();`
-	2. `document.onclick = function(){...}`
-	3. `setInterval(function(){...}, 1000);`
+	1. `(function(){...})();` // 直接调用
+	2. `document.onclick = function(){...}` // 绑定事件
+	3. `setInterval(function(){...}, 1000);` // 计时器
 
 <a name="47" />
 
@@ -584,9 +629,17 @@
 
 <a name="5" />
 
-### 数组
+## 数组
 
-#### 数组内置方法
+- **length**
+	- JS数组中的length可以被赋值, 而其他语言中length是只读
+
+- **清空数组**
+	- array.splice(0,array.length); //删除数组中所有项目 
+	- array.length = 0; //length属性可以赋值
+	- array = [];  //推荐
+
+### 数组内置方法
 
 - **push()** 
 	- 该方法可以向数组的末尾添加一个或多个元素，并返回数组的新的长度
@@ -661,7 +714,7 @@
 	- `var result = arr.concat(arr2,arr3,"牛魔王","铁扇公主");`
 
 
-#### 数组的API方法
+### 数组的API方法
 
 - 由我们创建但是不由我们调用的，我们称为**回调函数**
 - 浏览器会在回调函数中传递三个参数：
@@ -669,22 +722,25 @@
 	2. 第二个参数，就是当前正在遍历的元素的索引
 	3. 第三个参数，就是正在遍历的数组
 
-- every：参数是回调函数，返回一个boolean类型值，对于每个元素，只要运行结果有一个是false，停止遍历，返回false
+#### 以下方法不支持IE8及以下浏览器
+
+- **every**：参数是回调函数，返回一个boolean类型值，对于每个元素，只要运行结果有一个是false，停止遍历，返回false
 	- `res = arr.every(function(element, index, obj){...})`
 
-- some: 参数是回调函数，对数组中每一项运行该函数，只要有一项返回true，则some返回true
+- **some**: 参数是回调函数，对数组中每一项运行该函数，只要有一项返回true，则some返回true
 	- `res = arr.some(..)`
 
-- filter: 参数是回调函数，返回一个新数组(return为true的数组)
+- **filter**: 参数是回调函数，返回一个新数组(return为true的数组)
 	- `res = arr.filter(..)`
 
-- forEach: 参数是回调函数，纯遍历数组，无返回值
+- **forEach**: 参数是回调函数，纯遍历数组，无返回值
 	- `res = arr.foreach(...)`
 	
-- map: 参数是回调函数，返回该函数的结果组成的新数组，返回什么都添加到新数组中
+- **map**: 参数是回调函数，返回该函数的结果组成的新数组，返回什么都添加到新数组中
 	- `res = arr.map(..)`
-	
-#### indexOf
+
+
+### indexOf
 
 ```
 var numArr1 = [1,3,4,56,66,78,90];
@@ -723,40 +779,40 @@ console.log(ret6);
 
 <a name="6">
 
-### 字符串
+## 字符串
 
 - 在底层字符串是以字符数组的形式保存的
 	- ["H","e","l"]
 	
-- length属性
+- **length**属性
 	- 可以用来获取字符串的长度
 
-- charAt()
+- **charAt()**
 	- 可以返回字符串中指定索引位置的字符
 
-- charCodeAt()
+- **charCodeAt()**
 	- 获取指定位置字符的字符编码（Unicode编码）
 	
-- String.formCharCode()
+- **String.formCharCode()**
 	- 可以根据字符编码去获取字符
 		- `result = String.fromCharCode(0x2692);`	
 
-- concat()
+- **concat()**
 	- 可以用来连接两个或多个字符串
 	- 作用和+一样
 		
-- indexof()
+- **indexof()**
 	- 该方法可以检索一个字符串中是否含有指定内容
 	- 如果字符串中含有该内容，则会返回其第一次出现的索引
 	- 如果没有找到指定的内容，则返回-1
 	- 可以指定第二个参数，指定开始查找的位置
 
-- lastIndexOf();
+- **lastIndexOf();**
 	- 该方法的用法和indexOf()一样，
 	- 不同的是indexOf是从前往后找，而lastIndexOf是从后往前找
 	- 也可以指定开始查找的位置	 
 
-- slice()
+- **slice()**
 	- 可以从字符串中截取指定的内容
 	- 不会影响原字符串，而是将截取到内容返回
 	- 参数：
@@ -765,7 +821,7 @@ console.log(ret6);
 		- 如果省略第二个参数，则会截取到后边所有的
 		- 也可以传递一个负数作为参数，负数的话将会从后边计算
 		
-- substring()
+- **substring()**
 	- 可以用来截取一个字符串，和slice()类似
 	- 参数：
 		- 第一个：开始截取位置的索引（包括开始位置）
@@ -773,23 +829,26 @@ console.log(ret6);
 		- 不同的是这个方法【不接受负值】作为参数，如果传递了一个负值，则默认使用0
 		- 而且他还自动调整参数的位置，如果第二个参数小于第一个，则自动交换	 
 		
-- substr()
+- **substr()**
 	- 用来截取字符串
 	- 参数：
 		1. 截取开始位置的索引
 		2. 截取的长度
 		
-- split()
+- **split()**
 	- 可以将一个字符串拆分为一个数组
 	- 参数：
 		-需要一个字符作为参数，将会根据该字符去拆分成数组	 
 		- 可以传递一个**正则表达式**作为参数
 		- 如果传递一个空串作为参数，则会将每个字符都拆分为数组中的一个元素
 
-- toUpperCase()
+- **trim()**
+	- 去除字符串前后的空白
+
+- **toUpperCase()**
 	- 将一个字符串全部转换为大写并返回
 
-- toLowerCase()
+- **toLowerCase()**
 	- 将一个字符串转换为小写并返回
 
 - `str = str.split("").reverse().join(""); //可以这样翻转字符串`
@@ -799,7 +858,7 @@ console.log(ret6);
 
 <a name="7">
 
-### 正则表达式
+## 正则表达式
 
 ```	
 var reg = new RegExp('ab', i);
@@ -808,7 +867,7 @@ var str = "aBsdeF";
 var result = reg.test(str); //true
 ```
 
-- 使用字面量来创建正则表达式
+- 使用**字面量**来创建正则表达式
 	- 语法：var 变量 = /正则表达式/匹配模式	
 	- 使用 | 表示或者的意思
 		- reg = /a|b|c/;
@@ -816,13 +875,13 @@ var result = reg.test(str); //true
 	- [^ ] 除了
 		- reg = /[^0-9]/;
 	
-- search()
+- **search()**
 	- 可以搜索字符串中是否含有指定内容
 	- 如果搜索到指定内容，则会返回第一次出现的索引，如果没有搜索到返回-1
 	- 它可以接受一个正则表达式作为参数，然后会根据正则表达式去检索字符串
 	- search()**只会查找第一个**，即使设置全局匹配也没用!		
 			
-- match()
+- **match()**
 	- 可以根据正则表达式，从一个字符串中将符合条件的内容提取出来
 	- 默认情况下我们的match只会找到第一个符合要求的内容，找到以后就停止检索
 	- 我们可以设置正则表达式为全局匹配模式，这样就会匹配到所有的内容
@@ -835,7 +894,7 @@ var result = reg.test(str); //true
 	console.log(result[2]); //a
 	```
 	
-- replace()
+- **replace()**
 	- 可以将字符串中指定内容替换为新的内容
 	- 参数：
 		1. 第一个，被替换的内容，可以接受一个正则表达式作为参数
@@ -852,143 +911,160 @@ var result = reg.test(str); //true
 
 <a name="8" />
 
-### DOM
+## DOM
 
-- **document**
-	- 浏览器已经为我们提供了 **文档节点** 对象, 这个对象是window属性
-	- 可以在页面中直接使用，文档节点代表的是整个网页
+### document
+- 浏览器已经为我们提供了 **文档节点** 对象document, 这个对象是window属性
+- 可以在页面中直接使用，文档节点代表的是整个网页
 
-	- 浏览器在加载一个页面时，是按照自上向下的顺序加载的，读取到一行就运行一行
-	- 如果将script标签写到页面的上边，在代码执行时，页面还没有加载，那么DOM对象也没有加载, 会导致无法获取到DOM对象
+- 浏览器在加载一个页面时，是按照自上向下的顺序加载的，读取到一行就运行一行
+- 如果将script标签写到页面的上边，在代码执行时，页面还没有加载，那么DOM对象也没有加载, 会导致无法获取到DOM对象
 
-	- onload事件会在整个页面加载完成之后才触发
-	- 为window绑定一个onload事件
-	- 该事件对应的响应函数将会在页面加载完成之后执行，这样可以确保我们的代码执行时所有的DOM对象已经加载完毕了
-	```
-	window.onload = function(){
-		//获取id为btn的按钮
-		var btn = document.getElementById("btn");
-		//为按钮绑定一个单击响应函数
-		btn.onclick = function(){
-			alert("hello");
-		};
+- onload事件会在整个页面加载完成之后才触发
+- 为window绑定一个onload事件
+- 该事件对应的响应函数将会在页面加载完成之后执行，这样可以确保我们的代码执行时所有的DOM对象已经加载完毕了
+```
+window.onload = function(){
+	//获取id为btn的按钮
+	var btn = document.getElementById("btn");
+	//为按钮绑定一个单击响应函数
+	btn.onclick = function(){
+		alert("hello");
 	};
+};
+```
+
+<a name="81">
+
+### dom查询
+
+- **.innerHTML**
+	- 用于获取元素内部的HTML代码
+	- 对于自结束标签，这个属性没有意义
+
+- **.innerText**
+	- 获取节点内部的所有文本
+
+- **getElementById()**
+	- 根据标签的id属性来找到唯一的一个节点对象
+
+- **getElementsByTagName()**
+	- 可以根据标签名来获取一组元素节点对象
+	- 这个方法会给我们返回一个类数组对象，所有查询到的元素都会封装到对象中
+	- 即使查询到的元素只有一个，也会封装到数组中返回
+
+- **getElementsByName()**
+	- 根据属性名来查找节点
+	- 也会返回一组元素节点
+
+- **.childNodes**
+	- 返回元素的所有子节点(包括空白文本节点)
+
+- **.children**
+	- 返回元素的所有子元素节点
+
+- **.firstChild**
+	- 返回第一个子节点
+	- 可能返回空白文本节点
+	- lastChild 同理
+
+- **.firstElementChild**
+	- 获取当前元素的第一个子元素
+	- 不兼容IE8及以下浏览器
+	
+- **.parentNode**
+	- 返回父节点
+
+- **.previousSibling**
+	- 返回前一个兄弟节点
+	- 可能是空白文本节点
+	- nextSibling 同理
+	- IE8及以下不支持
+
+### dom查询的其他方法
+
+- **documentbody** 保存的是body的引用
+
+- **document.documentElement** 保存的是html根标签
+
+- **document.all** 代表页面中所有的元素
+
+	```
+	length1 = document.all.length;
+	length2 = document.getElementsByTagName("*").length;
+	console.log(length1 === length2); //true
 	```
 
-- **dom查询**
-	- .innerHTML
-		- 用于获取元素内部的HTML代码
-		- 对于自结束标签，这个属性没有意义
-	
-	- .innerText
-		- 获取节点内部的所有文本
-	
-	- getElementById()
-		- 根据标签的id属性来找到唯一的一个节点对象
-	
-	- getElementsByTagName()
-		- 可以根据标签名来获取一组元素节点对象
-		- 这个方法会给我们返回一个类数组对象，所有查询到的元素都会封装到对象中
-		- 即使查询到的元素只有一个，也会封装到数组中返回
+- **getElementsByClassName()**
+	- 可以根据class属性值获取一组元素节点对象，
+	- 但是该方法不支持IE8及以下的浏览器
 
-	- getElementsByName()
-		- 根据属性名来查找节点
-		- 也会返回一组元素节点
-	
-	- .childNodes
-		- 返回元素的所有子节点(包括空白文本节点)
-	
-	- .children
-		- 返回元素的所有子元素节点
-	
-	- .firstChild
-		- 返回第一个子节点
-		- 可能返回空白文本节点
-		- lastChild 同理
-	
-	- .firstElementChild
-		- 获取当前元素的第一个子元素
-		- 不兼容IE8及以下浏览器
-		
-	- .parentNode
-		- 返回父节点
-	
-	- .previousSibling
-		- 返回前一个兄弟节点
-		- 可能是空白文本节点
-		- nextSibling 同理
-		- IE8及以下不支持
+- **document.querySelector()**
+	- 需要一个选择器的字符串作为参数，可以根据一个**CSS选择器**来查询一个元素节点对象
+	- 虽然IE8中没有getElementsByClassName(), 但是可以使用querySelector()代替
+	- 使用该方法总会返回唯一的一个元素，如果满足条件的元素有多个，那么它只会返回第一个
 
-- **dom查询的其他方法**
+- **document.querySelectorAll()**
+	- 该方法和querySelector()用法类似，不同的是它会将符合条件的元素封装到一个数组中返回
+	- 即使符合条件的元素只有一个，它也会返回一个NodeList
 
-	- 在document中有一个属性body，它保存的是**body的引用**
-		- `var body = document.body;`
-	
-	- document.documentElement保存的是**html根标签**
-	
-	- document.all代表页面中所有的元素
-	
-		```
-		length1 = document.all.length;
-		length2 = document.getElementsByTagName("*").length;
-		console.log(length1 === length2); //true
-		```
-	
-	- getElementsByClassName()
-		- 可以根据class属性值获取一组元素节点对象，
-		- 但是该方法不支持IE8及以下的浏览器
-	
-	- document.querySelector()
-		- 需要一个选择器的字符串作为参数，可以根据一个**CSS选择器**来查询一个元素节点对象
-		- 虽然IE8中没有getElementsByClassName(), 但是可以使用querySelector()代替
-		- 使用该方法总会返回唯一的一个元素，如果满足条件的元素有多个，那么它只会返回第一个
+<a name="82">
 
-	- document.querySelectorAll()
-		- 该方法和querySelector()用法类似，不同的是它会将符合条件的元素封装到一个数组中返回
-		- 即使符合条件的元素只有一个，它也会返回一个NodeList
+### dom增删改
 
-- **dom增删改**
-	- document.createElement()
-		- 可以用于创建一个元素节点对象
-		- 它需要一个**标签名**作为参数，将会根据该标签名创建元素节点对象，并将创建好的对象作为返回值返回
+- **document.createElement()**
+	- 可以用于创建一个元素节点对象
+	- 它需要一个**标签名**作为参数，将会根据该标签名创建元素节点对象，并将创建好的对象作为返回值返回
+
+- **document.createTextNode()**
+	- 可以用来创建一个文本节点对象
+	- 需要一个**文本内容**作为参数，将会根据该内容创建文本节点，并将新的节点返回
+
+- **appendChild()**
+	- 向一个父节点中添加一个新的子节点
+	- 用法：父节点.appendChild(子节点);
+
+- **insertBefore()**
+	- 可以在指定的参考节点前插入新的子节点
+	- 语法：父节点.insertBefore(新节点,旧节点);
+	- 如果参考节点为**null**，那么将在节点最后插入一个节点
+
+- **replaceChild()**
+	- 可以使用指定的子节点替换已有的子节点
+	- 语法：父节点.replaceChild(新节点,旧节点);
+	- 注意这里是新在前旧在后, 而字符串方法replace()中是旧在前新在后
+
+- **cloneNode()**
+	- 想要复制的节点调用函数cloneNode(), 得到一个新节点
+	- 新节点 = oldNode.cloneNode()
+	- 可以传入参数, true深复制(复制节点及其所有子节点),  false浅复制(复制节点本身，不复制子节点)
+
+- **removeChild()**
+	- 可以删除一个子节点
+	- 语法：父节点.removeChild(子节点);
+	- 子节点自己删除自己：子节点.parentNode.removeChild(子节点);
+
+- 使用**innerHTML**也可以完成DOM的增删改的相关操作
+	- `city.innerHTML += "<li>北京</li>";`
+	- 相当于把原来的标签都删除然后重置，可能会影响绑定的事件
+	- 一般我们会两种方式结合使用
 	
-	- document.createTextNode()
-		- 可以用来创建一个文本节点对象
-		- 需要一个**文本内容**作为参数，将会根据该内容创建文本节点，并将新的节点返回
-
-	- appendChild()
-		- 向一个父节点中添加一个新的子节点
-		- 用法：父节点.appendChild(子节点);
-	
-	- insertBefore()
-		- 可以在指定的子节点前插入新的子节点
-		- 语法：父节点.insertBefore(新节点,旧节点);
-	
-	- replaceChild()
-		- 可以使用指定的子节点替换已有的子节点
-		- 语法：父节点.replaceChild(新节点,旧节点);
-		- 注意这里是新在前旧在后, 而字符串方法replace()中是旧在前新在后
-
-	- removeChild()
-		- 可以删除一个子节点
-		- 语法：父节点.removeChild(子节点);
-		- 子节点自己删除自己：子节点.parentNode.removeChild(子节点);
-
-	- 使用innerHTML也可以完成DOM的增删改的相关操作
-		- city.innerHTML += "<li>北京</li>";
-		- 相当于把原来的标签都删除然后重置，可能会影响绑定的事件
-		- 一般我们会两种方式结合使用
-		
-		```
-		var li = document.createElement("li");
-		li.innerHTML = "北京";
-		city.appendChild(li);
-		```
+	```
+	var li = document.createElement("li");
+	li.innerHTML = "北京";
+	city.appendChild(li);
+	```
 
 - **如果需要读取元素节点属性**
 	- 直接使用 元素.属性名
 	- 例：元素.id 元素.name 元素.value
 	- 注意：class属性不能采用这种方式，读取class属性时需要使用 元素.className
+	- 也可以用方法:
+		- 获取：getAttribute(名称)
+		- 设置：setAttribute(名称, 值)
+		- 删除：removeAttribute(名称)
+		- 注意：IE6、7不支持。
+
 
 - **获取元素内部的文本**
 	- 可以innerHTML
@@ -997,5 +1073,214 @@ var result = reg.test(str); //true
 		- 对于文本节点来说，nodeValue就是文本内容
 
 ![节点的属性](images/node.png)
+
+- **nodeType**
+	- 1是标签,2是属性,3是文本
+
+
+
+<a name="83">
+
+### 使用DOM操作CSS
+
+- **通过style修改元素的样式**
+	- 语法：元素.style.样式名 = 样式值
+	- 注意：如果CSS的样式名中含有-
+		- 这种名称在JS中是不合法的比如background-color
+		- 需要将这种样式名修改为驼峰命名法
+		- 去掉-，然后将-后的字母大写: backgroundColor
+	- 通过style属性设置的样式都是内联样式
+	- 而内联样式有较高的优先级，所以通过JS修改的样式往往会立即显示
+	- 但是如果在样式中写了!important, 则此时样式会有最高的优先级, 即使通过JS也不能覆盖该样式，将会导致JS修改样式失效
+	- 所以尽量不要为样式添加!important
+
+- **currentStyle 和 getComputedStyle**
+	- style设置和读取的样式都是内联样式，样式表中的不能读取
+	- IE可以通过 .currentStyle.样式名 来读取当前样式（其他浏览器都不支持！！）
+		- .currentStyle读取当前元素正在显示的样式
+		- .currentStyle.name 或 .currentStyle[name]
+		- 如果当前元素没有设置该样式，则获取它的默认值
+
+	- 其他浏览器可以通过 window的方法 getComputedStyle(obj, null)来获取样式对象
+		- 但是该方法不兼容IE8及以下的浏览器
+		- getComputedStyle()需要两个参数
+			- 第一个：要获取样式的元素
+			- 第二个：可以传递一个伪元素，一般都传null
+		- 该方法会返回一个对象，对象中封装了当前元素对应的样式
+			- 可以通过对象.样式名来读取样式
+			- getComputedStyle().name 或 getComputedStyle()[name]
+		- 如果获取的样式没有设置，则会获取到真实的值，而不是默认值
+			- 比如：没有设置width，它不会获取到auto，而是一个长度值
+	
+		- 注意：
+			obj.currentStyle 和 getComputedStyle都只能读取样式，不能修改，要修改只能用style
+		- 兼容解决方法：
+		
+		`return window.getComputedStyle?getComputedStyle(obj , null)[name]:obj.currentStyle[name];`
+		
+		- 单独一个getComputedStyle是变量，如果全局都没找到，会报错，但是如果写成window.getComputedStyle, 是对象的属性方法，没找到只会弹出undefined
+
+#### 其他样式操作的属性
+
+- **clientWidth**
+	- **clientHeight**
+	- 这两个属性可以获取元素的可见宽度和高度
+	- 这些属性都是不带px的，返回都是一个数字，可以直接进行计算
+	- 会获取元素宽度和高度，包括内容区和内边距，**不包括边框**
+	- 这些属性都是只读的，不能修改
+
+- **offsetWidth**
+	- **offsetHeight**
+	- 获取元素的整个的宽度和高度，包括内容区、内边距和边框	
+
+- **offsetParent**
+	- 可以用来获取当前元素的定位父元素
+	- 会获取到离当前元素最近的**开启了定位**的祖先元素
+	- 如果所有的祖先元素都没有开启定位，则返回body	
+
+- **offsetLeft**
+	- 当前元素相对于其定位父元素的**水平**偏移量
+	- **offsetTop**
+	- 当前元素相对于其定位父元素的**垂直**偏移量
+
+- **scrollWidth**
+	- **scrollHeight**
+	- 可以获取元素整个滚动区域的宽度和高度
+
+- **scrollLeft**
+	- 可以获取水平滚动条滚动的距离
+	- **scrollTop**
+	- 可以获取垂直滚动条滚动的距离				 
+
+- 当满足`scrollHeight - scrollTop == clientHeight`
+		说明垂直滚动条滚动到底了
+					
+- 当满足`scrollWidth - scrollLeft == clientWidth`
+		说明水平滚动条滚动到底
+- **应用场合**：可以在用户协议时，判断是否阅读完成，没有完成，就将checkbox等表单项的 disabled属性设置为disabled（js中设置为false值为不禁用，若为true则禁用）
+
+- **当垂直滚动条滚动到底时使表单项可用**
+	- **onscroll**
+	- 该事件会在元素的滚动条滚动时触发
+	- 可以在每次滚动的时候，都判断是否`scrollHeight - scrollTop == clientHeight`
+
+<a name="84">
+
+### 事件对象
+
+- **事件对象**
+	- 当事件的响应函数被触发时，浏览器每次都会将一个事件对象作为实参传递进响应函数
+	- 在事件对象中封装了当前事件相关的一切信息，比如：鼠标的坐标  键盘哪个按键被按下  鼠标滚轮滚动的方向...
+
+![JS中的事件](images/events.png)
+
+- **clientX**
+	- **cilentY** 
+	- 可以获取鼠标指针在当前**可见窗口**的坐标
+
+
+- **pageX**
+	- **pageY**
+	- 可以获取鼠标指针相对于**整个页面**的坐标
+
+- **event兼容性问题**
+
+```
+areaDiv.onmousemove = function(event){
+		
+	/*
+	 * 在IE8中，响应函数被触发时，浏览器不会传递事件对象，
+	 * 	在IE8及以下的浏览器中，是将事件对象作为window对象的属性保存的
+	 */
+	/*if(!event){
+		event = window.event;
+	}*/
+	
+	//解决事件对象的兼容性问题
+	event = event || window.event;
+	
+	/*
+	 * clientX可以获取鼠标指针的水平坐标
+	 * cilentY可以获取鼠标指针的垂直坐标
+	 */
+	var x = event.clientX;
+	var y = event.clientY;
+}
+```
+
+
+- **scrollTop和scrollLeft兼容性问题**
+
+	- **div跟随鼠标移动**
+
+	```
+	//获取box1
+	var box1 = document.getElementById("box1");
+	//绑定鼠标移动事件
+	document.onmousemove = function(event){
+		
+		//解决兼容问题
+		event = event || window.event;
+		
+		//获取滚动条滚动的距离
+		/*
+		 * chrome认为浏览器的滚动条是body的，可以通过body.scrollTop来获取
+		 * 火狐等浏览器认为浏览器的滚动条是html的
+		 */
+		var st = document.body.scrollTop || document.documentElement.scrollTop;
+		var sl = document.body.scrollLeft || document.documentElement.scrollLeft;
+		
+		//获取到鼠标的坐标
+		/*
+		 * clientX和clientY
+		 * 	用于获取鼠标在当前的可见窗口的坐标
+		 * 而div的偏移量，是相对于整个body页面的
+		 * 
+		 * pageX和pageY可以获取鼠标相对于当前页面的坐标
+		 * 	但是这个两个属性在IE8中不支持，所以如果需要兼容IE8，则不要使用
+		 */
+		var left = event.clientX;
+		var　top = event.clientY;
+		
+		//设置div的偏移量
+		box1.style.left = left + sl + "px";
+		box1.style.top = top + st + "px";
+		
+	};
+	```
+
+- **事件的冒泡（Bubble）**
+	- 所谓的冒泡指的就是事件的向上传导，当后代元素上的事件被触发时，其祖先元素的相同事件也会被触发
+	- 在开发中大部分情况冒泡都是有用的,如果不希望发生事件冒泡可以通过事件对象来取消冒泡
+
+	- **取消冒泡**
+		- 可以将事件对象的cancelBubble设置为true，即可取消冒泡
+		- `event.cancelBubble = true;`
+
+
+- **事件的委派**
+	- 我们希望，只绑定一次事件，即可应用到多个的元素上, 即使元素是后添加的, 可以尝试将其绑定给元素的共同的祖先元素
+
+	- 事件委派, 指将事件统一绑定给元素的共同的祖先元素，这样当后代元素上的事件触发时，会一直冒泡到祖先元素
+	- 从而通过祖先元素的响应函数来处理事件
+	- 事件委派是利用了冒泡，通过委派可以减少事件绑定的次数，提高程序的性能
+
+	```
+	u1.onclick = function(event){
+		event = event || window.event;
+		
+		/*
+		 * target
+		 *	event中的target表示的触发事件的对象
+		 */
+		//alert(event.target);
+		
+		//如果触发事件的对象是我们期望的元素, 则执行, 否则不执行
+		if(event.target.className == "link"){
+			alert("我是ul的单击响应函数");
+		}
+		
+	};
+	```
 
 
