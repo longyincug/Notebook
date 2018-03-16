@@ -1,9 +1,9 @@
 # 前端知识查漏补缺
 
+## JavaScript篇
 
 ## 目录
 
-**JavaScript篇**
 
 1. [JS数据类型](#1)
 2. [强制类型转换](#2)
@@ -21,7 +21,7 @@
 	- [对象创建](#410)
 	- [构造函数](#411)
 	- [原型](#412)
-	
+
 5. [数组](#5)
 6. [字符串](#6)
 7. [正则表达式](#7)
@@ -29,7 +29,17 @@
 	- [DOM查询](#81)
 	- [DOM增删改](#82)
 	- [DOM操作CSS](#83)
-	- [事件对象](#84)
+	- [事件](#84)
+		- [事件对象](#841)
+		- [event兼容性问题](#842)
+		- [scrollTop和scrollLeft兼容性问题](#843)
+		- [事件的冒泡](#844)
+		- [事件的委派](#845)
+		- [事件的绑定](#846)
+		- [事件的传播](#847)
+		- [元素的拖拽事件](#848)
+		- [鼠标滚轮事件](#849)
+		- [键盘事件](#8410)
 
 
 ***
@@ -773,7 +783,7 @@ console.log(ret6);
 //output -1 a fail result
 ```
 
-**虽然数组里的元素相等，但由于是引用数据类型,每次新建一个对象，都重新开辟了一块内存，所以实际上比较内存地址，并不相等！**
+**虽然看起来和数组里的元素相同，但由于是引用数据类型,每次新建一个对象，都重新开辟了一块内存，所以实际上比较内存地址，并不相等！**
 
 ***
 
@@ -983,7 +993,7 @@ window.onload = function(){
 
 ### dom查询的其他方法
 
-- **documentbody** 保存的是body的引用
+- **document.body** 保存的是body的引用
 
 - **document.documentElement** 保存的是html根标签
 
@@ -1166,11 +1176,14 @@ window.onload = function(){
 
 <a name="84">
 
-### 事件对象
+### 事件
 
-- **事件对象**
-	- 当事件的响应函数被触发时，浏览器每次都会将一个事件对象作为实参传递进响应函数
-	- 在事件对象中封装了当前事件相关的一切信息，比如：鼠标的坐标  键盘哪个按键被按下  鼠标滚轮滚动的方向...
+<a name="841">
+
+#### 事件对象
+
+- 当事件的响应函数被触发时，浏览器每次都会将一个事件对象作为实参传递进响应函数
+- 在事件对象中封装了当前事件相关的一切信息，比如：鼠标的坐标  键盘哪个按键被按下  鼠标滚轮滚动的方向...
 
 ![JS中的事件](images/events.png)
 
@@ -1182,8 +1195,11 @@ window.onload = function(){
 - **pageX**
 	- **pageY**
 	- 可以获取鼠标指针相对于**整个页面**的坐标
+	- 但是这两个属性在IE8中不支持，所以如果需要兼容IE8，则不要使用
 
-- **event兼容性问题**
+<a name="842">
+
+#### event兼容性问题
 
 ```
 areaDiv.onmousemove = function(event){
@@ -1208,14 +1224,16 @@ areaDiv.onmousemove = function(event){
 }
 ```
 
+<a name="843">
 
-- **scrollTop和scrollLeft兼容性问题**
+#### scrollTop和scrollLeft的兼容性问题
 
-	- **div跟随鼠标移动**
+- **div跟随鼠标移动**
 
 	```
 	//获取box1
 	var box1 = document.getElementById("box1");
+		
 	//绑定鼠标移动事件
 	document.onmousemove = function(event){
 		
@@ -1249,7 +1267,9 @@ areaDiv.onmousemove = function(event){
 	};
 	```
 
-- **事件的冒泡（Bubble）**
+<a name="844">
+
+#### 事件的冒泡(Bubble)
 	- 所谓的冒泡指的就是事件的向上传导，当后代元素上的事件被触发时，其祖先元素的相同事件也会被触发
 	- 在开发中大部分情况冒泡都是有用的,如果不希望发生事件冒泡可以通过事件对象来取消冒泡
 
@@ -1258,12 +1278,14 @@ areaDiv.onmousemove = function(event){
 		- `event.cancelBubble = true;`
 
 
-- **事件的委派**
-	- 我们希望，只绑定一次事件，即可应用到多个的元素上, 即使元素是后添加的, 可以尝试将其绑定给元素的共同的祖先元素
+<a name="845">
 
-	- 事件委派, 指将事件统一绑定给元素的共同的祖先元素，这样当后代元素上的事件触发时，会一直冒泡到祖先元素
-	- 从而通过祖先元素的响应函数来处理事件
-	- 事件委派是利用了冒泡，通过委派可以减少事件绑定的次数，提高程序的性能
+#### 事件的委派
+- 我们希望，只绑定一次事件，即可应用到多个的元素上, 即使元素是后添加的, 可以尝试将其绑定给元素的共同的祖先元素
+
+- 事件委派, 指将事件统一绑定给元素的共同的祖先元素，这样当后代元素上的事件触发时，会一直冒泡到祖先元素
+- 从而通过祖先元素的响应函数来处理事件
+- 事件委派是利用了冒泡，通过委派可以减少事件绑定的次数，提高程序的性能
 
 	```
 	u1.onclick = function(event){
@@ -1282,5 +1304,281 @@ areaDiv.onmousemove = function(event){
 		
 	};
 	```
+
+<a name="846">
+
+#### 事件的绑定
+
+- 使用 对象.事件 = 函数 的形式绑定响应函数，它只能同时为一个元素的一个事件绑定一个响应函数，不能绑定多个，如果绑定了多个，则后边会覆盖掉前边的
+
+- **addEventListener()**
+	- 通过这个方法也可以为元素绑定响应函数
+	- 参数：
+		1. 事件的字符串，**不要on**
+		2. 回调函数，当事件触发时该函数会被调用
+		3. 是否在捕获阶段触发事件，需要一个布尔值，一般都传false
+
+	- 使用addEventListener()可以同时为一个元素的相同事件同时绑定多个响应函数，这样当事件被触发时，响应函数将会按照函数的绑定**顺序执行**
+
+	- 这个方法不支持IE8及以下的浏览器
+
+	```
+	btn01.addEventListener("click",function(){
+		alert(1);
+	},false);
+	
+	btn01.addEventListener("click",function(){
+		alert(2);
+	},false);
+	
+	btn01.addEventListener("click",function(){
+		alert(3);
+	},false);
+	```
+
+- **attachEvent()**
+	- 在IE8中可以使用attachEvent()来绑定事件
+	- 参数：
+		1. 事件的字符串，**要有on**
+		2. 回调函数
+	- 这个方法也可以同时为一个事件绑定多个处理函数，不同的是它是**后绑定先执行**，执行顺序和addEventListener()相反
+
+
+	- **注意**
+		- addEventListener()中的this, 是**绑定事件的对象**
+		- attachEvent()中的this, 是**window**
+		- 需要在兼容处理中统一两个方法的this
+
+	- 可以定义一个函数，用来为指定元素绑定响应函数，作为**兼容性处理方案**:
+	- 参数:
+		- obj 要绑定的对象
+		- eventStr 事件的字符串
+		- callback 回调函数
+		
+	```
+	function bind(obj, eventStr, callback){
+		if(obj.addEventListener){
+			//大部分浏览器兼容的方式
+			obj.addEventListener(eventStr, callback, false);
+		}else{
+			/*
+			 *	this是谁由调用方式决定
+			 *	callback.call(obj)
+			 *	但是回调函数不由我们控制，而是浏览器决定
+			 */
+			
+			//IE8及以下
+			obj.attachEvent("on"+eventStr, function(){
+				//浏览器控制调用匿名函数，在匿名函数里调用回调函数
+				callback.call(obj);
+				//这样this就是指向绑定的事件对象
+			});
+		}
+	}
+	```
+
+<a name="847">
+
+#### 事件的传播
+- 关于事件的传播网景公司和微软公司有不同的理解
+	- 微软公司认为事件应该是由内向外传播，也就是当事件触发时，应该先触发当前元素上的事件，然后再向当前元素的祖先元素上传播，也就说事件应该在冒泡阶段执行
+	- 网景公司认为事件应该是由外向内传播的，也就是当前事件触发时，应该先触发当前元素的最外层的祖先元素的事件，然后再向内传播给后代元素
+	- W3C综合了两个公司的方案，将事件传播分成了三个阶段
+		1. 捕获阶段
+			- 在捕获阶段时从最外层的祖先元素，向目标元素进行事件的捕获，但是默认此时不会触发事件
+		2. 目标阶段
+			- 事件捕获到目标元素，捕获结束，开始在目标元素上触发事件
+		3. 冒泡阶段
+			- 事件从目标元素向他的祖先元素传递，**由内向外**依次触发祖先元素上的事件
+			- 如果希望在捕获阶段就触发事件，可以将addEventListener()的第三个参数设置为true
+			- 一般情况下我们不会希望在捕获阶段触发事件，所以这个参数一般都是false
+
+	- IE8及以下的浏览器中没有捕获阶段
+
+
+<a name="848">
+
+#### 元素的拖拽事件
+
+- 拖拽的流程
+	1. 当鼠标在被拖拽元素上按下时，开始拖拽		**onmousedown**
+	2. 当鼠标移动时被拖拽元素跟随鼠标移动	**onmousemove**
+	3. 当鼠标松开时，被拖拽元素固定在当前位置	**onmouseup**
+
+- 注意:
+	- 当我们拖拽一个网页中的内容时, 浏览器会默认去搜索引擎中搜索内容, 此时会导致拖拽功能的异常，这个是浏览器提供的默认行为
+	- 如果不希望发生这个行为，则可以**通过return false来取消浏览器的默认行为**
+		- 注意: 如果通过addEventListener绑定的事件, 取消浏览器默认行为需要使用event.preventDefault方法来实现
+	- 但是这对IE8不起作用
+
+- 兼容IE8的处理方案:
+	- 当调用一个元素的setCapture()方法以后，这个元素将会把下一次所有的鼠标按下相关的事件捕获到自身上
+	- releaseCapture()取消捕获
+
+- **元素拖拽事件的兼容性处理函数:**
+
+	```
+	function drag(obj){
+		//当鼠标在被拖拽元素上按下时，开始拖拽  onmousedown
+		obj.onmousedown = function(event){
+			
+			//设置obj捕获所有鼠标按下的事件(为了兼容处理IE8中浏览器默认拖拽行为)
+			/*
+			 * setCapture()
+			 *	只有IE支持，但是在火狐中调用时不会报错
+			 *	而如果使用chrome调用，会报错
+			 */
+			/*if(obj.setCapture){
+				obj.setCapture();
+			}*/
+			obj.setCapture && obj.setCapture();
+			
+			event = event || window.event;
+			
+			//div的偏移量 鼠标.clentX - 元素.offsetLeft
+			//div的偏移量 鼠标.clentY - 元素.offsetTop
+			var ol = event.clientX - obj.offsetLeft;
+			var ot = event.clientY - obj.offsetTop;
+			
+			
+			//为document绑定一个onmousemove事件
+			document.onmousemove = function(event){
+				event = event || window.event;
+				
+				//当鼠标移动时被拖拽元素跟随鼠标移动 onmousemove
+				//获取鼠标的坐标
+				var left = event.clientX - ol;
+				var top = event.clientY - ot;
+				
+				//修改box1的位置
+				obj.style.left = left+"px";
+				obj.style.top = top+"px";
+				
+			};
+			
+			//为document绑定一个鼠标松开事件
+			document.onmouseup = function(){
+			
+				//取消document的onmousemove事件
+				document.onmousemove = null;
+				
+				//取消document的onmouseup事件
+				document.onmouseup = null;
+				
+				//当鼠标松开时，取消对事件的捕获(为了兼容IE8)
+				obj.releaseCapture && obj.releaseCapture();
+			};
+
+			return false;
+			
+		};
+	}
+	```
+
+<a name="849">
+
+#### 鼠标滚轮事件
+
+- **onmousewheel** 绑定鼠标滚轮滚动的事件，会在滚轮滚动时触发
+	- 但是火狐不支持该属性
+
+- 在火狐中需要使用 **DOMMouseScroll** 来绑定滚动事件
+	- 注意该事件需要通过**addEventListener()**函数来绑定
+
+- **event.wheelDelta** 可以获取鼠标滚轮滚动的方向
+	- wheelDelta这个值我们不看大小，只看正负
+	- 向上滚为**正值**, 向下滚为**负值**
+	- wheelDelta这个属性火狐中不支持
+
+- 在火狐中使用**event.detail**来获取滚动的方向
+	- 向上滚为**负值**, 向下滚为**正值**
+
+	```
+	obj.onmousewheel = function(event){
+
+		event = event || window.event;
+		/*
+		 * 实现效果:
+		 * 当鼠标滚轮向下滚动时，obj变长
+		 * 	当滚轮向上滚动时，obj变短
+		 */
+		//判断鼠标滚轮滚动的方向
+		if(event.wheelDelta > 0 || event.detail < 0){
+			//向上滚，obj变短
+			obj.style.height = obj.clientHeight - 10 + "px";
+			
+		}else{
+			//向下滚，obj变长
+			obj.style.height = obj.clientHeight + 10 + "px";
+		}
+
+		/*
+		 * 使用addEventListener()方法绑定响应函数，取消默认行为时不能使用return false
+		 * 需要使用event来取消默认行为event.preventDefault();
+		 * 但是IE8不支持 event.preventDefault(); 如果直接调用会报错
+		 */
+		event.preventDefault && event.preventDefault();
+		
+		/*
+		 * 当滚轮滚动时，如果浏览器有滚动条，滚动条会随之滚动，
+		 * 这是浏览器的默认行为，如果不希望发生，则可以取消默认行为
+		 */
+		return false;
+	};
+
+	//需要专门为火狐绑定如上的滚轮事件
+	//bind函数在 事件的绑定 一节中已定义
+	bind(obj,"DOMMouseScroll",obj.onmousewheel);
+
+	```
+
+<a name="8410">
+
+#### 键盘事件
+
+- **onkeydown**
+	- 按键被按下
+	- 对于onkeydown来说如果一直按着某个按键不松手，则事件会一直触发
+	- 当onkeydown连续触发时，第一次和第二次之间会间隔稍微长一点, 其他的会非常的快, 这种设计是为了防止误操作的发生
+- **onkeyup**
+	- 按键被松开
+
+- 键盘事件一般都会绑定给一些可以获取到焦点的对象或者是document
+
+- 可以通过 **keyCode** 来获取按键的编码, 通过它可以判断哪个按键被按下
+- 字母不论大小写, 统一按照小写字母的ASCII码来显示
+- 除了keyCode, 事件对象中还提供了几个属性
+	- **altKey**
+	- **ctrlKey**
+	- **shiftKey**
+	- 这三个用来判断alt ctrl 和 shift是否被按下, 如果按下则返回true，否则返回false
+
+- 方向键的KeyCode值:
+	- 左: 37
+	- 上: 38
+	- 右: 39
+	- 下: 40
+
+
+- 限制文本框不能输入数字:
+
+	```
+	input.onkeydown = function(event){
+		
+		event = event || window.event;
+
+		//数字的ASCII码: 48 - 57
+		//使文本框中不能输入数字
+		if(event.keyCode >= 48 && event.keyCode <= 57){
+		
+			//在文本框中输入内容，属于onkeydown的默认行为
+			//如果在onkeydown中取消了默认行为，则输入的内容，不会出现在文本框中
+			return false;
+		}
+		
+		
+	};
+	```
+
 
 
