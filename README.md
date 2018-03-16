@@ -1,4 +1,4 @@
-# exercises 
+# Notebook 
 **html/css/javascript** **:** **查漏补缺 日常笔记**
 
 
