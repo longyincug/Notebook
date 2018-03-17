@@ -4,4 +4,4 @@
 
 [每日一练](./dailycodes.md)
 
-[知识集锦](./notes.md)
+[知识集锦](./JSnotes.md)
