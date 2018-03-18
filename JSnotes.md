@@ -277,7 +277,7 @@ var start = Date.now();
 				如果两个值都为false, 才返回false
 			- JS中的“或”属于[短路的或], 
 			如果第一个值为true, 则不会检查第二个值
-		- **可以用来写一些 "如果没有就执行另一个" 的功能: **
+		- **可以用来写一些 "如果没有就执行另一个" 的功能:**
 			- 如: `event = event || window.event;`
 
 - **关系运算符**
@@ -1167,6 +1167,39 @@ window.onload = function(){
 		```
 
 		- 单独一个getComputedStyle是变量, 如果全局都没找到, 会报错, 但是如果写成 `window.getComputedStyle`, 是对象的属性方法, 没找到只会弹出undefined
+
+#### 注意:
+
+- 通过style属性来修改元素的样式，每修改一个样式，浏览器就需要重新渲染一次页面, 
+这样的执行的性能是比较差的，而且这种形式当我们要修改多个样式时，也不太方便
+
+- 我们可以通过修改元素的class属性来间接的修改样式, 这样一来，我们只需要修改一次，即可同时修改多个样式，浏览器只需要重新渲染页面一次，性能比较好，并且这种方式，可以使表现和行为进一步的分离
+
+```
+function removeClass(obj, cn) {
+	var reg = new RegExp('\\b' + cn + '\\b');
+	obj.className = obj.className.replace(reg, '');
+}
+
+function hasClass(obj, cn) {
+	var reg = new RegExp('\\b' + cn + '\\b');
+	return reg.test(obj.className);
+}
+
+function addClass(obj, cn) {
+	if(!hasClass(obj, cn)) {
+		obj.className += " " + cn;
+	}
+}
+
+function toggleClass(obj, cn) {
+	if(hasClass(obj, cn)) {
+		removeClass(obj, cn);
+	} else {
+		addClass();
+	}
+}
+```
 
 #### 其他样式操作的属性
 
