@@ -6,6 +6,7 @@
 4. [每天一道面试题: 4](#4)
 5. [每天一道面试题: 5](#5)
 6. [每天一道面试题: 6](#6)
+7. [每天一道面试题: 7](#7)
 
 <a name="1">
 
@@ -473,6 +474,8 @@ function isPalindrome(str) {
 
 `1 4 3 2`
 
+<a name="61">
+
 需要理解**JavaScript的运行机制**:
 
 JavaScript语言的一大特点就是单线程。
@@ -480,7 +483,7 @@ JavaScript语言的一大特点就是单线程。
 #### 任务队列
 
 所有任务可以分成两种，一种是**同步任务**（synchronous），另一种是**异步任务**（asynchronous）。
-同步任务指的是，在主线程上排队执行的任务，只有前一个任务执行完毕，才能执行后一个任务；异步任务指的是，不进入主线程、而进入"任务队列"（task queue）的任务，只有"任务队列"通知主线程，某个异步任务可以执行了，该任务才会进入主线程执行。
+同步任务指的是，在主线程上排队执行的任务，只有前一个任务执行完毕，才能执行后一个任务；异步任务指的是，不进入主线程、而进入"任务队列"（task queue）的任务，只有主线程通知"任务队列"，某个异步任务可以执行了，该任务才会进入主线程执行。
 
 具体来说，异步执行的运行机制如下。（同步执行也是如此，因为它可以被视为没有异步任务的异步执行。）
 
@@ -519,4 +522,128 @@ setInterval()、 setTimeout()只是将事件插入了"任务队列"，必须等�
 ***
 
 <a name="7">
+
+## 每天一道面试题: 7
+
+### 根据下面的代码片段回答后面的问题
+
+```
+for (var i = 0; i < 5; i++) {
+  var btn = document.createElement('button');
+  btn.appendChild(document.createTextNode('Button ' + i));
+  btn.addEventListener('click', function(){ console.log(i); });
+  document.body.appendChild(btn);
+}
+```
+
+1、点击 Button 4 ，会在控制台输出什么？
+
+2、给出一种符合预期的实现方式
+
+**答案:**
+
+1、点击5个按钮中的任意一个，都是输出5
+
+2、参考 **IIFE**
+
+#### IIFE
+为什么要用立即执行函数表达式（Immediately-Invoked Function Expression）？
+
+IIFE 有两个比较经典的使用场景，一是类似于在循环中定时输出数据项，二是类似于 JQuery/Node 的插件和模块开发。
+
+```
+for(var i = 0; i < 5; i++) {
+    setTimeout(function() {
+        console.log(i);  
+    }, 1000);
+}
+```
+
+上面的输出并不是你以为的0 1 2 3 4，这时IIFE就有用了: 
+
+```
+for(var i=0; i<5; i++){
+	(function(i){
+		setTimeout(function(){
+			console.log(i);
+		}, 1000);
+	})(i);
+}
+```
+
+而在 JQuery/Node 的插件和模块开发中，为避免变量污染，也是一个大大的 IIFE：
+
+```
+(function($) { 
+        //代码
+ } )(jQuery);
+```
+
+***
+
+### 下面的代码会输出什么？为什么？
+
+```
+var arr1 = "john".split(''); j o h n
+var arr2 = arr1.reverse(); n h o j
+var arr3 = "jones".split(''); j o n e s
+arr2.push(arr3);
+console.log("array 1: length=" + arr1.length + " last=" + arr1.slice(-1));
+console.log("array 2: length=" + arr2.length + " last=" + arr2.slice(-1));
+```
+
+**答案:**
+
+```
+array 1: length=5 last=j,o,n,e,s
+array 2: length=5 last=j,o,n,e,s
+```
+
+MDN 上对于 reverse() 的描述是这样的：
+
+> Description
+
+> The reverse method transposes the elements of the calling array object in place, mutating the array, and returning a reference to the array.
+
+`reverse()` 会改变数组本身，并返回原数组的引用
+
+`slice()` 方法用于提取目标数组的一部分，返回一个新数组，原数组不变
+
+而数组与字符串""做加法运算输出，会将数组中除中括号外的字符全部打印出来
+
+
+***
+
+### 如果 list 很大，下面的这段递归代码会造成堆栈溢出，如何在不改变递归模式的前提下修缮这段代码？
+
+```
+var list = readHugeList();
+
+var nextListItem = function() {
+    var item = list.pop();
+
+    if (item) {
+        // process the list item...
+        nextListItem();
+    }
+};
+```
+
+**答案:**
+
+```
+var list = readHugeList();
+
+var nextListItem = function() {
+    var item = list.pop();
+
+    if (item) {
+        // process the list item...
+        setTimeout( nextListItem, 0);
+    }
+};
+```
+
+解决方式原理请参考: [每天一道面试题: 6](#61)
+
 
