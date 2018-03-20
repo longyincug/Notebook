@@ -7,6 +7,7 @@
 5. [每天一道面试题: 5](#5)
 6. [每天一道面试题: 6](#6)
 7. [每天一道面试题: 7](#7)
+8. [每天一道面试题: 8](#8)
 
 <a name="1">
 
@@ -146,7 +147,7 @@ js内部为了保证赋值语句的正确, 会在一条赋值语句执行前, �
 ## 每天一道面试题：3
 
 ### 下面代码的输出是什么？
- 
+
 ```
 var myObject = {
     foo: "bar",
@@ -242,7 +243,7 @@ Foo.prototype.getName = function () { alert (3);};
 var getName = function () { alert (4);};
 function getName() { alert (5);}
 ```
- 
+
 ### 请写出以下输出结果:
 
 ```
@@ -301,7 +302,6 @@ new new Foo().getName();//3
 **运算符优先级**
 
 ![运算符优先级](images/PRI.png)
-
 
 ***
 
@@ -611,7 +611,6 @@ MDN 上对于 reverse() 的描述是这样的：
 
 而数组与字符串""做加法运算输出，会将数组中除中括号外的字符全部打印出来
 
-
 ***
 
 ### 如果 list 很大，下面的这段递归代码会造成堆栈溢出，如何在不改变递归模式的前提下修缮这段代码？
@@ -646,4 +645,106 @@ var nextListItem = function() {
 
 解决方式原理请参考: [每天一道面试题: 6](#61)
 
+***
+
+<a name="8">
+
+## 每天一道面试题: 8
+
+### 解释下列代码的输出
+```
+console.log("0 || 1 = "+(0 || 1));
+console.log("1 || 2 = "+(1 || 2));
+console.log("0 && 1 = "+(0 && 1));
+console.log("1 && 2 = "+(1 && 2));
+```
+
+**答案:**
+
+逻辑与和逻辑或运算符会返回一个值，并且二者都是短路运算符：
+
+- 逻辑与返回第一个是 false 的操作数 或者 最后一个是 true的操作数
+	- 如果某个操作数为 false，则该操作数之后的操作数都不会被计算
+```
+console.log(1 && 2 && 0);  //0
+console.log(1 && 0 && 1);  //0
+console.log(1 && 2 && 3);  //3
+```
+
+- 逻辑或返回第一个是 true 的操作数 或者 最后一个是 false的操作数
+	- 如果某个操作数为 true，则该操作数之后的操作数都不会被计算
+```
+console.log(1 || 2 || 0); //1
+console.log(0 || 2 || 1); //2
+console.log(0 || 0 || false); //false
+```
+
+- 如果逻辑与和逻辑或作混合运算，则逻辑与的优先级高：
+```
+console.log(1 && 2 || 0); //2
+console.log(0 || 2 && 1); //1
+console.log(0 && 2 || 1); //1
+```
+
+**在 JavaScript，常见的 false 值:**
+`0, '0', +0, -0, false, '', null, undefined, null, NaN`
+
+要注意**空数组([])**和**空对象({})**:
+```
+console.log([] == false) //true
+console.log({} == false) //false
+console.log(Boolean([])) //true
+console.log(Boolean({})) //true
+```
+所以在 if 中，[] 和 {} 都表现为 true
+
+***
+
+### 解释下面代码的输出
+```
+var a={},
+    b={key:'b'},
+    c={key:'c'};
+
+a[b]=123;
+a[c]=456;
+
+console.log(a[b]);
+```
+
+**答案:**
+
+> The reason for this is as follows: When setting an object property, JavaScript will implicitly stringify the parameter value. In this case, since b and c are both objects, they will both be converted to "[object Object]". As a result, a[b] anda[c] are both equivalent to a["[object Object]"] and can be used interchangeably. Therefore, setting or referencing a[c] is precisely the same as setting or referencing a[b].
+
+答案是456
+
+Javascript中对象的key值，一定会是一个string值，如果不是，则会隐式地进行转换，当执行到`a[b]=123`时，b并不是一个string值，将b执行toString()方法转换(得到"[object Object]"), a[c]也是相同道理，所以代码可以看做这样执行：
+
+```
+var a={},
+    b={key:'b'},
+    c={key:'c'};
+
+a["[object Object]"]=123;
+a["[object Object]"]=456;
+
+console.log(a["[object Object]"]);
+```
+
+***
+
+### 解释下面代码的输出
+
+`console.log((function f(n){return ((n > 1) ? n * f(n-1) : n)})(10));`
+
+**答案:**
+
+其实就是一个立即执行函数+递归，求个阶乘而已（10!），给立即执行函数加了个名字f，方便在递归里调用，其实完全可以用`arguments.callee`代替: 
+```
+var ans = (function(n){
+    return ((n>1) ? n * arguments.callee(n-1): n)
+})(10);
+
+console.log(ans);
+```
 
