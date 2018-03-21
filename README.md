@@ -4,7 +4,8 @@
 
 [每日一练](./dailycodes.md)
 
-**知识笔记**
-	- [JavaScript](./JSnotes.md)
-	- [html+CSS](./CSSnotes.md)
-	- [jQuery](./JQuery.md)
+
+**知识笔记:**
+[JavaScript](./JSnotes.md)
+[html+CSS](./CSSnotes.md)
+[jQuery](./JQuery.md)
