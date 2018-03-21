@@ -8,6 +8,7 @@
 6. [每天一道面试题: 6](#6)
 7. [每天一道面试题: 7](#7)
 8. [每天一道面试题: 8](#8)
+9. [每天一道面试题: 9](#9)
 
 <a name="1">
 
@@ -56,6 +57,20 @@ function sum() {
  
 }
 ```
+
+或者这样:
+
+```
+function sum(x, y) {
+	if(y !== undefined){
+		return x + y;
+	} else {
+		return function(y) {return x + y; };
+	}
+}
+
+```
+
 
 ***
 
@@ -351,7 +366,7 @@ function foo2()
 }
 ```
 
-所以第二个函数是返回 undefined
+尽管后面的语句不符合规范，但是因为没有执行到，所以第二个函数是返回 undefined
 
 ***
 
@@ -579,6 +594,32 @@ for(var i=0; i<5; i++){
  } )(jQuery);
 ```
 
+**另一种解法，使用bind:**
+```
+for(var i = 0; i < 5; i++) {
+  setTimeout(console.log.bind(console, i), i * 1000);
+}
+```
+bind是和apply、call一样，是Function的扩展方法，所以应用场景是`func.bind()`，而传的参数形式和call一样，第一个参数是this指向，之后的参数是func的实参，`fun.bind(thisArg[, arg1[, arg2[, ...]]])`
+
+ps:bind(obj, *args)方法返回的是一个柯里化的函数，所以可以接受后面的参数作为func的实参
+
+关于bind详情看:[bind的用法](#91)
+
+**还有一种解法, 不用闭包:**
+```
+var num;
+var timer = setTimeout(function func(){
+	
+	console.log(num++);
+	if(num<10){
+		setTimeout(func, 1000);
+	}
+}, 1000);
+
+```
+
+
 ***
 
 ### 下面的代码会输出什么？为什么？
@@ -644,6 +685,49 @@ var nextListItem = function() {
 ```
 
 解决方式原理请参考: [每天一道面试题: 6](#61)
+
+利用 setTimeout 的异步性质，完美地去除了这个调用栈。
+
+简单举个例子:
+```
+var list = [0, 1];
+ 
+var nextListItem = function() {
+    var item = list.pop();
+ 
+    if (item) {
+      nextListItem();
+    }
+ 
+    console.log(item);
+};
+ 
+nextListItem();
+```
+上面的代码会依次输出0和1，因为程序中形成了一个调用栈，1被压到了栈底，最后出栈
+
+把程序改成这样:
+```
+var list = [0, 1];
+ 
+var nextListItem = function() {
+    var item = list.pop();
+ 
+    if (item) {
+        // process the list item...
+        setTimeout( nextListItem, 0);
+    }
+ 
+    console.log(item);
+};
+ 
+nextListItem();
+```
+这回就是1和0了，因为`setTimeout`的回调只有当主体的js执行完后才会去执行，所以先输出1，自然也就没有栈这一说法了
+
+事实上，并不是所有递归都能这样改写，如果下一次递归调用依赖于前一次递归调用返回的值，就不能这么改了
+
+
 
 ***
 
@@ -747,4 +831,99 @@ var ans = (function(n){
 
 console.log(ans);
 ```
+
+
+
+***
+
+<a name="9">
+
+## 每天一道面试题: 9
+
+<a name="91">
+
+### 解释下面代码的输出，并修复存在的问题
+
+```
+var hero = {
+    _name: 'John Doe',
+    getSecretIdentity: function (){
+        return this._name;
+    }
+};
+
+var stoleSecretIdentity = hero.getSecretIdentity;
+
+console.log(stoleSecretIdentity());
+console.log(hero.getSecretIdentity());
+```
+
+**答案:**
+
+将 `getSecretIdentity` 赋给 `stoleSecretIdentity`，等价于定义了 `stoleSecretIdentity` 函数：
+
+```
+var stoleSecretIdentity =  function (){
+    return this._name;
+}
+```
+
+`stoleSecretIdentity` 的上下文是全局环境，所以第一个输出 `undefined`
+
+若要输出 `John Doe`，则要通过 `call 、apply 和 bind` 等方式改变 stoleSecretIdentity 的`this` 指向(hero)
+
+```
+var stoleSecretIdentity = hero.getSecretIdentity.bind(hero);
+```
+
+第二个是调用对象的方法，输出 John Doe
+
+#### bind方法
+
+bind和call以及apply一样，都是可以改变上下文的this指向的。
+不同的是，call和apply一样，直接引用在方法上，而bind绑定this后返回一个方法，但内部核心还是apply
+
+bind的核心是返回一个**未执行的方法**, 如果直接使用apply或者call，方法及参数已经确定并执行
+
+bind是function的一个函数扩展方法，但是不兼容ie6~8，兼容代码如下:
+
+```
+Function.prototype.bind = Funtion.prototype.bind || function(context) {
+	var that = this;
+	return function(){
+		return that.apply(context, arguments);
+	}
+	
+	// 但是该兼容方法并没有实现bind返回的函数柯里化！因此不建议在bind中传入除了obj以外的参数。
+};
+```
+
+
+***
+
+### 给你一个 DOM 元素，创建一个能访问该元素所有子元素的函数，并且要将每个子元素传递给指定的回调函数
+
+函数接受两个参数：
+
+- DOM
+
+- 指定的回调函数
+
+
+**答案:**
+
+
+原文利用 深度优先搜索(Depth-First-Search) 给了一个实现：
+
+```
+function Traverse(p_element,p_callback) {
+   p_callback(p_element);
+   var list = p_element.children;
+   for (var i = 0; i < list.length; i++) {
+       Traverse(list[i],p_callback);  // recursive call
+   }
+}
+```
+
+
 

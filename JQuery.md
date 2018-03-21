@@ -1,6 +1,19 @@
 # jQuery
 
 
+## 目录
+
+1. [jQuery中的顶级对象](#1)
+2. [jQuery对象和DOM对象互转](#2)
+3. [jQuery简单操作属性样式](#3)
+4. [页面加载的事件](#4)
+5. [通过选择器操作元素属性](#5)
+6. [jQuery事件](#6)
+
+***
+
+
+
 
 **JavaScript库**：把一些浏览器兼容性的代码或者是常用的函数封装在一个js文件中，这个文件就是一个JavaScript库，common.js 可以看成是一个js库
 
@@ -9,6 +22,7 @@
 优点：体积小，功能强大，链式编程，隐式迭代，插件丰富
 
 
+<a name="1">
 
 ## jQuery中的顶级对象
 
@@ -31,6 +45,9 @@ document.getElementById("id").onclick = function(){};
 $("#id").click(function(){});
 ```
 
+***
+
+<a name="2">
 
 
 ## jQuery对象和DOM对象互转
@@ -56,6 +73,10 @@ btnObj2[0].onclick = function(){};
 jQuery操作中，又有一些兼容没有封装在jQuery中，可以转DOM对象，通过原生的js代码实现功能。
 
 
+
+***
+
+<a name="3">
 
 
 ## jQuery简单操作属性样式
@@ -92,11 +113,18 @@ $("#btn").click(function(){
 DOM操作中设置和获取value属性的值--> `对象.value`
 
 jQuery中: 
+
 `jQuery对象.val();` 表示获取该元素的value属性值
+
 `jQuery对象.val("值")` 表示设置该元素的value属性值
+
 `jQuery对象.css("css的属性名字", "属性的值");` 设置元素的样式属性值
 
 
+
+***
+
+<a name="4">
 
 
 ## 页面加载的事件
@@ -137,6 +165,11 @@ $(function(){
     console.log("world");
 });
 ```
+
+***
+
+<a name="5">
+
 
 
 
@@ -183,6 +216,7 @@ $(function(){
 - `对象.text("值")` 设置该元素的文本内容
 
 **隐式迭代**
+
 本身代码没有循环操作，jQuery内部帮助我们完成循环操作
 
 
@@ -248,6 +282,11 @@ $(function(){
 ```
 可以用`$("#uu>li:eq('索引值')")`来获取指定位置的子元素
 
+***
+
+<a name="6">
+
+
 
 
 ## jQuery事件
@@ -290,6 +329,7 @@ $(function(){
 });
 ```
 - `index()`方法用来获取当前对象的索引值
+
 - `li:eq()`子元素伪类选择器，接受index参数作为索引，获取指定元素
 
 
