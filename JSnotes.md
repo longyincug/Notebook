@@ -696,13 +696,14 @@ var start = Date.now();
 		- 翻转数组, **会改变数组本身，并返回原数组的引用**
 	
 	- sort()
+		- 对数组进行排序，**返回排序后的数组, 原数组也已经被排序后的数组代替**
 		- 根据数字或字符, Unicode编码从小到大排序, 如果数字的位数不同, 只会对数字的第一位进行排列,  1 12 13 2 4 6...
 		- 可以通过回调函数来改变排序规则：（sort函数底层是通过冒泡排序来实现的）
 
 		```
 		arr.sort(function(a,b){
-			return a-b; //升序
-			return b-a; //降序
+			return a-b; //数值升序
+			return b-a; //数值降序
 		});
 		function bubble(arr){
 			for(i=0; i<arr.length-1; i++){
@@ -878,7 +879,8 @@ console.log(ret6);
 		- 如果传递一个空串作为参数, 则会将每个字符都拆分为数组中的一个元素
 
 - **trim()**
-	- 去除字符串前后的空白
+	- 去除字符串前后的空白，包括换行，制表符等
+	- 返回新的字符串，不影响原字符串
 
 - **toUpperCase()**
 	- 将一个字符串全部转换为大写并返回
@@ -1365,7 +1367,7 @@ areaDiv.onmousemove = function(event){
 		
 		/*
 		 * target
-		 *	event中的target表示的触发事件的对象
+		 *	event中的target表示的触发事件的对象 // IE用srcElement获取事件源
 		 */
 		//alert(event.target);
 		

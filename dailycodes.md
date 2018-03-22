@@ -1,4 +1,5 @@
 # 每天一道面试题
+
 ## 目录
 1. [每天一道面试题: 1](#1)
 2. [每天一道面试题: 2](#2)
@@ -9,6 +10,8 @@
 7. [每天一道面试题: 7](#7)
 8. [每天一道面试题: 8](#8)
 9. [每天一道面试题: 9](#9)
+10. [每天一道面试题: 10](#10)
+
 
 <a name="1">
 
@@ -602,7 +605,7 @@ for(var i = 0; i < 5; i++) {
 ```
 bind是和apply、call一样，是Function的扩展方法，所以应用场景是`func.bind()`，而传的参数形式和call一样，第一个参数是this指向，之后的参数是func的实参，`fun.bind(thisArg[, arg1[, arg2[, ...]]])`
 
-ps:bind(obj, *args)方法返回的是一个柯里化的函数，所以可以接受后面的参数作为func的实参
+ps:`bind(obj, *args)`方法返回的是一个柯里化的函数，所以可以接受后面的参数作为func的实参
 
 关于bind详情看:[bind的用法](#91)
 
@@ -927,3 +930,127 @@ function Traverse(p_element,p_callback) {
 
 
 
+***
+
+<a name="10">
+
+## 每天一道面试题: 10
+
+### 找出数字数组中最大的元素（使用Math.max函数）
+
+
+**答案:**
+
+```
+
+var a = [1, 2, 3, 6, 5, 4];
+var ans = Math.max.apply(null, a);
+
+```
+
+很巧妙的利用了apply，如果不是数组，是很多数字求最大值，我们可以这样:
+`Math.max(1, 2, 3, 4, 5, 6);`
+
+还有一种实现, 利用eval+toString:
+`var ans = eval( 'Math.max(' + a.toString() + ')');`
+
+学习了 ES6 后，我们有了更简单的方法：
+```
+let a = [1, 2, 3, 6, 5, 4];
+let maxn = Math.max(...a);
+console.log(maxn); // 6
+```
+
+
+***
+
+### 转化一个数字数组为function数组（每个function都弹出相应的数字）
+
+
+**答案:**
+
+这道题跟[第7天](#7)的第一题类似，用闭包保存变量到内存即可。
+```
+var a = [1, 2, 3, 4, 5, 6];
+
+for(var i=0; i<a.length; i++){
+	var num = a[i];
+	(function(num) {
+    	var f = function() {
+      		console.log(num);
+    	};
+    	
+    	a[i] = f;
+    
+	})(num);
+}
+
+for(var i=0; i<a.length; i++){
+	a[i]();
+}
+
+```
+
+
+***
+
+### 给object数组进行排序（排序条件是每个元素对象的属性个数）
+
+
+**答案:**
+
+```
+Object.prototype.getLength = function(){
+	var count = 0;
+	for(var key in this){
+		if(this.hasOwnProperty(key)){
+			count += 1;
+		}
+	}
+};
+
+arr.sort(function(a, b){return a.getLength() - b.getLength(); });
+```
+
+这题不难，数组排序，当然是sort，排序条件是对象的属性个数，可以写个函数计算，注意可能要用hasOwnProperty判断下
+
+
+`obj.hasOwnProperty(prop)`
+
+- 用来判断某个对象是否含有指定的属性
+
+- 所有继承了 `Object` 的对象都会继承到 `hasOwnProperty` 方法
+
+- 这个方法可以用来检测一个对象是否含有特定的自身属性；
+
+- 和 `in` 运算符不同，该方法会忽略掉那些从原型链上继承到的属性。
+
+`sort(compareFunction)`如果指明了 compareFunction ，那么数组会按照调用该函数的返回值排序。即 a 和 b 是两个将要被比较的元素：
+
+- 如果 compareFunction(a, b) 小于 0 ，那么 a 会被排列到 b 之前；
+- 如果 compareFunction(a, b) 等于 0 ， a 和 b 的相对位置不变；
+- 如果 compareFunction(a, b) 大于 0 ， b 会被排列到 a 之前。
+
+
+当 compareFunction 较为复杂，且元素较多的时候，某些 `compareFunction` 可能会导致很高的负载，可以使用 `map` 辅助排序
+
+**一个使用映射改善排序的例子**
+```
+// 需要被排序的数组
+var list = ['Delta', 'alpha', 'CHARLIE', 'bravo'];
+
+// 对需要排序的数字和位置的临时存储
+var mapped = list.map(function(el, i) {
+  return { index: i, value: el.toLowerCase() };
+})
+
+// 按照多个值排序数组
+mapped.sort(function(a, b) {
+  return +(a.value > b.value) || +(a.value === b.value) - 1;
+});
+
+// 根据索引得到排序的结果
+var result = mapped.map(function(el){
+  return list[el.index];
+});
+```
