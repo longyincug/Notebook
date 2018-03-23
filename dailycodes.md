@@ -11,6 +11,7 @@
 8. [每天一道面试题: 8](#8)
 9. [每天一道面试题: 9](#9)
 10. [每天一道面试题: 10](#10)
+11. [每天一道面试题: 11](#11)
 
 
 <a name="1">
@@ -1035,6 +1036,7 @@ arr.sort(function(a, b){return a.getLength() - b.getLength(); });
 当 compareFunction 较为复杂，且元素较多的时候，某些 `compareFunction` 可能会导致很高的负载，可以使用 `map` 辅助排序
 
 **一个使用映射改善排序的例子**
+
 ```
 // 需要被排序的数组
 var list = ['Delta', 'alpha', 'CHARLIE', 'bravo'];

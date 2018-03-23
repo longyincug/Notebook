@@ -9,7 +9,7 @@
 4. [页面加载的事件](#4)
 5. [jQuery操作CSS样式](#5)
 6. [jQuery操作表单属性](#6)
-7. [jQuery事件方法](#7)
+7. [jQuery事件方法及绑定](#7)
 8. [链式编程](#8)
 9. [元素的获取、创建、添加、删除](#9)
 10. [动画相关的方法](#10)
@@ -334,7 +334,7 @@ $("#btn").click(function(){
 用`css()`方法设置宽高等属性时，若不加`px`，jQuery会自动帮我们加上，不过为了保持和DOM中的习惯一致，建议都加`px`
 
 
-### jQuery用css()操作样式的三种方法
+### jQuery用css()操作样式的三种方式
 
 
 ```
@@ -359,7 +359,7 @@ $(function () {
 ```
 
 
-### 直接获取指定CSS样式的方法
+### 直接获取指定CSS样式值的方法
 
 
 **获取设置宽高**
@@ -387,6 +387,39 @@ $(function () {
 
 - 这里得到的top是包含了`top`和`margin-top`**两个值的和**，left同理
 
+
+**获取滚动条属性值**
+
+- `scrollTop()`
+- `scrollLeft()`
+
+- 获取匹配元素相对滚动条顶部和左侧的偏移，此方法对可见和隐藏元素均有效。
+- 可以直接传入数值，设置偏移量
+
+`$("div.demo").scrollLeft(300);`
+
+
+
+#### 固定导航栏实现
+
+```
+$(window).scroll(function(){
+
+	if($(this).scrollTop() > $(".top").height()){
+		// 设置导航栏固定定位
+		$(".nav").css("position", "fixed");
+		// 设置偏移量为0
+		$(".nav").css("top", 0);
+		// 让下面的主体栏能够平滑过渡，不因为导航栏脱标而迅速上移
+		$(.main).css("marginTop", $(".nav").height());
+	}else{
+		$(".nav").css("position", "static");
+		$(".main").css("marginTop", 0);
+	
+	}
+	
+});
+```
 
 
 
@@ -497,7 +530,7 @@ $("#tb").find("input").click(function(){
 <a name="7">
 
 
-## jQuery事件方法
+## jQuery事件方法及绑定
 
 
 ### mouseenter和mouseleave
@@ -525,7 +558,6 @@ $(function(){
 - `stop()`方法停止所有在指定元素上正在运行的动画。如果队列中有等待执行的动画(并且clearQueue没有设为true)，他们将被马上执行
 
 
-
 ```
 $(function(){
     $("#left>li").mouseenter(function(){
@@ -545,6 +577,55 @@ $(function(){
 
 - `li:eq()`索引选择器，接受index参数作为索引，获取指定元素
 
+
+### 为元素绑定事件的方式
+
+- 第一种:
+
+```
+$("#btn").mouseenter(function(){}).mouseleave(function(){});
+```
+
+
+- 第二种:
+
+```
+$("#btn").bind("click", function(){}).bind("mouseenter", function(){});
+```
+
+- 第三种:
+
+```
+$("#btn").bind({"click":function(){}, "mouseenter", function(){}});
+```
+
+
+
+### 给元素绑定事件的注意点
+
+- 在DOM中，给同一个元素绑定多个相同的事件，后面的会覆盖前面的，为此我们用了`addEventListener()`和`attchEvent()`来解决这个问题
+
+- 而在jQuery中，即使连续绑定相同事件，也不会出现覆盖的情况，而会依次触发
+
+- 在jQuery中使用`bind()`方法绑定相同事件的时候，若按照上面第二种方式绑定，也会依次触发
+
+- 但是需要注意，当按照第三种方式，即**键值对**的方式来绑定多个相同事件，则只会执行最后一个!
+
+
+
+### 另一种绑定事件的方式
+
+在`bind()`方法内部，实际调用的是另一个方法`on`绑定的事件
+
+还有一个方法:`delegate()`, 原理类似
+
+`$("#dv").delegate("p", "click", function(){});`
+
+- 该方法为p元素绑定了click事件
+
+- 父级元素调用该方法，为子级元素绑定事件
+
+- 子级元素委托父级元素绑定事件
 
 
 
