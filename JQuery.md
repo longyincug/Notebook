@@ -5,13 +5,13 @@
 
 1. [jQuery中的顶级对象](#1)
 2. [jQuery对象和DOM对象互转](#2)
-3. [jQuery简单操作属性样式](#3)
+3. [jQuery中的选择器](#3)
 4. [页面加载的事件](#4)
-5. [通过选择器操作元素属性](#5)
-6. [jQuery事件方法](#6)
-7. [jQuery操作CSS的三种方法](#7)
+5. [jQuery操作CSS样式](#5)
+6. [jQuery操作表单属性](#6)
+7. [jQuery事件方法](#7)
 8. [链式编程](#8)
-9. [元素的获取、创建、添加](#9)
+9. [元素的获取、创建、添加、删除](#9)
 10. [动画相关的方法](#10)
 
 ***
@@ -93,102 +93,9 @@ jQuery操作中，又有一些兼容没有封装在jQuery中，可以转DOM对�
 <a name="3">
 
 
-## jQuery简单操作属性样式
-
-```
-$("#btn").click(function(){
-    // 判断body标签是否应用了cls类的样式
-    if($("body").hasClass("cls")){
-        // 此处应用了cls类样式，就移除这个样式
-        $("body").removeClass("cls");
-    }else{
-        // 此处没有应用类样式cls，那么添加类样式
-        $("body").addClass("cls");
-    }
-});
-```
-
-```
-$("#btn").click(function(){
-    //判断这个按钮的值来修改body的样式
-    //此处的this是当前的按钮DOM对象，需要转换为jQuery对象
-    if($(this).val() == "关灯"){
-        $("body").css("backgroundColor", "black");
-        $(this).val("开灯");
-    }else{
-        $("body").css("backgroundColor", "");
-        $(this).val("关灯");
-    }
-});
-```
-
-**标签属性操作**
-
-DOM操作中设置和获取value属性的值--> `对象.value`
-
-jQuery中: 
-
-`jQuery对象.val();` 表示获取该元素的value属性值
-
-`jQuery对象.val("值")` 表示设置该元素的value属性值
-
-`jQuery对象.css("css的属性名字", "属性的值");` 设置元素的样式属性值
 
 
-
-***
-
-<a name="4">
-
-
-## 页面加载的事件
-
-在DOM对象中，一个页面只能写一个`window.onload = function(){};`，多写的话，后面的会覆盖前面的。
-
-而jQuery中可以依次触发多个页面加载事件。
-
-- 第一种页面加载的事件(等待页面所有元素加载完毕后触发)
-```
-$(window).load(function(){
-    console.log("hello");
-});
-
-$(window).load(function(){
-    console.log("world");
-});
-```
-
-- 第二种页面加载的事件(比load更快，页面中的基本元素加载后就触发)
-```
-$(document).ready(function(){
-    console.log("hello");
-});
-
-$(document).ready(function(){
-    console.log("world");
-});
-```
-
-- 第三种页面加载的事件(也是页面中基本元素加载后就触发，和第二种类似，但更简便，用的较多)
-```
-$(function(){
-    console.log("hello");
-});
-
-$(function(){
-    console.log("world");
-});
-```
-
-***
-
-<a name="5">
-
-
-
-
-
-## 通过选择器操作元素属性
+## jQuery中的选择器
 
 DOM中获取元素的方式：
 - 根据id获取元素
@@ -283,7 +190,9 @@ $(function(){
 });
 ```
 
-### 子元素的伪类
+
+### 索引选择器
+
 ```
 $(function(){
     $("#btn").click(function(){
@@ -294,16 +203,304 @@ $(function(){
     });
 });
 ```
-可以用`$("#uu>li:eq('索引值')")`来获取指定位置的子元素
+
+- `$("选择器:eq(索引值)")`来获取指定位置的子元素
+
+- `$("选择器:lt(索引)")` 获取小于这个索引的元素
+
+- `$("选择器:gt(索引)")` 获取大于这个索引的元素
+
+- `$("选择器:last")` 最后一个
+
+- `$("选择器:first")` 第一个
+
+
+### 其他选择器
+
+- `$("选择器:has(selector)")` 获取含有selector所匹配的元素的元素
+
+- `$("选择器:hidden")` 获取所有不可见元素，或者type为hidden的元素
+
+	- 例如: `display:none`、`<input type="hidden" name="id" />`
+
+
+### 表单对象选择器
+
+
+|    选择器           |      作用           |
+| ------------- |:-------------:|
+| :input      | 匹配所有input、textarea、select 和 button 表单元素 |
+| :text      | 匹配所有单行文本框     |
+| :password | 匹配所有密码框      |
+| :radio | 匹配所有单选按钮 |
+| :checkbox | 匹配所有复选框      |
+| :submit | 匹配所有提交按钮 |
+| :button | 匹配所有按钮     |
+
+### 表单对象属性选择器
+
+|    选择器           |      作用           |
+| ------------- |:-------------:| 
+| :enabled | 匹配所有可用元素 |
+| :disabled | 匹配所有不可用元素 |
+| :checked | 匹配所有选中的被选中元素(复选框、单选框等，不包括select中的option) |
+| :selected | 匹配所有选中的option元素 |
+
+
+
+***
+
+<a name="4">
+
+
+## 页面加载的事件
+
+在DOM对象中，一个页面只能写一个`window.onload = function(){};`，多写的话，后面的会覆盖前面的。
+
+而jQuery中可以依次触发多个页面加载事件。
+
+- 第一种页面加载的事件(等待页面所有元素加载完毕后触发)
+```
+$(window).load(function(){
+    console.log("hello");
+});
+
+$(window).load(function(){
+    console.log("world");
+});
+```
+
+- 第二种页面加载的事件(比load更快，页面中的基本元素加载后就触发)
+```
+$(document).ready(function(){
+    console.log("hello");
+});
+
+$(document).ready(function(){
+    console.log("world");
+});
+```
+
+- 第三种页面加载的事件(也是页面中基本元素加载后就触发，和第二种类似，但更简便，用的较多)
+```
+$(function(){
+    console.log("hello");
+});
+
+$(function(){
+    console.log("world");
+});
+```
+
+***
+
+<a name="5">
+
+
+## jQuery操作CSS样式
+
+
+### 通过CSS类属性操作样式
+
+```
+$("#btn").click(function(){
+    // 判断body标签是否应用了cls类的样式
+    if($("body").hasClass("cls")){
+        // 此处应用了cls类样式，就移除这个样式
+        $("body").removeClass("cls");
+    }else{
+        // 此处没有应用类样式cls，那么添加类样式
+        $("body").addClass("cls");
+    }
+});
+```
+
+### 通过css方法操作样式
+
+```
+$("#btn").click(function(){
+    //判断这个按钮的值来修改body的样式
+    //此处的this是当前的按钮DOM对象，需要转换为jQuery对象
+    if($(this).val() == "关灯"){
+        $("body").css("backgroundColor", "black");
+        $(this).val("开灯");
+    }else{
+        $("body").css("backgroundColor", "");
+        $(this).val("关灯");
+    }
+});
+```
+
+用`css()`方法设置宽高等属性时，若不加`px`，jQuery会自动帮我们加上，不过为了保持和DOM中的习惯一致，建议都加`px`
+
+
+### jQuery用css()操作样式的三种方法
+
+
+```
+$(function () {
+
+    $("#btn").click(function () {
+        //设置div的样式
+
+       // 第一种写法
+        $("#dv").css('width', "300px");
+        $("#dv").css('height', "300px");
+        $("#dv").css('backgroundColor', "red");
+
+        // 第二种写法(链式)
+        $("#dv").css("width", "300px").css("height", "300px").css("backgroundColor", "red")
+
+        // 第三种写法
+        var json = {"width": "200px", "height": "100px", "backgroundColor": "red"}
+        $("#dv").css(json);
+    });
+});
+```
+
+
+### 直接获取指定CSS样式的方法
+
+
+**获取设置宽高**
+
+`$("#dv").css("width");` 这样获取的宽实际是一个带`px`的字符串，后续计算还需要`parseInt`来提取数字
+
+- 可以使用方法`$("#dv").width();` 这样直接获取了元素的宽
+
+- 可以传入数值，修改元素的宽，可以不加`px`
+
+- `height()` 同理
+
+
+**获取设置left和top**
+
+`offset()`
+
+- 获取匹配元素在当前视口的相对偏移。
+
+- 返回的对象包含两个整型属性：top 和 left, 此方法只对可见元素有效。
+
+- 设置元素的`offset`时，需要传入一个对象参数，`$("#dv").offset({"left":500, "top":250 });`
+
+注意:
+
+- 这里得到的top是包含了`top`和`margin-top`**两个值的和**，left同理
+
+
+
 
 ***
 
 <a name="6">
 
 
+## jQuery操作表单属性
+
+### 标签属性操作
+
+DOM操作中设置和获取value属性的值--> `对象.value`
+
+jQuery中: 
+
+- `jQuery对象.val();` 表示获取该元素的value属性值
+
+- `jQuery对象.val("值")` 表示设置该元素的value属性值
+
+- `jQuery对象.css("css的属性名字", "属性的值");` 设置元素的样式属性值
+
+- `jQuery对象.html()` 相当于innerHTML
+
+- `jQuery对象.text()` 相当于innerText
+
+
+### 表单属性操作
+
+**文本域**
+
+- `$("#te").text();` 可以用来设置`textarea`文本域中的内容，不要用`val()`
+
+**下拉框**
+
+- `.val();` 一般常用来设置表单属性的值，但是也有一些例外，并不是设置的意思
+
+比如: 为下拉框`select`标签中`value`属性是`5`的这个`option`标签设置选中:
+
+`$("select").val(5)` 并没有设置其`value`值，只是选中而已
+
+**单选、复选框**
+
+- 操作选择按钮(`type = "radio/checkbox"`)的属性: 
+	
+	- DOM中操作: `document.getElementById("r").checked = true;`
+	
+	- jQuery转换为DOM操作: `$("#r").get(0).checked = true;`
+
+
+**自定义属性方法**
+
+- jQuery中可以使用自定义属性: 
+	- `$("#r").attr("checked", "true");`（不建议用attr操作checked等状态属性）
+	- 如果标签默认选中了，`attr("checked")` --> `checked`
+	- 如果标签没有选中，`attr("checked")` --> `undefined`
+	- 注意：
+	- `attr`方法针对单选框或者复选框的是否选中问题，切换起来很麻烦，几乎不用！
+
+
+- 当属性没有被设置时候，`.attr()`方法将返回`undefined`, 而不是`false`
+
+- 若要检索和更改DOM属性,比如元素的checked, selected, 或 disabled状态，请使用`prop()`方法。
+
+
+**prop()方法**
+
+- 用来获取或设置元素是否选中的状态，推荐使用`prop()`方法
+
+- `prop("属性");` 获取这个元素是否选中，返回true或false
+
+- `prop("属性", "值");` 值一般是布尔类型
+
+
+- 可以将第二个参数设置为一个function，该函数返回新的属性值
+
+点击一个按钮切换选中状态:
+```
+$("input[type='checkbox']").prop("checked", function( i, val ) {
+  return !val;
+});
+
+```
+
+设置tbody中所有复选框的选中状态和当前点击的复选框(全选/全不选 按钮)的选中状态一致: 
+```
+$("#all").click(function(){
+	$("#tb").find("input").prop("checked", $(this).prop("checked"));
+	
+});
+
+```
+
+设置当所有复选框都被选中时全选框自动选中，否则不选中:
+```
+$("#tb").find("input").click(function(){
+	var allLength = $("#tb").find("input").length;
+	var ckLength = $("#tb").find(":checked").length;
+	
+	$("#all").prop("checked", allLength == ckLength );
+});
+```
+
+
+
+***
+
+<a name="7">
 
 
 ## jQuery事件方法
+
+
+### mouseenter和mouseleave
 
 ```
 $(function(){
@@ -343,38 +540,12 @@ $(function(){
     });
 });
 ```
+
 - `index()`方法用来获取当前对象的索引值
 
 - `li:eq()`索引选择器，接受index参数作为索引，获取指定元素
 
 
-***
-
-<a name="7">
-
-
-## jQuery操作CSS样式的三种方法
-
-```
-$(function () {
-
-    $("#btn").click(function () {
-        //设置div的样式
-
-       // 第一种写法
-        $("#dv").css('width', "300px");
-        $("#dv").css('height', "300px");
-        $("#dv").css('backgroundColor', "red");
-
-        // 第二种写法(链式)
-        $("#dv").css("width", "300px").css("height", "300px").css("backgroundColor", "red")
-
-        // 第三种写法
-        var json = {"width": "200px", "height": "100px", "backgroundColor": "red"}
-        $("#dv").css(json);
-    });
-});
-```
 
 
 ***
@@ -422,9 +593,9 @@ $("#btn").click(function () {
 
 <a name="9">
 
-## 元素的获取、创建、添加
+## 元素的获取、创建、添加、删除
 
-### 兄弟元素的获取
+### 兄弟元素、父子元素的获取
 
 ```
 $("#three").click(function () {
@@ -441,7 +612,7 @@ $("#three").click(function () {
     // 获取某个li前面的所有兄弟元素
     $(this).prevAll("li").css("backgroundColor", "red");
 
-    // 获取当前的li的所有兄弟元素
+    // 获取当前的li的所有兄弟元素（不包括自己）
     $(this).siblings("li").css("backgroundColor", "grey");
 
 
@@ -462,10 +633,38 @@ $("#three").click(function () {
 
 ```
 
+- `当前元素.parent()` --> 父级元素
+
+- `当前元素.children()` --> 当前元素的所有的子元素(直属的子元素)
+
+- `当前元素.find("选择器")` --> 是找出正在处理的元素的后代元素的好方法
+
+从所有的段落开始，进一步搜索下面的span元素: `$("p").find("span")`, 与`$("p span")`相同
+
+
 
 ### 元素的创建和添加
 
 
+#### 创建节点
+
+- **方式一:**
+
+`$('<span>这是一个span元素</span>').appendTo($("#dv"))`
+
+先创建一个jQuery对象，然后添加到父级元素中，类似DOM中的`createElement()`
+
+- **方式二:**
+
+`$("#dv").html("<span>这是一个span元素</span>")`
+
+直接给元素的内部html赋值，会覆盖原有的内容，相当于DOM中的`innerHTML`
+
+
+
+#### 添加节点
+
+**在被选元素内部的结尾插入内容**
 
 - 父级元素.append(子级元素)
 `$("#dv").append($("<a href='http://www.baidu.com'>百度</a>"));`
@@ -474,6 +673,28 @@ $("#three").click(function () {
 `$("<a href='http://www.baidu.com'>百度</a>").appendTo($("#dv"));`
 
 
+**在被选元素内部的开头插入内容**
+
+- `pretend` 
+
+- `pretendTo`
+
+用法和`append`、`appendTo`一样
+
+
+**在指定兄弟元素的前后插入内容**
+
+- `$("#dv").before($("<span>this is a span</span>"))`
+
+此时`span`是`div`的前一个兄弟元素
+
+- `$("#dv").after($("<span>this is a span</span>"))`
+
+此时`span`是`div`的后一个兄弟元素
+
+
+
+**实例:**
 
 - 给ul中添加li，同时实现hover动画效果
 
@@ -507,7 +728,22 @@ $(function () {
 
 **注意:**
 - 获取已有的元素，并通过append方法添加到另外一个元素中的时候，类似于剪切
-- 若想实现复制效果，需要使用clone方法: `$("#dv1>p").clone.appendTo($("#dv2"));`
+- 若想实现复制效果，需要使用clone方法: `$("#dv1>p").clone().appendTo($("#dv2"));`
+
+
+### 元素的删除
+
+- 清空元素中所有子级元素
+
+`$("#dv").html("")`
+
+`$("#dv").empty()`
+
+- 自杀方法
+
+`$("#dv").remove()`
+
+比如: `$("#dv").children("ul").remove()`
 
 
 ***
@@ -567,6 +803,19 @@ $(function () {
 - normal:400ms
 
 - slow:600ms
+
+
+- **stop()**
+
+	- 在同一个元素上执行多个动画，那么对于这个动画来说，后面的动画会被放到动画队列中，等到前面的动画执行完成了才会执行
+	
+	- `stop`方法，停止动画效果
+	
+	- 第一个参数，是否清除队列
+	
+	- 第二个参数，是否跳转到最终结果
+	
+	- 如果没有传入参数，这些动画将被马上执行
 
 
 ### 用递归实现连续动画
