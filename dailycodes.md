@@ -1056,3 +1056,101 @@ var result = mapped.map(function(el){
   return list[el.index];
 });
 ```
+
+
+***
+
+
+<a name="11">
+
+
+## 每天一道面试题: 11
+
+
+### 利用JavaScript打印出Fibonacci数列（不使用全局变量）
+
+
+**答案:**
+
+
+利用递归实现:
+
+```
+(function(a, b){
+	
+	console.log(b);
+	var c = a + b;
+	if(c < 100) return;
+	arguments.callee(b, c);
+
+})(0, 1);
+
+```
+
+利用迭代实现:
+
+```
+
+function func(n) {
+	
+	var a = [0, 1];
+	
+	for(var i=2; i<n+1; i++){
+		var newEle = a[i-1] + a[i-2];
+		a.push(newEle);
+	}
+	
+	for(var j=1; j<n+1; j++){
+		console.log(a[j]);
+	}
+	
+}
+
+func(5);
+
+```
+
+学习了ES6，还可以用generator实现。
+
+
+***
+
+
+### 实现如下语法的功能：var a = (5).plus(3).minus(6); //2
+
+
+**答案:**
+
+直接在Number对象上加上扩展方法即可
+
+```
+
+Number.prototype.plus = function(a){
+	return this + a;
+};
+
+Number.prototype.minus = function(a){
+	return this - a;
+};
+
+var a = (5).plus(3).minus(6);
+
+
+```
+
+
+***
+
+
+### 实现如下语法的功能：var a = add(2)(3)(4); //9
+
+
+
+**答案:**
+
+```
+
+
+
+```
+

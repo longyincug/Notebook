@@ -837,7 +837,7 @@ $(function () {
 - **show()**
 	- 显示隐藏的匹配元素
 	- 如果选择的元素是可见的，这个方法将不会改变任何东西
-	- 无论这个元素是通过hide()方法隐藏的还是在CSS里设置了display:none;，这个方法都将有效
+	- 无论这个元素是通过`hide()`方法隐藏的还是在CSS里设置了`display:none;`，这个方法都将有效
 
 
 - **hide()**
@@ -877,13 +877,13 @@ $(function () {
 	- 第一个参数是毫秒数，第二个参数是指定的不透明度
 
 
-同时，这些方法第一个参数也可以传字符串参数: 
+- 同时，这些方法第一个参数也可以传字符串参数: 
 
-- fast:200ms
-
-- normal:400ms
-
-- slow:600ms
+	- fast:200ms
+	
+	- normal:400ms
+	
+	- slow:600ms
 
 
 - **stop()**
@@ -911,8 +911,8 @@ $("btn01").click(function () {
 
 $("btn02").click(function () {
     // 从最后一个开始逐渐隐藏
-    $("div>image:last").show(300, function f1() {
-        $(this).prev().show(300, f1);
+    $("div>image:last").hide(300, function f1() {
+        $(this).prev().hide(300, f1);
     });
 });
 ```
