@@ -12,6 +12,7 @@
 9. [每天一道面试题: 9](#9)
 10. [每天一道面试题: 10](#10)
 11. [每天一道面试题: 11](#11)
+12. [每天一道面试题: 12](#12)
 
 
 <a name="1">
@@ -1150,7 +1151,181 @@ var a = (5).plus(3).minus(6);
 
 ```
 
+function add(a){
+	
+	var temp = function(b){
+		return add(a+b);
+	}
+	
+	temp.valueOf = temp.toString = function(){return a;};
+	
+	return temp
+}
 
+var ans = add(2)(3)(4);
+console.log(ans);
 
 ```
+
+先了解一下`valueOf`和`toString`方法:
+
+1. 当直接打印一个对象时，实际调用的是对象的`toString`或者`valueOf`方法
+
+2. js里除了null外每个对象都有`valueOf`和`toString`方法，一般情况下对象会先调用`toString`方法，然后再调用`valueOf`
+
+3. 如果只重写了`toString`，对象转换时会无视`valueOf`的存在来进行转换
+
+4. 但是，如果只重写了`valueOf`方法，在要转换为字符串的时候也会优先考虑`toString`方法, 在不能调用`toString`的情况下，只能让`valueOf`上阵了
+
+5. 而在有操作符的情况下，`valueOf`的优先级比`toString`的高
+
+参考资料: [valueOf和toString](http://www.cnblogs.com/zichi/p/4106711.html)
+
+
+所以在这一题中，为了保证后面没有参数时，返回`temp`能直接打印出数值，就把`toString`和`valueOf`方法都重写了。
+
+详细解答，请参考上面：[valueOf和toString](http://www.cnblogs.com/zichi/p/4106711.html)
+
+
+***
+
+
+<a name="12">
+
+## 每天一道面试题: 12 
+
+
+### 下面代码输出什么(考察this)
+
+```
+var length = 10;
+function fn() {
+  console.log(this.length);
+}
+
+var obj = {
+  length: 5,
+  method: function(fn) {
+    fn();
+    arguments[0]();
+  }
+};
+
+obj.method(fn, 1); 
+```
+
+
+**答案:**
+
+第一个输出10，在内部直接执行fn()函数，实际上是window调用的，所以this是window，length是10
+
+第二个输出2，取对象属于除了点操作符还可以用中括号，所以第二次执行时相当于arguments调用方法，this指向arguments，而这里传了两个参数，故输出arguments长度为2
+
+
+
+***
+
+### 下面代码输出什么？(var和函数的提前声明)
+
+```
+function fn(a) {
+  console.log(a); 
+  var a = 2;
+  function a() {}
+  console.log(a); 
+}
+
+fn(1); 
+```
+
+**答案:**
+
+```
+
+function a() {}
+2
+
+```
+
+我们知道var和function是会提前声明的，而且function是优先于var声明的（如果同时存在的话），所以提前声明后输出的a是个function，然后代码往下执行a进行重新赋值了，故第二次输出是2
+
+```
+if('a' in window) {
+  var a = 10;
+}
+
+alert(a);
+```
+
+上面这题，输出10，因为即使{}里面的变量，声明也会提前，所以在if判断之前，全局作用域已经有了`a`，返回true，然后赋值
+
+
+***
+
+### 下面代码输出什么？(局部变量和全局变量)
+
+```
+var f = true;
+if (f === true) {
+  var a = 10;
+}
+
+function fn() {
+  var b = 20;
+  c = 30;
+}
+
+fn();
+console.log(a);
+console.log(b);
+console.log(c);
+
+```
+
+
+**答案:**
+
+```
+10
+报错
+30
+```
+
+只有`function(){}`内新声明的才能是局部变量，`while{...}`、`if{...}`、`for(..)` 之内的都是全局变量, 函数体内没有用 `var` 声明的也是全局变量
+
+而函数体内声明的局部变量，外部访问不到。（可以通过闭包提供外部访问内部的途径）
+
+
+***
+
+### 下面代码的输出是什么？
+
+```
+var a = 10;
+a.pro = 10;
+console.log(a.pro + a);
+
+var s = 'hello';
+s.pro = 'world';
+console.log(s.pro + s);
+```
+
+
+**答案:**
+
+```
+NaN
+undefinedhello
+```
+
+注意：给基本数据类型添加属性，不会报错，但是引用的话，会返回`undefined`！
+
+`10 + undefined`，`undefined`会转为`NaN`
+
+
+***
+
+
+<a name="13">
+
 
