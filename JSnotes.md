@@ -1344,14 +1344,15 @@ areaDiv.onmousemove = function(event){
 <a name="844">
 
 #### 事件的冒泡(Bubble)
-	- 所谓的冒泡指的就是事件的向上传导, 当后代元素上的事件被触发时, 其祖先元素的相同事件也会被触发
-	- 在开发中大部分情况冒泡都是有用的,如果不希望发生事件冒泡可以通过事件对象来取消冒泡
-	
-	- **取消冒泡**
-		- 可以将事件对象的cancelBubble设置为true, 即可取消冒泡
-		- `event.cancelBubble = true;`
+- 所谓的冒泡指的就是事件的向上传导, 当后代元素上的事件被触发时, 其祖先元素的相同事件也会被触发
+- 在开发中大部分情况冒泡都是有用的,如果不希望发生事件冒泡可以通过事件对象来取消冒泡
 
-<a name="845">
+- **取消冒泡**
+	- 可以将事件对象的cancelBubble设置为true, 即可取消冒泡
+	- `window.event.cancelBubble = true;` （IE中）
+	- `event.stopPropagation();`
+
+
 <a name="845">
 
 #### 事件的委派

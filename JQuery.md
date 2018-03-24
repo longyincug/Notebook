@@ -9,7 +9,7 @@
 4. [页面加载的事件](#4)
 5. [jQuery操作CSS样式](#5)
 6. [jQuery操作表单属性](#6)
-7. [jQuery事件方法及绑定](#7)
+7. [jQuery事件](#7)
 8. [链式编程](#8)
 9. [元素的获取、创建、添加、删除](#9)
 10. [动画相关的方法](#10)
@@ -470,7 +470,7 @@ jQuery中:
 	- jQuery转换为DOM操作: `$("#r").get(0).checked = true;`
 
 
-**自定义属性方法**
+**自定义属性方法attr**
 
 - jQuery中可以使用自定义属性: 
 	- `$("#r").attr("checked", "true");`（不建议用attr操作checked等状态属性）
@@ -483,6 +483,8 @@ jQuery中:
 - 当属性没有被设置时候，`.attr()`方法将返回`undefined`, 而不是`false`
 
 - 若要检索和更改DOM属性,比如元素的checked, selected, 或 disabled状态，请使用`prop()`方法。
+
+- `removeAttr("属性");`移除这个自定义属性
 
 
 **prop()方法**
@@ -530,7 +532,7 @@ $("#tb").find("input").click(function(){
 <a name="7">
 
 
-## jQuery事件方法及绑定
+## jQuery事件
 
 
 ### mouseenter和mouseleave
@@ -599,6 +601,12 @@ $("#btn").bind("click", function(){}).bind("mouseenter", function(){});
 $("#btn").bind({"click":function(){}, "mouseenter", function(){}});
 ```
 
+- 第四种:
+
+```
+delegate()
+
+```
 
 
 ### 给元素绑定事件的注意点
@@ -613,11 +621,11 @@ $("#btn").bind({"click":function(){}, "mouseenter", function(){}});
 
 
 
-### 另一种绑定事件的方式
+### 用delegate绑定事件
 
 在`bind()`方法内部，实际调用的是另一个方法`on`绑定的事件
 
-还有一个方法:`delegate()`, 原理类似
+还有一个方法:`delegate()`, 内部也是调用了`on`
 
 `$("#dv").delegate("p", "click", function(){});`
 
@@ -626,6 +634,127 @@ $("#btn").bind({"click":function(){}, "mouseenter", function(){}});
 - 父级元素调用该方法，为子级元素绑定事件
 
 - 子级元素委托父级元素绑定事件
+
+**使用这个方法来给子级元素绑定事件，即使在绑定后又新增了子元素，新的子元素也会有该事件**
+
+
+### on方法
+
+前面提到了，`bind`和`delegate`内部都是调用`on`方法来实现的
+
+`on(events,[selector],[data],fn)` : 在选择元素上绑定一个或多个事件的事件处理函数
+
+- `events`:一个或多个用空格分隔的事件类型和可选的命名空间，如"click"或"keydown.myPlugin" 。
+
+- `selector`:一个选择器字符串用于过滤器的触发事件的选择器元素的后代。如果选择 null或省略，当它到达选定的元素，事件总是触发。
+
+- `data`:当一个事件被触发时要传递`event.data`给事件处理函数。
+
+- `fn`:该事件被触发时执行的函数。 false 值也可以做一个函数的简写，返回false。
+
+**所以，其实`on`方法在有`selector`参数时，就是`delegate`的用法，没有`selector`参数时，就是`bind`的用法**
+
+需要注意`on`方法参数的位置！先是`event`参数，再是`selector`，和`delegate`参数的位置**相反**
+
+
+### 几种方式绑定事件的区别
+
+- `对象.事件名字(事件处理函数)` -->普通的写法
+- `对象.bind(事件的名字，事件处理函数)`
+
+上面两种方式，可以为存在的元素绑定事件，后添加的元素**没有事件**
+
+下面的两种，采用**委托**的方式，可以为存在的元素绑定事件，后添加的元素**也有事件**
+
+- `对象.delegate("选择器", " 事件名字", 事件处理函数)`
+- `对象.on("事件名字", "选择器", 事件处理函数)`
+
+
+建议以后绑定事件都用`on`的方式
+
+注意: 在jQuery中也会有事件冒泡，子元素被点，也会触发祖先元素的点击事件
+
+
+
+### 解绑事件
+
+用什么方式绑定事件，最好就用对应的方式解绑事件
+
+
+#### unbind解绑
+
+`unbind()`
+
+- 传入事件名字作为参数，可以将这个元素绑定该事件的所有方法都解绑
+
+- 如果不传入参数，此时该元素的所有的事件全部解绑
+
+- 可以传入多个事件的字符串，事件之间用空格隔开，实现同时解绑多个事件
+
+```
+$("#btn").click(function(){
+	// 解绑#dv的所有点击事件
+	$("#dv").unbind("click");
+	// 该元素的所有事件全部解绑
+	$("#dv").unbind();
+	// 同时解绑多个事件
+	$("#dv").unbind("mouseenter mouseleave");
+});
+
+```
+
+
+#### undelegate解绑
+
+`undelegate([selector,[type],fn])`
+
+```
+$("#btn2").click(function(){
+	// 解绑#dv里面的元素的所有事件
+	$("#dv").undelegate();
+	// 解绑#dv里面的p元素点击事件
+	$("#dv").undelegate("p", "click");
+	// 解绑#dv里面p元素的多个事件
+	$("#dv").undelegate("p", "mouseenter mouseleave");
+});
+
+```
+
+
+#### off解绑事件
+
+和`on`对应，`off`解绑自然也是功能最全的
+
+**注意和其他解绑方式对比记忆:**
+
+```
+$("#btn3").click(function(){
+	// 父级元素和子级元素的所有的事件全部解绑
+	$("#dv").off();
+	// 父级元素和子级元素的点击事件全部解绑
+	$("#dv").off("click");
+	// 解绑父级元素和子级元素的多个事件，空格隔开
+	$("#dv").off("click mouseenter");
+	// 解绑p标签的点击事件
+	$("#dv").off("click", "p");
+	// 解绑p标签的多个事件
+	$("#dv").off("click mouseenter", "p");
+	// 解绑p的所有事件
+	$("#dv").off("", "p");
+	// 解绑#dv中所有子元素的点击事件
+	$("#dv").off("click", "**");
+	
+});
+
+```
+
+
+### 事件冒泡
+
+在DOM中，取消事件冒泡，用`window.event.cancelBubble=true;`和`event.stopPropagation();`
+
+而在jQuery中取消事件冒泡，只要在事件绑定函数的最后`return false`就行了，内部自动解决了兼容问题
+
 
 
 
