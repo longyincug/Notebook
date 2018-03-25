@@ -4,7 +4,7 @@
 ## 目录
 
 1. [jQuery中的顶级对象](#1)
-2. [jQuery对象和DOM对象互转](#2)
+2. [jQuery对象和DOM对象](#2)
 3. [jQuery中的选择器](#3)
 4. [页面加载的事件](#4)
 5. [jQuery操作CSS样式](#5)
@@ -25,6 +25,10 @@
 
 优点：体积小，功能强大，链式编程，隐式迭代，插件丰富
 
+注意：jQuery 1.12以上的版本不再兼容IE8，如果需要兼容，使用低版本
+
+
+
 
 <a name="1">
 
@@ -41,13 +45,24 @@
 - 大多数情况下，jQuery中都是方法，属性很少
 
 - jQuery把DOM中的事件都封装成了一个方法。去掉了`on`，然后直接变成了方法, 往里面传入匿名函数，自动绑定this
+
+- 如果希望jQuery对象能够调用自定义的方法，可以把这个方法加入到`$.fn`
+	- `$.fn.sayHi = function(){};` 里面的this指向调用该方法的实例对象
+
+
 ```
-// DOM中实现
+// DOM中实现点击事件 
 document.getElementById("id").onclick = function(){};
 
-// jQuery中实现
+// jQuery中实现点击事件
 $("#id").click(function(){});
 ```
+
+
+- 可以将`$`的权限转移给别人，然后`$`会作为普通的变量使用
+	- `var queen = $.noConflict();` // 将$的权利给了queen
+	- `queen("#btn").click(function(){});`
+	- 这可以作为多库共存的解决方案
 
 
 ### 几种常见对象
@@ -64,7 +79,9 @@ $("#id").click(function(){});
 <a name="2">
 
 
-## jQuery对象和DOM对象互转
+## jQuery对象和DOM对象
+
+### jQuery和DOM对象的互转
 
 通过jQuery获取的对象和通过DOM获取的对象是**不相同**的
 
@@ -87,11 +104,59 @@ btnObj2[0].onclick = function(){};
 jQuery操作中，又有一些兼容没有封装在jQuery中，可以转DOM对象，通过原生的js代码实现功能。
 
 
+### jQuery对象访问
+
+- `size()` 返回当前匹配的对象元素个数
+
+- `length` 返回jQuery对象中元素的个数
+	- 可以通过`$("#btn").length != 0` 来判断这个对象元素是否存在
+	- 还可以通过这个来限制用户只创建一个对象
+
+- `selector` 返回传给jQuery()的原始选择器，可以与context一起使用，用于精确检测选择器查询情况（对于插件开发人员很有用）
+
+	- `$("div#foo ul:not([class])").selector` (返回`div#foo ul:not([class])`)
+	
+- `context` 返回传给jQuery()的原始的DOM节点内容，即jQuery()的第二个参数。如果没有指定，那么context指向当前的文档(document)
+
+	- `$("ul", document.body).context.nodeName` (返回`body`)
+
+- `get()` 获取jQuery匹配到的元素
+	
+	- 不传参数，则取得所有匹配的DOM元素集合
+	- 传入index参数，取得index位置上的元素
+	- `$(this).get(0)` 与 `$(this)[0]` 等价
+
+
+- `index()` 搜索匹配的元素，并返回相应元素的索引值，从0开始计数，如果找不到匹配的元素，则返回-1
+
+	1. 如果不给 `.index()` 方法传递参数，那么返回值就是这个jQuery对象集合中第一个元素相对于其同辈元素的位置
+		- `$("li#flag").index();` 可以这样获取一个唯一元素在其父元素下的索引值
+
+	2. 如果参数是一组DOM元素或者jQuery对象，那么返回值就是传递的元素相对于原先集合的位置
+		- `$('li').index($('#bar'));` 获取#bar元素在所有li元素中的索引值
+		- 注意：如果是一组元素对象，则返回这个对象中第一个元素在原先集合中的索引位置
+		- `$('li').index($('li:gt(0)'));` (返回1)
+	
+	3. 如果参数是一个选择器，那么返回值就是**原先元素**相对于**选择器匹配元素**中的位置
+		- `$('#bar').index('li');`  获取#bar元素在所有li元素中的索引值
+
+
+- `each(callback)` 以每一个匹配的元素作为上下文来执行一个函数（迭代）
+
+	- 会自动往回调函数里传入两个参数，第一个是索引，第二个是该元素(DOM对象)
+
+```
+$("#uu>li").each(function(index, ele){
+	var opacity = (index+1)/10;
+	$(ele).css("opacity", opacity);
+});
+
+```
+
 
 ***
 
 <a name="3">
-
 
 
 
@@ -151,6 +216,18 @@ $(function(){
         $(".cls").css("border", "1px solid red");
     });
 });
+```
+
+
+### 属性选择器
+
+可以先用`attr()`自定义属性方法设置属性，然后用该选择器获取指定元素
+
+```
+$(function(){
+	$(".comment>li[index=1]").text("★");
+});
+
 ```
 
 ### 交集选择器
@@ -373,6 +450,21 @@ $(function () {
 - `height()` 同理
 
 
+**inner宽高和outer宽高**
+
+`innerHeight()`、`innerWidth()`
+
+- 返回元素的高度和宽度(包括内边距)
+
+`outerHeight()`、`outerWidth()`
+
+- 返回元素的高度和宽度(包括内边距和边框)
+
+`outerHeight(true)`、`outerWidth(true)`
+
+- 返回元素的高度和宽度(包括内边距、边框和外边距)
+
+
 **获取设置left和top**
 
 `offset()`
@@ -447,6 +539,7 @@ jQuery中:
 - `jQuery对象.text()` 相当于innerText
 
 
+
 ### 表单属性操作
 
 **文本域**
@@ -472,13 +565,14 @@ jQuery中:
 
 **自定义属性方法attr**
 
-- jQuery中可以使用自定义属性: 
+- jQuery中可以使用自定义属性方法: 
 	- `$("#r").attr("checked", "true");`（不建议用attr操作checked等状态属性）
 	- 如果标签默认选中了，`attr("checked")` --> `checked`
 	- 如果标签没有选中，`attr("checked")` --> `undefined`
 	- 注意：
 	- `attr`方法针对单选框或者复选框的是否选中问题，切换起来很麻烦，几乎不用！
 
+- 当然自定义属性，还可以设置一些本不存在的属性，比如说`attr("hello", true);`用来帮助标记
 
 - 当属性没有被设置时候，`.attr()`方法将返回`undefined`, 而不是`false`
 
@@ -580,7 +674,25 @@ $(function(){
 - `li:eq()`索引选择器，接受index参数作为索引，获取指定元素
 
 
-### 为元素绑定事件的方式
+当然还有很多其他事件，比如`click`、`focus`、`scroll`、`keydown`，在此不一一介绍
+
+
+**mouseenter和mouseover的区别**
+
+
+- `mouseenter`与 `mouseover` 事件不同，只有在鼠标指针穿过被选元素时，才会触发 `mouseenter` 事件。
+- 如果鼠标指针穿过任何子元素，同样会触发 `mouseover` 事件
+
+![mouseenter和mouseover的区别](./images/mouseEvent.jpg)
+
+`mouseleave`和`mouseout`也同理
+
+我们没必要为容易触发太多次的操作绑定事件，所以在jQuery中我们一般都是用`mouseenter`和`mouseleave`
+
+
+### 用bind为元素绑定事件
+
+**绑定事件的方式:**
 
 - 第一种:
 
@@ -601,12 +713,7 @@ $("#btn").bind("click", function(){}).bind("mouseenter", function(){});
 $("#btn").bind({"click":function(){}, "mouseenter", function(){}});
 ```
 
-- 第四种:
 
-```
-delegate()
-
-```
 
 
 ### 给元素绑定事件的注意点
@@ -756,6 +863,60 @@ $("#btn3").click(function(){
 而在jQuery中取消事件冒泡，只要在事件绑定函数的最后`return false`就行了，内部自动解决了兼容问题
 
 
+### 事件的触发
+
+```
+$("#btn").click(function(){
+	// 事件触发第一种方式，通过别的元素来触发
+	$("#txt").focus(function(){});
+	
+	// 事件触发第二种方式，通过 trigger 触发
+	$("#txt").trigger("focus");
+	
+	// 事件触发第三种方式，通过 triggerHandler 触发
+	// 注意该方式不会触发浏览器的默认行为, 如文本框内出现光标
+	$("#txt").triggerHandler("focus");
+	
+});
+
+```
+
+
+### 事件参数对象
+
+在jQuery中，给元素绑定事件的时候，都会传入一个事件对象参数，不管是IE还是别的浏览器
+
+该事件对象中包含了很多属性，如`button`，`clientX`，`currentTarget`, `delegateTarget`, `target`等等
+
+```
+$(document).mousedown(function(e){
+	// 获取鼠标按键的值，左键是0，滚轮是1，右键是2
+	console.log(e.button);
+	
+	if(e.ctrlKey){
+		console.log("用户同时也按下了ctrl键");
+	}else if(e.shiftKey){
+		console.log("用户同时也按下了shift键");
+	}else if(e.altKey){
+		console.log("用户同时也按下了alt键");
+	}else{
+		console.log("用户按下了鼠标");
+	}
+	
+});
+
+```
+
+
+- `e.target` 这个属性得到触发该事件的目标对象，此时是一个DOM对象
+	- 可以通过 `$(e.target).attr("id")` 将其转换为jQuery对象来获取里面的属性
+	
+- `e.currentTarget` 这个属性得到的是触发该事件的当前的对象
+
+- `e.delegateTarget` 这个属性得到的是代理的这个对象
+
+- `screenX`、`screenY`、`pageX`、`pageY`...鼠标相对于屏幕、页面的坐标
+ 
 
 
 ***
@@ -763,6 +924,8 @@ $("#btn3").click(function(){
 <a name="8">
 
 ## 链式编程
+
+### 原理
 
 链式编程：对象连续地调用方法
 
@@ -799,6 +962,35 @@ $("#btn").click(function () {
 ```
 
 
+### 通过构造函数实现链式调用
+
+```
+function Person(age){
+	this.age = age;
+	this.sayHi = function(txt){
+		// 可以判断，当用户传入参数，返回对象
+		if(txt){
+			console.log("hello" + txt);
+			return this; // 如果这里不返回原对象，默认会返回undefined，就不能链式调用了
+		}else{
+			console.log("hello")
+		}
+	};
+	this.eat = function(){
+		console.log("eat some food");
+		return this;
+	};
+}
+
+var per = new Person(10);
+
+per.sayHi("Tom").eat().sayHi();
+
+
+```
+
+
+
 ***
 
 <a name="9">
@@ -808,40 +1000,46 @@ $("#btn").click(function () {
 ### 兄弟元素、父子元素的获取
 
 ```
-$("#three").click(function () {
 
-    //获取某个li的下一个兄弟元素
-    $(this).next("li").css("backgroundColor", "yellowgreen");
+//获取某个li的下一个兄弟元素
+$(this).next("li").css("backgroundColor", "yellowgreen");
 
-    // 获取某个li的前一个兄弟元素
-    $(this).prev("li").css("backgroundColor", "greenyellow");
+// 获取某个li的前一个兄弟元素
+$(this).prev("li").css("backgroundColor", "greenyellow");
 
-    // 获取某个li后面的所有兄弟元素
-    $(this).nextAll("li").css("backgroundColor", "red");
+// 获取某个li后面的所有兄弟元素
+$(this).nextAll("li").css("backgroundColor", "red");
 
-    // 获取某个li前面的所有兄弟元素
-    $(this).prevAll("li").css("backgroundColor", "red");
+// 获取某个li前面的所有兄弟元素
+$(this).prevAll("li").css("backgroundColor", "red");
 
-    // 获取当前的li的所有兄弟元素（不包括自己）
-    $(this).siblings("li").css("backgroundColor", "grey");
+// 获取当前的li的所有兄弟元素（不包括自己）
+$(this).siblings("li").css("backgroundColor", "grey");
 
-
-    // 断链：对象调用方法后，返回的已经不是当前的这个对象了，此时再继续调用方法，出现了断链
-    // 用 end() 方法可以修复断链，恢复断链之前的状态，但是会影响性能，不推荐使用
-    $(this).prevAll("li").css("backgroundColor", "yellow").end().nextAll("li").css("backgroundColor", "blue");
+```
 
 
-    // tab栏产品切换的实现
+- **断链**：对象调用方法后，返回的已经不是当前的这个对象了，此时再继续调用方法，出现了断链，无法继续链式调用
+- 用 end() 方法可以修复断链，恢复断链之前的状态，但是会影响性能，不推荐使用
+
+```
+$(this).prevAll("li").css("backgroundColor", "yellow").end().nextAll("li").css("backgroundColor", "blue");
+```
+
+
+#### 案例: tab栏产品切换的实现
+
+```
     // 设置当前鼠标进入的li添加类样式，同时移除当前li的所有兄弟元素的类样式
     $(this).addClass("active").siblings("li").removeClass("active");
 
     // 获取当前鼠标进入的li的索引值
     var index = $(this).index();
+    
     // 获取下面的所有产品div，将选中的添加样式，其余的删除样式
     $(".products>div:eq("+index+")").addClass("selected").siblings("div").removeClass("selected");
-});
-
 ```
+
 
 - `当前元素.parent()` --> 父级元素
 
@@ -851,6 +1049,28 @@ $("#three").click(function () {
 
 从所有的段落开始，进一步搜索下面的span元素: `$("p").find("span")`, 与`$("p span")`相同
 
+
+#### 案例:五角星评分效果实现
+
+```
+$(".comment>li").mouseenter(function(){
+	// 当前鼠标碰触的li是实心的五角星，前面的li也是实心，后面的li是空心
+	$(this).text("★").prevAll("li").text("★").end().nextAll("li").text("☆");
+	
+}).click(function(){
+	// 当鼠标点击哪个li，就给它设置一个自定义的标记属性，同时删除其它li中该标记
+	$(this).attr("flag", "1").siblings("li").removeAttr("flag");
+	
+}).mouseleave(function(){
+	// 鼠标移开，先清除所有实心，如果用户之前没有点击，这时就结束了
+	$(".comment>li").text("☆");
+	// 判断，获取带有flag标记的li，然后将其前面的设置为实心，后面的设置为空心
+	$(".comment>li[index=1]").text("★").prevAll("li").text("★");
+	
+});
+
+
+```
 
 
 ### 元素的创建和添加
