@@ -13,6 +13,7 @@
 10. [每天一道面试题: 10](#10)
 11. [每天一道面试题: 11](#11)
 12. [每天一道面试题: 12](#12)
+13. [每天一道面试题: 13](#13)
 
 
 <a name="1">
@@ -112,9 +113,9 @@ console.log("A" - "B" + 2); // NaN
 ### 下面代码输出什么？
 
 ```
-var a={n:1}; 
-var b=a; 
-a.x=a={n:2}; 
+var a = {n:1}; 
+var b = a; 
+a.x = a = {n:2}; 
 console.log(a);
 console.log(b);
 console.log(a.x); 
@@ -1247,7 +1248,9 @@ function a() {}
 
 ```
 
-我们知道var和function是会提前声明的，而且function是优先于var声明的（如果同时存在的话），所以提前声明后输出的a是个function，然后代码往下执行a进行重新赋值了，故第二次输出是2
+我们知道`var`和`function`是会提前声明的，而且`function`是优先于`var`声明的（如果同时存在的话），所以提前声明后输出的a是个`function`，然后代码往下执行a进行重新赋值了，故第二次输出是2
+
+**函数声明优于变量声明**
 
 ```
 if('a' in window) {
@@ -1327,5 +1330,119 @@ undefinedhello
 
 
 <a name="13">
+
+
+## 每天一道面试题: 13
+
+### 判断一个字符串中出现次数最多的字符，并统计次数
+
+
+**答案:**
+
+- **hash table方式:**
+
+```
+var s = 'aaabbbcccaaabbbaaa';
+var obj = {};
+var maxn = -1;
+var letter;
+for(var i = 0; i < s.length; i++) {
+  if(obj[s[i]]) {
+    obj[s[i]]++;
+    if(obj[s[i]] > maxn) {
+      maxn = obj[s[i]];
+      letter = s[i];
+    }
+  } else {
+    obj[s[i]] = 1;
+    if(obj[s[i]] > maxn) {
+      maxn = obj[s[i]];
+      letter = s[i];
+    }
+  }
+}
+
+alert(letter + ': ' + maxn);
+
+```
+
+
+- **正则方式:**
+
+```
+var s = 'aaabbbcccaaabbbaaabbbbbbbbbb';
+var a = s.split('');
+a.sort();
+s = a.join('');
+var pattern = /(\w)\1*/g;
+var ans = s.match(pattern);
+ans.sort(function(a, b) {
+  return a.length < b.length;
+});;
+console.log(ans[0][0] + ': ' + ans[0].length);
+
+```
+
+
+***
+
+### 实现一段脚本，使得点击对应链接alert出相应的编号
+
+```
+
+<!-- 实现一段脚本，使得点击对应链接alert出相应的编号 -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body>
+  <a href='#'> 第一个链接 </a> </br>
+  <a href='#'> 第二个链接 </a> </br>
+  <a href='#'> 第三个链接 </a> </br>
+  <a href='#'> 第四个链接 </a> </br>
+</body>
+
+```
+
+
+**答案:**
+
+- **dom污染法**
+
+```
+
+<script type="text/javascript">
+    var lis = document.links;
+    for(var i = 0, length = lis.length; i < length; i++) {
+      lis[i].index = i;
+      lis[i].onclick = function() {
+        alert(this.index);
+      };
+    }
+</script>
+
+```
+
+- **闭包**
+
+```
+
+<script type="text/javascript">
+    var lis = document.links;
+	for(var i=0; i<lis.length; i++) {
+		(function(i) {
+		
+			lis[i].onclick = function() {
+				alert(i + 1);
+			};
+		
+		})(i);
+	}
+</script>
+
+```
+
+
+***
+
+
+<a name="14">
 
 
