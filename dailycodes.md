@@ -1,6 +1,7 @@
 # 每天一道面试题
 
 ## 目录
+
 1. [每天一道面试题: 1](#1)
 2. [每天一道面试题: 2](#2)
 3. [每天一道面试题: 3](#3)
@@ -14,6 +15,7 @@
 11. [每天一道面试题: 11](#11)
 12. [每天一道面试题: 12](#12)
 13. [每天一道面试题: 13](#13)
+14. [每天一道面试题: 14](#14)
 
 
 <a name="1">
@@ -122,9 +124,10 @@ console.log(a.x);
 console.log(b.x);
 ```
 
-**尽量不要使用JS的连续赋值操作, 除非真的了解它的内部机制及可能会产生的后果。**
 
 **答案:**
+
+**尽量不要使用JS的连续赋值操作, 除非真的了解它的内部机制及可能会产生的后果。**
 
 ```
 var a={n:1}; 
@@ -495,7 +498,7 @@ function isPalindrome(str) {
 
 `1 4 3 2`
 
-<a name="61">
+<a name="6a">
 
 需要理解**JavaScript的运行机制**:
 
@@ -610,15 +613,15 @@ bind是和apply、call一样，是Function的扩展方法，所以应用场景�
 
 ps:`bind(obj, *args)`方法返回的是一个柯里化的函数，所以可以接受后面的参数作为func的实参
 
-关于bind详情看:[bind的用法](#91)
+关于bind详情看:[bind的用法](#9a)
 
 **还有一种解法, 不用闭包:**
 ```
-var num;
+var num = 0;
 var timer = setTimeout(function func(){
 	
 	console.log(num++);
-	if(num<10){
+	if(num < 5){
 		setTimeout(func, 1000);
 	}
 }, 1000);
@@ -658,7 +661,9 @@ MDN 上对于 reverse() 的描述是这样的：
 
 而数组与字符串""做加法运算输出，会将数组中除中括号外的字符全部打印出来
 
+
 ***
+
 
 ### 如果 list 很大，下面的这段递归代码会造成堆栈溢出，如何在不改变递归模式的前提下修缮这段代码？
 
@@ -690,7 +695,7 @@ var nextListItem = function() {
 };
 ```
 
-解决方式原理请参考: [每天一道面试题: 6](#61)
+解决方式原理请参考: [每天一道面试题: 6](#6a)
 
 利用 setTimeout 的异步性质，完美地去除了这个调用栈。
 
@@ -776,17 +781,25 @@ console.log(0 || 2 && 1); //1
 console.log(0 && 2 || 1); //1
 ```
 
+<a name="8a">
+
 **在 JavaScript，常见的 false 值:**
+
 `0, '0', +0, -0, false, '', null, undefined, null, NaN`
 
 要注意**空数组([])**和**空对象({})**:
 ```
-console.log([] == false) //true
-console.log({} == false) //false
-console.log(Boolean([])) //true
+console.log([] == false) //true ([]调用indexOf方法, 返回"", 是false)
+console.log({} == false) //false({}返回"[object Object]"字符串)
+console.log(Boolean([])) //true(都是对象，所以转化为Boolean，都是true)
 console.log(Boolean({})) //true
 ```
+
 所以在 if 中，[] 和 {} 都表现为 true
+
+注意: `[] == ![] //true` 前者是按相等运算的转换规则，后者是按Boolean的转换规则
+
+
 
 ***
 
@@ -846,7 +859,7 @@ console.log(ans);
 
 ## 每天一道面试题: 9
 
-<a name="91">
+<a name="9a">
 
 ### 解释下面代码的输出，并修复存在的问题
 
@@ -1446,3 +1459,121 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 <a name="14">
 
 
+## 每天一道面试题: 14
+
+
+### 下面的代码应该输出什么？（再谈声明提前、类型转换）
+
+```
+f = function () { return true; };
+g = function () { return false; };
+(function () {
+    if (g() && [] == ![]) {
+        f = function f() { return false; };
+        g = function() { return true; }
+    }
+})();
+alert(f());
+```
+
+
+**答案:**
+
+函数的声明会提前，但是函数表达式是不会提前的，在if条件中的f和g均为函数表达式，所以不会被提前，使用全局的变量进行判断。
+
+由于相等运算符优先级高于逻辑与，先算`[] == ![]`返回true，而`g()`返回false，所以最终`alert(f());`结果返回true
+
+如果不明白，再回顾一下之前学过的:
+
+- [相等运算类型转换](./JSnotes.md/#31)
+
+- [常见的false值](#8a)
+
+
+如果把代码变动一下呢？
+
+```
+
+f = function () { return true; };
+g = function () { return false; };
+(function () {
+	if (g() && [] == ![]) {
+		f = function f() { return false; };
+		function g() { return true; }  
+	}
+})();
+alert(f());
+
+```
+
+- 此题中if中的g函数的声明会被提前，但是定义不会被提前，所以if中使用的将不会是全局的函数g，而是局部变量，g进行了声明，但是没有定义,故会报错 `g is not a function` 
+
+- 如果将g函数变为 `var g = function(){};` 这样也会报同样的错误，后者相当于是函数表达式，提升的是var定义的变量而不是函数的声明
+
+举个例子:
+
+```
+console.log(f)
+f();
+if(false){
+	function f(){
+	console.log("ok")
+	}
+}
+```
+
+输出`undefined`后，报错`f is not a function`, 说明在if语句块中的函数的声明被提前但是函数的定义没被提前
+
+
+**学习一下声明规范:**
+
+- ES5中有规定不要将函数定义在语句块中，也就是函数可以在全局作用域和函数作用域中被声明和定义，但不要在if等语句块中定义和声明
+- 在全局和函数作用域中定义的函数的声明和定义都将会被提前到当前作用域的顶部
+- 在if和for中声明的函数在非严格模式下不会报错，但是不同的浏览器可能表现不同
+- 在谷歌中，在if 等语句块中声明的函数的声明会被提前但是函数的定义将不会被提前
+- 所以在**块语句**里面最好是使用函数表达式，而不是函数的声明
+
+
+***
+
+### 请给出这段代码的运行结果
+
+```
+
+var bb = 1;
+function aa(bb) {
+    bb = 2;
+    alert(bb);
+};
+aa(bb);
+alert(bb);
+
+```
+
+
+**答案:**
+
+在aa函数中，bb是以传值的方式传入的，在函数中，会重新定义一个bb变量，并将其值覆为2，并不影响函数体外的bb变量，所以其值仍然为1
+
+注意这一题中的特殊情况，不要误以为函数内没有用var声明的都是隐式全局变量
+
+**如果函数接受的参数名和全局变量名相同的话，在函数内部不用写var，使用该变量会认为是形参的调用，而不会覆盖全局变量！**
+
+当然如果是下面这种情况，就是我们熟知的输出了，输出`2 2`:
+
+```
+var bb = 1;
+function aa(cc) {
+    bb = 2;
+    alert(bb);
+};
+aa(bb);
+alert(bb);
+
+```
+
+
+***
+
+
+<a name="15">
