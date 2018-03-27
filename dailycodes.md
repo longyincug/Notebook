@@ -16,6 +16,7 @@
 12. [每天一道面试题: 12](#12)
 13. [每天一道面试题: 13](#13)
 14. [每天一道面试题: 14](#14)
+15. [每天一道面试题: 15](#15)
 
 
 <a name="1">
@@ -1577,3 +1578,73 @@ alert(bb);
 
 
 <a name="15">
+
+## 每天一道面试题: 15
+
+### 解释一下下面的代码
+
+```
+
+function JSClass() {
+  this.m_Text = 'division element';
+  this.m_Element = document.createElement('div');
+  this.m_Element.innerHTML = this.m_Text;
+  this.m_Element.addEventListener('click', this.func);
+
+}
+
+JSClass.prototype.Render = function() {
+  document.body.appendChild(this.m_Element);
+}
+
+JSClass.prototype.func = function() {
+  alert(this.m_Text);
+};
+
+var jc = new JSClass();
+jc.Render();
+jc.func();
+
+// 当点击添加的div，会输出什么？
+
+```
+
+
+**答案:**
+
+```
+division element
+undefined
+```
+
+`jc.func()`输出`division element`很好理解，而当点击添加的div时，仔细可以看出，事件绑定的方法中，this已经指向了`this.m_Element`
+
+因为是`this.m_Element`调用的`addEventListener`函数，所以内部的this全指向它了
+
+可以试着加上一行代码`this.m_Element.m_Text = 'hello world'`，就会alert出`hello world`了
+
+
+***
+
+### 请编写一个JavaScript函数 parseQueryString，它的用途是把URL参数解析为一个对象，如： var url = “http://witmax.cn/index.php?key0=0&key1=1&key2=2″
+
+
+**答案:**
+
+```
+function parseQueryString(str){
+	var argObj = {};
+	var arr = str.split("?");
+	if(arr.length === 1) return argObj;
+	var queryArr = arr[1].split("&");
+	for(var i = 0; i < queryArr.length; i++){
+		var obj = queryArr[i].split("=");
+		argObj[obj[0]] = obj[1];
+	}
+	
+	return argObj;
+
+}
+
+
+```
