@@ -17,6 +17,7 @@
 13. [每天一道面试题: 13](#13)
 14. [每天一道面试题: 14](#14)
 15. [每天一道面试题: 15](#15)
+16. [每天一道面试题: 16](#16)
 
 
 <a name="1">
@@ -1648,3 +1649,130 @@ function parseQueryString(str){
 
 
 ```
+
+***
+
+<a name="16">
+
+## 每天一道面试题: 16
+
+> 今天开始进行JavaScript细节上的查漏补缺
+
+### `javascript`的`typeof`返回哪些数据类型？
+
+**答案:**
+
+object number function boolean undefined string
+
+***
+
+### 传统事件绑定和符合W3C标准的事件绑定有什么区别？
+
+**答案:**
+
+- 传统事件绑定: `div1.onclick=function(){}; `
+	- 如果给同一个元素绑定了两次或者多次相同类型的事件，那么后面的绑定会覆盖前面的绑定
+	- 不支持DOM事件流(事件捕获阶段-->目标元素阶段-->事件冒泡阶段)
+
+- 符合W3C标准的事件绑定
+	- `addEventListener`
+		-  如果说给同一个元素绑定了两次或者多次相同类型的事件，所有的绑定将会依次触发 
+		- 支持 `DOM` 事件流
+		- 进行事件绑定传参不需要 `on` 前缀 
+	
+	- IE9之前: `attachEvent/detachEvent`
+		- 进行事件类型传参需要带上`on`前缀
+		- 这种方式只支持事件冒泡，不支持事件捕获
+
+***
+
+### IE和DOM事件流的区别？
+
+**答案:**
+
+1. 执行顺序不一样
+2. 参数不一样
+3. 事件加不加on
+4. this指向问题
+
+IE9 以前：attachEvent(“onclick”)、detachEvent(“onclick”) 
+
+IE9 开始跟 DOM 事件流是一样的，都是 addEventListener
+
+***
+
+### IE和标准下有哪些兼容的写法？
+
+**答案:**
+
+```
+ev=ev||window.event 
+
+document.documentElement.clientWidth || document.body.clientWidth
+
+target = ev.srcElement||ev.target
+```
+
+***
+
+### b继承a的方法
+
+**答案:**
+
+```
+function b(){}
+
+b.prototype = new a;
+```
+
+***
+
+### js指针、闭包、作用域
+
+**答案:**
+
+this: 指向调用上下文
+
+闭包: 内层作用域可以访问外层作用域的变量。
+	- 闭包就是可以读取其他函数内部变量的函数
+	- 闭包的缺点：滥用闭包会造成内存泄漏，因为闭包中引用到的包裹函数中定义的变量都永远不会被释放，所以我们应在必要的时候，及时释放这个闭包函数
+
+作用域: 定义一个函数就开辟了一个局部作用域，整个js执行环境就是一个全局作用域
+
+***
+
+### 事件委托是什么？如何阻止事件冒泡和默认事件？
+
+**答案:**
+
+事件委托: 利用事件冒泡的原理，子元素所触发的事件，让其父元素代替执行
+
+阻止事件冒泡: 
+	- `e.stopPropagation()` // 标准浏览器
+	- `event.cancelBubble = true` // IE9之前
+	
+阻止默认事件:
+	- 比如为了不让a点击之后跳转，我们就要给它的点击事件进行阻止。还有一些浏览器的默认事件
+	- `return false`
+	- 对于使用addEventListener绑定的事件，需要使用`e.preventDefault();`阻止默认事件
+	
+
+
+***
+
+
+<a name="17">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
