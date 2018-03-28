@@ -860,7 +860,7 @@ $("#btn3").click(function(){
 
 在DOM中，取消事件冒泡，用`window.event.cancelBubble=true;`和`event.stopPropagation();`
 
-而在jQuery中取消事件冒泡，只要在事件绑定函数的最后`return false`就行了，内部自动解决了兼容问题
+而在jQuery中取消事件冒泡，只要在事件绑定函数的最后`return false`就行了，内部自动解决了兼容问题, 同时也会取消默认行为
 
 
 ### 事件的触发
