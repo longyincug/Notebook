@@ -365,19 +365,415 @@
 
 #### `string`类型
 
+字符串可以由双引号或单引号表示，在PHP中双引号和单引号会影响对字符串的解释方式，ES中这两种语法形式并没有什么区别
+
+1. 字符字面量，一些特殊的字符字面量，也叫转义序列，用于表示非打印字符，或者具有其他用途的字符
+	- ![字符字面量](./images/字面量.png)
+	- 这些字符字面量可以出现在字符串的任意位置，也被当做一个字符来解析
+	- `var text = "This is the letter sigma: \u03a3.";`这个例子的text有28个字符，其中6个字符长的转义序列表示1个字符
+	- 任何字符串的长度都可以通过访问其length属性得到
+	
+2. 字符串一旦创建，他们的值就不能改变，要改变某个变量保存的字符串，首先要销毁原来的字符串，然后再用另一个包含新值得字符串填充该变量
+
+3. 把一个值转换为字符串有两种方式
+	1. 第一种使用toString方法，但是null和undefined没有这个方法
+		- 多数情况调用toString不必传递参数，但是对于数值，可以传递一个参数，作为输出数值的基数
+		- 默认情况下，toString方法以十进制格式返回数值的字符串表示
+	
+	2. 在不知道要转换的值是不是null或undefined的情况下，可以使用String()
+		- 这个函数能够将任何类型的值转换为字符串
+		- null返回"null", undefined返回"undefined"
 
 
+#### `Object`类型
+
+ECMAScript 中的对象其实就是一组数据和功能的集合。对象可以通过执行 new 操作符后跟要创建的对象类型的名称来创建。而创建 Object 类型的实例并为其添加属性和（或）方法，就可以创建自定义对象
+
+在 ECMAScript 中，如果不给构造函数传递参数，则可以省略后面的那一对圆括号。也就是说，在像前面这个示例一样不传递参数的情况下，完全可以省略那对圆括号（但这不是推荐的做法）：
+
+`var o = new Object; // 有效，但不推荐省略圆括号`
+
+Object的每个实例都具有下列属性和方法:
+
+- `constructor`: 保存着用于创建当前对象的函数，对于前面的例子而言，构造函数(constructor)就是Object()
+
+- `hasOwnProperty()`: 用于检查给定的属性在当前对象实例中是否存在
+
+- `isPrototypeOf(object)`: 用于检查传入的对象是否是传入对象的原型
+
+- `propertyIsEnumerable(propertyName)`: 用于检查给定的属性是否能够使用for-in语句来枚举
+
+- `toLocaleString()`: 返回对象的字符串表示，该字符串与执行环境的地区对应
+
+- `toString()`: 返回对象的字符串表示
+
+- `valueOf()`: 返回对象的字符串、数值或布尔值表示，通常与`toString()`方法的返回值相同
+
+由于Object是所有对象的基础，因此所有对象都具有这些基本的属性和方法，第5章和第6章将详细介绍Object
+
+注意: ES中对象的行为不一定适合JS中的其他对象，比如说宿主对象，是由宿主实现和定义的，可能不会继承Object
 
 
 <a name="3c">
 
 ### 操作符
 
+#### 布尔操作符
+
+1. 逻辑非
+	- 可以应用于ES中的任何值，无论这个值是什么类型，都会返回一个布尔值，首先会将其转换为一个布尔值，再对其求反
+	- 遵循以下规则:
+	- ![逻辑非](./images/逻辑非.png)
+
+	- 如果同时使用两个逻辑非操作符，实际上就是模拟Boolean()函数的行为
+
+2. 逻辑与
+	- 逻辑与(&&)也可以应用于任何类型的操作数
+		- 如果有一个操作数是 null，则返回 null；
+		- 如果有一个操作数是 NaN，则返回 NaN；
+		- 如果有一个操作数是 undefined，则返回 undefined
+
+	- 逻辑与操作属于短路操作，如果第一个操作数能够决定结果，就不会再对第二个操作数求值
+
+3. 逻辑或
+	- 逻辑或(||)与逻辑与相似，也是属于短路操作
+	- 我们可以利用逻辑或的行为来避免为一个变量赋null或undefined值
+	- `var event = event || window.event`
+
+
+#### 乘性操作符
+
+1. 乘法:
+	- 如果有一个操作数是NaN，结果是NaN
+	- **如果是Infinity与0相乘，结果是NaN**
+	- 如果Infinity与非0相乘，则结果是Infinity或-Infinity
+	- **Infinity与Infinity相乘，结果也是Infinity**
+	- 如果有一个操作数不是数值，则在后台调用Number()将其转换为数值，再应用上面的规则
+
+2. 除法:
+	- 如果有一个操作数是NaN，结果是NaN
+	- **如果是 Infinity 被 Infinity 除，则结果是 NaN**
+	- **如果是零被零除，则结果是 NaN**
+	- 如果是非零的有限数被零除，则结果是 Infinity 或-Infinity
+	- 如果是 Infinity 被任何非零数值除，则结果是 Infinity 或-Infinity
+	- 如果有一个操作数不是数值，则在后台调用Number()将其转换为数值，再应用上面的规则
+
+```
+console.log(Infinity*0); //NaN
+console.log(Infinity/0); //Infinity
+console.log(0/Infinity); //0
+console.log(Infinity == Infinity); //true
+console.log(0/0); //NaN
+console.log(Infinity/Infinity); //NaN
+console.log(Infinity*Infinity); //Infinity
+console.log(1/0); //Infinity
+console.log(1%0); //NaN
+console.log(Infinity%0);//NaN
+console.log(Infinity%Infinity);//NaN
+```
+
+
+#### 加性操作符
+
+1. 加法:
+	- 如果两个操作符都是数值:
+		- 如果有一个操作数是 NaN，则结果是 NaN
+		- 如果是 Infinity 加-Infinity，则结果是 NaN
+		- 如果是 Infinity 加 Infinity，则结果是 Infinity
+		- 如果是-Infinity 加-Infinity，则结果是-Infinity
+
+	- 如果有一个操作数是字符串
+		- 如果两个都是字符串，那么会进行拼接
+		- 如果只有一个是字符串，会将另一个操作数转换为字符串，然后再进行拼接
+	
+	- 如果有一个操作数是对象、数值或布尔值
+		- 则调用他们的toString()方法取得相应的字符串值，然后再应用前面的规则
+		- 对于undefined和null，则分别调用String()函数并取得字符串"undefined"和"null"
+
+2. 减法:
+	- 如果两个操作符都是数值:
+		- 如果有一个操作数是 NaN，则结果是 NaN
+		- 如果是 Infinity 减 Infinity，则结果是 NaN
+		- 如果是-Infinity 减-Infinity，则结果是 NaN
+		- 如果是 Infinity 减-Infinity，则结果是 Infinity
+		- 如果是-Infinity 减 Infinity，则结果是-Infinity
+
+	- 如果有一个操作数是字符串、布尔值、null 或 undefined，则先在后台调用 Number()函数将其转换为数值，然后再根据前面的规则执行减法计算。如果转换的结果是 NaN，则减法的结果就是 NaN；
+	
+	- 如果有一个操作数是对象，则调用对象的 valueOf()方法以取得表示该对象的数值。如果得到的值是 NaN，则减法的结果就是 NaN。如果对象没有 valueOf()方法，则调用其 toString()方法并将得到的字符串转换为数值。
+
+
+#### 关系运算符
+
+1. 大于、小于、小于等于、大于等于，用于对两个值进行比较，都返回一个布尔值
+
+2. 转换操作:
+
+	- 如果两个操作数都是字符串，则比较两个字符串对应的字符编码值
+	
+	- 如果一个操作数是数值，则将另一个操作数转换为一个数值，然后执行数值比较
+	
+	- 如果一个操作数是对象，则调用这个对象的 valueOf()方法，用得到的结果按照前面的规则执行比较。如果对象没有 valueOf()方法，则调用 toString()方法，并用得到的结果根据前面的规则执行比较
+	
+	- 如果一个操作数是布尔值，则先将其转换为数值，然后再执行比较
+
+	- 任何操作数与NaN进行关系比较，结果都是false
+	
+	```
+	var result1 = NaN < 3; //false
+	var result2 = NaN >= 3; //false 
+	```
+
+
+#### 相等操作符
+
+1. 如果有一个操作数是布尔值，则在比较相等性之前先将其转换为数值——false 转换为 0，而true 转换为 1
+
+2. 如果一个操作数是字符串，另一个操作数是数值，在比较相等性之前先将字符串转换为数值
+
+3. 如果一个操作数是对象，另一个操作数不是，则调用对象的 valueOf()方法，用得到的基本类型值按照前面的规则进行比较
+
+4. 注意遵循以下规则:
+
+	- null 和 undefined 是相等的
+	- 要比较相等性之前，不能将 null 和 undefined 转换成其他任何值
+	- 如果有一个操作数是NaN，则相等操作符返回 false，而不相等操作符返回 true
+	- 即使两个操作数都是 NaN，相等操作符也返回 false；因为按照规则，NaN 不等于 NaN
+	- 如果两个操作数都是对象，则比较它们是不是同一个对象。如果两个操作数都指向同一个对象，则相等操作符返回 true；否则，返回 false
+
+	```
+	undefined == 0 //false
+	null == 0 //false
+	```
+
+	- 注意将相等转换规则和Boolean转换规则区分开来
+
+5. 对于全等操作符，不会转换类型，所以`undefined` 不全等于 `null`
+
+
+#### 条件操作符
+
+`variable = boolean_expression ? true_value : false_value;`
+
+
+#### 逗号操作符
+
+使用逗号操作符可以在一条语句中执行多个操作
+
+`var num1 = 1, num2 = 2, num3 = 3;`
+
+逗号操作符多用于声明多个变量，除此之外，逗号操作符还可以用于赋值，在用于赋值时，逗号操作符总会返回表达式中的最后一项
+
+`var num = (5, 1, 4, 8, 0);` //num的值为0
+
+虽然逗号的这种使用方式并不常见，但这个例子可以帮助我们理解逗号的这种行为
 
 
 <a name="3d">
 
 ### 语句
+
+#### if语句
+
+`if (condition) statement1 else statement2 `
+
+- condition（条件）可以是任意表达式；而且对这个表达式求值的结果不一定是布尔值。
+
+- ECMAScript 会自动调用 Boolean()转换函数将这个表达式的结果转换为一个布尔值
+
+- 这两个语句既可以是一行代码，也可以是一个代码块，推荐始终使用代码块
+
+
+#### do-while语句
+
+```
+var i = 0;
+do {
+ i += 2;
+} while (i < 10); 
+```
+
+这种后测试循环语句最常用于循环体中的代码至少要被执行一次的情形
+
+
+#### while语句
+
+```
+var i = 0;
+while (i < 10) {
+	i += 2;
+}
+
+```
+
+
+#### for语句
+
+for 语句也是一种前测试循环语句，但它具有在执行循环之前初始化变量和定义循环后要执行的代码的能力
+
+使用 while 循环做不到的，使用 for 循环同样也做不到。也就是说，for 循环只是把与循环有关的代码集中在了一个位置
+
+
+#### for-in语句
+
+for-in 语句是一种精准的迭代语句，可以用来**枚举对象的属性**
+
+```
+for (var propName in window) {
+ document.write(propName);
+} 
+```
+
+ES对象的属性没有顺序，因此通过for-in循环输出的属性名的顺序是不可预测的
+
+**但是，如果要迭代的对象的变量值为null或undefined，for-in语句会抛出错误！**
+
+在ES5中更正了这一行为，对这种情况不在报错，而只是不执行循环体，为了保证最大限度的兼容性，建议在使用for-in循环之前，先检测该对象的值不是null或undefined
+
+
+#### label语句
+
+使用label语句可以在代码中添加标签，以便将来使用
+
+```
+start: for (var i=0; i < count; i++) {
+ alert(i);
+} 
+```
+
+这个例子中定义的 start 标签可以在将来由 break 或 continue 语句引用。加标签的语句一般都要与 for 语句等循环语句配合使用
+
+```
+var num = 0;
+outPoint:
+for (var i = 0 ; i < 10 ; i++){
+  for (var j = 0 ; j < 10 ; j++){
+   if( i == 5 && j == 5 ){
+    break outPoint;
+   }
+  num++;
+  }
+}
+alert(num); // 循环在 i 为5，j 为5的时候跳出双循环，返回到outPoint层继续执行，输出 55
+```
+
+
+#### break和continue语句
+
+break 和 continue 语句用于在循环中精确地控制代码的执行。
+
+其中，break 语句会立即退出循环，强制继续执行循环后面的语句。
+
+而 continue 语句虽然也是立即退出循环，但退出循环后会从循环的顶部继续执行。
+
+结合label标签使用:
+
+```
+var num = 0;
+outermost:
+for (var i=0; i < 10; i++) {
+	for (var j=0; j < 10; j++) {
+		if (i == 5 && j == 5) {
+			continue outermost;
+		}
+		num++;
+	}
+}
+alert(num); //95 
+
+```
+
+在这种情况下，continue 语句会强制继续执行循环——退出内部循环，执行外部循环。
+当 j 是 5时，continue 语句执行，而这也就意味着内部循环少执行了 5 次，因此 num 的结果是 95。
+
+
+#### with语句
+
+with 语句的作用是将代码的作用域设置到一个特定的对象中
+
+定义 with 语句的目的主要是为了简化多次编写同一个对象的工作:
+
+```
+var qs = location.search.substring(1);
+var hostName = location.hostname;
+var url = location.href; 
+```
+使用with语句简化如下:
+
+```
+with(location){
+	var qs = search.substring(1);
+	var hostName = hostname;
+	var url = href;
+} 
+```
+
+- 这意味着在 with 语句的代码块内部，每个变量首先被认为是一个局部变量，而如果在局部环境中找不到该变量的定义，就会查询location 对象中是否有同名的属性。如果发现了同名属性，则以 location 对象属性的值作为变量的值。
+
+- 严格模式下不允许使用 with 语句，否则将视为语法错误。
+
+- 大量使用with会导致性能下降，同时给代码调试带来困难，因此不建议使用
+
+
+#### switch语句
+
+switch 语句中的每一种情形（case）的含义是：“如果表达式等于这个值（value），则执行后面的语句（statement）”。而 break 关键字会导致代码执行流跳出 switch 语句。如果省略 break 关键字，就会导致执行完当前 case 后，继续执行下一个 case。最后的 default 关键字则用于在表达式不匹配前面任何一种情形的时候，执行机动代码（因此，也相当于一个 else 语句）。
+
+从根本上讲，switch语句就是为了让开发人员免于编写如下代码:
+
+```
+if (i == 25){
+ alert("25");
+} else if (i == 35) {
+ alert("35");
+} else if (i == 45) {
+ alert("45");
+} else {
+ alert("Other");
+} 
+```
+
+而与此等价的 switch 语句如下所示：
+
+```
+switch (i) {
+	case 25:
+		alert("25");
+ 		break;
+	case 35:
+ 		alert("35");
+		break;
+	case 45:
+		alert("45");
+		break;
+	default:
+		alert("Other");
+} 
+```
+
+通过为每个 case 后面都添加一个 break 语句，就可以避免同时执行多个 case 代码的情况。假如确实需要混合几种情形，不要忘了在代码中添加注释，说明你是有意省略了 break 关键字
+
+在ES的switch语句中可以使用任何数据类型，无论是字符串还是对象，每个case的值也不一定是常量，可以是变量甚至是表达式
+
+```
+var num = 25;
+switch (true) {
+	case num < 0:
+		alert("Less than 0.");
+		break;
+	case num >= 0 && num <= 10:
+		alert("Between 0 and 10.");
+		break;
+	case num > 10 && num <= 20:
+		alert("Between 10 and 20.");
+		break;
+	default:
+		alert("More than 20.");
+} 
+```
+
+注意！**switch 语句在比较值时使用的是全等操作符，因此不会发生类型转换**
+
 
 
 <a name="3e">
