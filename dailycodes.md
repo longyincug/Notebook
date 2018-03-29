@@ -18,6 +18,7 @@
 14. [每天一道面试题: 14](#14)
 15. [每天一道面试题: 15](#15)
 16. [每天一道面试题: 16](#16)
+17. [每天一道面试题: 17](#17)
 
 
 <a name="1">
@@ -1658,7 +1659,8 @@ function parseQueryString(str){
 
 > 今天开始进行JavaScript细节上的查漏补缺
 
-### `javascript`的`typeof`返回哪些数据类型？
+
+### `javascript` 的`typeof`返回哪些数据类型？
 
 **答案:**
 
@@ -1763,9 +1765,112 @@ this: 指向调用上下文
 
 <a name="17">
 
+## 每天一道面试题: 17
 
 
+### 添加、删除、替换、插入 到某个节点的方法
 
+
+**答案:**
+
+```
+obj.appendChild()
+obj.insertBefore() // 原生的js不提供insertAfter()
+obj.replaceChild() // 替换
+obj.removeChild() // 删除
+
+```
+
+***
+
+### js的本地对象，内置对象和宿主对象
+
+**答案:**
+
+1. 本地对象为 `array` `obj` `regexp` 等可以new实例化的对象
+2. 内置对象为 `global` `Math` 等不可以实例化的, 内置对象也属于本地对象
+3. 宿主对象为浏览器自带的 `document`，`window` 等
+
+***
+
+### document load 和 document ready 的区别
+
+**答案:**
+
+`document.onload` 是在结构和样式加载完才执行js
+
+`window.onload` 不仅仅要在结构和样式加载完，还要执行完所有的样式、图片这些资源文件，全部加载完才会触发`window.onload`事件
+
+`document.ready` 原生js中没有这个方法，jquery中有`$().ready(function(){})`
+
+
+***
+
+### javascript的同源策略
+
+**答案:**
+
+一段脚本只能读取来自于同一来源的窗口和文档的属性，这里的统一来源指的是**主机名**、**协议**和**端口号**的组合
+
+同源策略带来的麻烦: 同域名下的请求无法实现，如果说想要请求其他来源的js文件，或者json数据，可以通过jsonp来解决
+
+
+***
+
+### 编写一个数组去重的方法
+
+**答案:**
+
+```
+
+function clrRepeat(arr){
+
+	var n = {}, r = [], len = array.length, val, type; 
+	
+	for (var i = 0; i < array.length; i++) { 
+		val = array[i]; 
+		type = typeof val; 
+		if (!n[val]) { 
+			n[val] = [type]; 
+			r.push(val); 
+		} else if (n[val].indexOf(type) < 0) { 
+			n[val].push(type); 
+			r.push(val); 
+		} 
+	} 
+	return r; 
+}
+
+// 注意indexOf()为ES5的新方法，IE8及以下不支持！
+
+```
+
+
+***
+
+### 怎么判断某变量是否为数组数据类型？
+
+**答案:**
+
+1. 方法一，`obj instanceof Array`，但在某些IE版本中不正确
+
+2. 方法二，在ES5中定义了新方法: `Array.isArray()`, 保证其兼容性
+
+3. 最佳方案:
+```
+if(typeof Array.isArray === "undefined"){
+	Array.isArray = function(arg){
+		return Object.prototype.toString.call(arg) === "[object Array]"
+	}
+
+}
+
+```
+
+***
+
+
+<a name="18">
 
 
 

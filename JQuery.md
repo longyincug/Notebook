@@ -67,7 +67,7 @@ $("#id").click(function(){});
 
 ### 几种常见对象
 
-- 内置对象：js中自带的对象，Array，Object，Date，Math，RegExp
+- 内部对象：js中自带的对象，Array，Object，Date，Math，RegExp
 - 浏览器对象：window
 - 自定义对象：自己定义的构造函数创建的对象
 - DOM对象：通过DOM方式获取的对象
