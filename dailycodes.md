@@ -19,6 +19,8 @@
 15. [每天一道面试题: 15](#15)
 16. [每天一道面试题: 16](#16)
 17. [每天一道面试题: 17](#17)
+18. [每天一道面试题: 18](#18)
+
 
 
 <a name="1">
@@ -1539,6 +1541,8 @@ if(false){
 
 ***
 
+<a name="14a">
+
 ### 请给出这段代码的运行结果
 
 ```
@@ -1560,7 +1564,10 @@ alert(bb);
 
 注意这一题中的特殊情况，不要误以为函数内没有用var声明的都是隐式全局变量
 
-**如果函数接受的参数名和全局变量名相同的话，在函数内部不用写var，使用该变量会认为是形参的调用，而不会覆盖全局变量！**
+**如果函数接受的参数名和全局变量名相同的话，在函数内部不用写var，使用该变量会被认为是形参的调用，而不会覆盖全局变量！**
+
+**可以把函数的参数想象成局部变量！**
+
 
 当然如果是下面这种情况，就是我们熟知的输出了，输出`2 2`:
 
@@ -1736,8 +1743,9 @@ b.prototype = new a;
 this: 指向调用上下文
 
 闭包: 内层作用域可以访问外层作用域的变量。
-	- 闭包就是可以读取其他函数内部变量的函数
-	- 闭包的缺点：滥用闭包会造成内存泄漏，因为闭包中引用到的包裹函数中定义的变量都永远不会被释放，所以我们应在必要的时候，及时释放这个闭包函数
+
+- 闭包就是可以读取其他函数内部变量的函数
+- 闭包的缺点：滥用闭包会造成内存泄漏，因为闭包中引用到的包裹函数中定义的变量都永远不会被释放，所以我们应在必要的时候，及时释放这个闭包函数
 
 作用域: 定义一个函数就开辟了一个局部作用域，整个js执行环境就是一个全局作用域
 
@@ -1750,13 +1758,13 @@ this: 指向调用上下文
 事件委托: 利用事件冒泡的原理，子元素所触发的事件，让其父元素代替执行
 
 阻止事件冒泡: 
-	- `e.stopPropagation()` // 标准浏览器
-	- `event.cancelBubble = true` // IE9之前
+- `e.stopPropagation()` // 标准浏览器
+- `event.cancelBubble = true` // IE9之前
 	
 阻止默认事件:
-	- 比如为了不让a点击之后跳转，我们就要给它的点击事件进行阻止。还有一些浏览器的默认事件
-	- `return false`
-	- 对于使用addEventListener绑定的事件，需要使用`e.preventDefault();`阻止默认事件
+- 比如为了不让a点击之后跳转，我们就要给它的点击事件进行阻止。还有一些浏览器的默认事件
+- `return false`
+- 对于使用addEventListener绑定的事件，需要使用`e.preventDefault();`阻止默认事件
 	
 
 
@@ -1848,6 +1856,7 @@ function clrRepeat(arr){
 
 ***
 
+
 ### 怎么判断某变量是否为数组数据类型？
 
 **答案:**
@@ -1871,6 +1880,128 @@ if(typeof Array.isArray === "undefined"){
 
 
 <a name="18">
+
+
+## 每天一道面试题: 18
+
+
+### 希望获取到页面中所有的checkbox怎么做？（不使用第三方模块）
+
+**答案:**
+
+```
+var domList = document.getElementsByTagName('input')
+var checkBoxList = [];//返回的所有的 checkbox
+var len = domList.length; //缓存到局部变量
+while (len--) { //使用 while 的效率会比 for 循环更高
+	if (domList[len].type == `checkbox`) {
+		checkBoxList.push(domList[len]);
+	}
+}
+
+```
+
+***
+
+
+### 当一个 DOM 节点被点击时候，我们希望能够执行一个函数, 应该怎么做
+
+**答案:**
+
+直接在 DOM 里绑定事件：`<div onclick="test()"></div>`
+
+在 JS 里通过 onclick 绑定：`xxx.onclick = test`
+
+通过事件添加进行绑定：`addEventListener(xxx, 'click', test)`
+
+
+***
+
+
+### undefined什么情况下发生?
+
+**答案:**
+
+undefined会在以下三种情况下产生:
+
+1. 一个变量定义了却没有赋值
+2. 想要获取一个对象上不存在的属性或方法
+3. 一个数组中没有被赋值的元素
+
+注意区分undefined和not defined(语法错误)是不一样的
+
+***
+
+
+### 已知有字符串 foo="get-element-by-id",写一个 function 将其转化成驼峰表示法 "getElementById"
+
+
+**答案:**
+
+```
+function combo(msg){
+	var arr = msg.split("-"); //[get,element,by,id]
+	for(var i = 1; i < arr.length; i++){
+		arr[i] = arr[i].charAt(0).toUpperCase()+arr[i].substr(1,arr[i].length-1); //Element
+	}
+	msg = arr.join(""); //msg = 'getElementById'
+	return msg;
+}
+```
+
+
+也可以直接用正则:
+
+```
+var foo = "get-element-by-id";
+
+var newFoo = s.replace(/-([a-z])/g, function(m, p1){return p1.toUpperCase();});
+
+```
+
+***
+
+
+### 输出今天的日期，以YYYY-MM-DD的方式
+
+**答案:**
+
+```
+var d = new Date();
+
+// 获取年，getFullYear()返回4位的数字
+var year = d.getFullYear();
+
+// 月份有些特殊，0是1月，11是12月
+var month = d.getMonth();
+// 变成两位
+month = month < 10? "0" + month : month;
+
+// 获取日
+var day = d.getDate();
+day = day < 10? "0" + day : day;
+
+alert(year + '-' + month + '-' + day);
+
+```
+
+***
+
+
+### 将字符串 `<tr><td>{$id}</td><td>{$name}</td></tr>`中的{$id}替换成 10，{$name}替换成 Tony （使用正则表达式）
+
+
+**答案:**
+
+`'<tr><td>{$id}</td><td>{$id}_{$name}</td></tr>'.replace(/{\$id}/g, '10').replace(/{\$name}/g, 'Tony');`
+
+
+***
+
+
+<a name="19">
+
+
 
 
 
