@@ -1037,6 +1037,10 @@ window.onload = function(){
 	- 返回前一个兄弟节点
 	- 可能是空白文本节点
 	- nextSibling 同理
+
+- **.previousElementSibling**
+	- 返回前一个兄弟元素节点
+	- nextElementSibling同理
 	- IE8及以下不支持
 
 ### dom查询的其他方法

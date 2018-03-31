@@ -809,7 +809,6 @@ switch (true) {
 严格模式对函数有一些限制：
 
 - 不能把函数命名为 eval 或 arguments；
-- 不能把参数命名为 eval 或 arguments；
 - 不能出现两个命名参数同名的情况。
 
 如果发生以上情况，就会导致语法错误，代码无法执行
@@ -1261,6 +1260,7 @@ var options = [,,,,,]; // 不要这样！这样会创建一个包含 5 或 6 项
 
 > instanceof 操作符的问题在于，它假定只有一个全局执行环境。如果网页中包含多个框架，那实际上就存在两个以上不同的全局执行环境，从而存在两个以上不同版本的 Array 构造函数。如果你从一个框架向另一个框架传入一个数组，那么传入的数组与在第二个框架中原生创建的数组分别具有各自不同的构造函数。
 
+
 为了解决这个问题，ES5新增了`Array.isArray()`方法, 这个方法的目的是最终确定某个值到底是不是数组，而不管它是在哪个全局执行环境中创建的
 
 在IE8中不支持`Array.isArray()`方法，可以创建一个:
@@ -1307,6 +1307,875 @@ ECMAScript 为数组专门提供了 push()和 pop()方法，以便实现类似�
 
 
 #### 队列方法
+
+栈数据结构是后进先出，而队列数据结构的访问规则是先进先出
+
+- shift()方法可以移除数组的第一项并返回该项，同时将数组长度减1
+
+- unshift()方法可以在数组前端添加**任意个项**并返回新数组的长度(IE7及更早版本，IE8的兼容模式，会返回undefined)
+
+
+#### 重排序方法
+
+- reverse()
+
+- sort()
+	- sort()方法可以接收一个比较函数作为参数，以便我们指定哪个值位于哪个值的前面
+	- 比较函数接收两个参数，如果第一个参数应该位于第二个之前则返回一个负数，如果两个参数相等则返回 0，如果第一个参数应该位于第二个之后则返回一个正数
+
+	```
+	function compare(value1, value2) {
+	 if (value1 < value2) {
+	 return -1;
+	 } else if (value1 > value2) {
+	 return 1;
+	 } else {
+	 return 0;
+	 }
+	} 
+	```
+
+
+#### 操作方法
+
+- concat(): 基于当前数组中的所有项创建一个新数组
+	- 先创建当前数组一个副本，然后将接受到的参数添加到这个副本的末尾，最后返回新构建的数组
+	- 在没有给concat()方法传递参数的情况下，它只是复制当前数组并返回副本
+	- 如果传递给concat()方法的是一或多个数组，则该方法会将这些数组中的每一项都添加到结果数组中
+	- 如果传递的值不是数组，这些值就是简单的被添加到结果数组的末尾
+
+- slice(): 基于当前数组中的一项或多个项创建一个新数组
+	- 接受一或两个参数，即要返回项的起始和结束位置，可以接受负数，从末尾开始计算
+	- 只有一个参数的情况下，返回从该参数位置到数组末尾的所有项
+
+- splice(): 最强大的数组方法
+	- 删除。可以删除任意数量的项，只需指定2个参数，要删除的第一项的位置和要删除的项数
+	- 插入。可以向指定位置插入任意数量的项，只需提供 3 个参数：起始位置、0（要删除的项数）和要插入的项。如果要插入多个项，可以再传入第四、第五，以至任意多个项
+	- 替换。可以向指定位置插入任意数量的项，且同时删除任意数量的项，只需指定 3 个参数：起始位置、要删除的项数和要插入的任意数量的项。插入的项数不必与删除的项数相等。
+
+	- splice()方法始终都会返回一个数组，该数组中包含从原始数组中删除的项（如果没有删除任何项，则返回一个空数组）
+
+	```
+	var colors = ["red", "green", "blue"];
+	var removed = colors.splice(0,1); // 删除第一项
+	alert(colors); // green,blue
+	alert(removed); // red，返回的数组中只包含一项
+	
+	removed = colors.splice(1, 0, "yellow", "orange"); // 从位置 1 开始插入两项
+	alert(colors); // green,yellow,orange,blue
+	alert(removed); // 返回的是一个空数组
+	
+	removed = colors.splice(1, 1, "red", "purple"); // 插入两项，删除一项
+	alert(colors); // green,red,purple,orange,blue
+	alert(removed); // yellow，返回的数组中只包含一项
+	
+	```
+
+
+#### 位置方法
+
+ES5为数组添加了两个位置方法，IE8及以下不支持
+
+`indexOf()`、`lastIndexOf()`
+
+- 返回要查找的项在数组中的位置
+
+- 两个参数: 要查找的项、查找起点位置的索引（可选）
+
+- 没找到的情况下返回-1
+
+
+#### 迭代方法
+
+ES5为数组定义了5个迭代方法。这些数组迭代方法不支持IE8及以下的浏览器！
+
+- 每个方法都接收两个参数：要在每一项上运行的函数和（可选的）运行该函数的作用域对象——影响 this 的值。
+
+- 传入这些方法中的函数会接收三个参数：数组项的值、该项在数组中的位置和数组对象本身。
+
+- 根据使用的方法不同，这个函数执行后的返回值可能会也可能不会影响方法的返回值。
+
+
+`every()`: 对数组中的每一项运行给定函数，如果该函数对每一项都返回 true，则返回 true
+
+`filter()`: 对数组中的每一项运行给定函数，返回该函数会返回 true 的项组成的数组
+
+`forEach()`: 对数组中的每一项运行给定函数。这个方法没有返回值, 本质上与使用 for 循环迭代数组一样
+
+`map()`: 对数组中的每一项运行给定函数，返回每次函数调用的结果组成的数组
+
+`some()`: 对数组中的每一项运行给定函数，如果该函数对任一项返回 true，则返回 true。
+
+```
+var numbers = [1,2,3,4,5,4,3,2,1];
+var filterResult = numbers.filter(function(item, index, array){
+ return (item > 2);
+});
+alert(filterResult); //[3,4,5,4,3]
+```
+
+```
+var numbers = [1,2,3,4,5,4,3,2,1];
+var mapResult = numbers.map(function(item, index, array){
+ return item * 2;
+});
+alert(mapResult); //[2,4,6,8,10,8,6,4,2]
+```
+
+
+#### 归并方法
+
+ES5新增两个归并数组的方法:`reduce()`和`reduceRight()`，不支持IE8及以下浏览器
+
+这两个方法都会迭代数组的所有项，然后构建一个最终返回的值
+
+reduce是从数组的第一项开始，逐个遍历到最后，而reduceRight则从数组的最后一项开始，向前遍历到第一项
+
+这两个方法都接收两个参数:
+- 一个在每一项上调用的函数
+- 作为归并基础的初始值（可选）
+
+传给方法的函数接收4个参数:前一个值、当前值、项的索引和数组对象。
+- 这个函数返回的任何值都会作为第一个参数自动传给下一项。
+- 第一次迭代发生在数组的第二项上，因此第一个参数是数组的第一项，第二个参数是数组的第二项
+
+
+<a name="5c">
+
+### Date类型
+
+1. 要创建一个日期对象，使用 new 操作符和 Date 构造函数即可 `var now = new Date();`
+
+	- 在调用 Date 构造函数而不传递参数的情况下，新创建的对象自动获得当前日期和时间
+	
+	- 如果想根据特定的日期和时间创建日期对象，必须传入表示该日期的毫秒数（即从 UTC 时间 1970 年 1 月 1 日午夜起至该日期止经过的毫秒数）
+	
+	- 为了简化这一计算过程，ES提供了两个方法: `Date.parse()` 和 `Date.UTC()`
+
+2. `Date.parse()`方法接收一个表示日期的字符串参数，然后尝试根据这个字符串返回相应日期的毫秒数
+
+	- “月/日/年”，如 6/13/2004；
+	- “英文月名 日,年”，如 January 12,2004；
+	- “英文星期几 英文月名 日 年 时:分:秒 时区”，如 Tue May 25 2004 00:00:00 GMT-0700。
+	- ISO 8601 扩展格式 YYYY-MM-DDTHH:mm:ss.sssZ（例如 2004-05-25T00:00:00）。只有兼容ECMAScript 5 的实现支持这种格式。
+
+	- 例如，要为 2004 年 5 月 25 日创建一个日期对象，可以使用下面的代码：
+
+		- `var someDate = new Date(Date.parse("May 25, 2004")); `
+
+	- 如果传入 Date.parse()方法的字符串不能表示日期，那么它会返回 NaN。实际上，如果直接将表示日期的字符串传递给 Date 构造函数，也会在后台调用 Date.parse()
+
+		- `var d2 = new Date("12/25/2015 12:12:12");`
+
+3. `Date.UTC()`方法同样也返回表示日期的毫秒数，但它与 Date.parse()在构建值时使用不同的信息。
+
+	- Date.UTC()的参数分别是年份、基于 0 的月份（一月是 0，二月是 1，以此类推）、月中的哪一天（1 到 31）、小时数（0 到 23）、分钟、秒以及毫秒数。
+
+	- 在这些参数中，只有前两个参数（年和月）是必需的。如果没有提供月中的天数，则假设天数为 1；如果省略其他参数，则统统假设为 0。
+
+	```
+	// GMT 时间 2000 年 1 月 1 日午夜零时
+	var y2k = new Date(Date.UTC(2000, 0));
+	// GMT 时间 2005 年 5 月 5 日下午 5:55:55
+	var allFives = new Date(Date.UTC(2005, 4, 5, 17, 55, 55)); 
+	```
+
+	- 如同模仿 Date.parse()一样，Date 构造函数也会模仿 Date.UTC()，但有一点明显不同：日期和时间都基于本地时区而非 GMT 来创建。不过，Date 构造函数接收的参数仍然与 Date.UTC()相同
+	
+	```
+	本地时间 2000 年 1 月 1 日午夜零时
+	var y2k = new Date(2000, 0);
+	// 本地时间 2005 年 5 月 5 日下午 5:55:55
+	var allFives = new Date(2005, 4, 5, 17, 55, 55); 
+	```
+
+4. ECMAScript 5 添加了 `Data.now()`方法，返回表示调用这个方法时的日期和时间的毫秒数。这个方法简化了使用 Data 对象分析代码的工作
+	```
+	//取得开始时间
+	var start = Date.now();
+	//调用函数
+	doSomething();
+	//取得停止时间
+	var stop = Date.now(),
+	 result = stop – start; 
+	```
+
+IE8及以下不支持 Data.now()方法，使用+操作符把 Data 对象转换成字符串，也可以达到同样的目的。
+
+	```
+	//取得开始时间
+	var start = +new Date();
+	//调用函数
+	doSomething();
+	//取得停止时间
+	var stop = +new Date(),
+	 result = stop - start; 
+	```
+
+
+#### 继承的方法
+
+与其他引用类型一样，Date类型也重写了toLocaleString()、toString()和 valueOf()方法；但这些方法返回的值与其他类型中的方法不同。
+
+- Date 类型的 toLocaleString()方法会按照与浏览器设置的地区相适应的格式返回日期和时间。这大致意味着时间格式中会包含 AM 或 PM，但不会包含时区信息（当然，具体的格式会因浏览器而异）。
+
+	- 而 toString()方法则通常返回带有时区信息的日期和时间，其中时间一般以军用时间（即小时的范围是 0 到 23）表示。
+
+	- 这两个方法在不同的浏览器中返回的日期和时间格式可谓大相径庭。事实上，toLocaleString()和 toString()的这一差别仅在调试代码时比较有用，而在显示日期和时间时没有什么价值。
+
+- Date 类型的 valueOf()方法，则根本不返回字符串，而是返回日期的毫秒表示。
+	- 可以方便使用比较操作符（小于或大于）来比较日期值
+	```
+	var date1 = new Date(2007, 0, 1); //"January 1, 2007"
+	var date2 = new Date(2007, 1, 1); //"February 1, 2007"
+	alert(date1 < date2); //true
+	alert(date1 > date2); //false 
+	```
+
+
+#### 日期格式化方法
+
+Date 类型还有一些专门用于将日期格式化为字符串的方法
+
+- toDateString()——以特定于实现的格式显示星期几、月、日和年；
+- toTimeString()——以特定于实现的格式显示时、分、秒和时区；
+- toLocaleDateString()——以特定于地区的格式显示星期几、月、日和年；
+- toLocaleTimeString()——以特定于实现的格式显示时、分、秒；
+- toUTCString()——以特定于实现的格式完整的 UTC 日期。
+
+与 toLocaleString()和 toString()方法一样，以上这些字符串格式方法的输出也是因浏览器而异的，因此没有哪一个方法能够用来在用户界面中显示一致的日期信息。
+
+
+#### 日期/时间组件方法
+
+到目前为止，剩下还未介绍的Date类型的方法，都是直接取得和设置日期值中特定部分的方法了
+
+![Date类型方法](./images/Date.png)
+
+
+
+<a name="5d">
+
+### RegExp类型
+
+ES通过RegExp类型来支持正则表达式
+
+`var expression = / pattern / flags `
+
+其中的模式（pattern）部分可以是任何简单或复杂的正则表达式，可以包含字符类、限定符、分组、向前查找以及反向引用。
+
+每个正则表达式都可带有一或多个标志（flags），用以标明正则表达式的行为。
+正则表达式的匹配模式支持下列 3 个标志。
+
+- g：表示全局（global）模式，即模式将被应用于所有字符串，而非在发现第一个匹配项时立即停止；
+- i：表示不区分大小写（case-insensitive）模式，即在确定匹配项时忽略模式与字符串的大小写；
+- m：表示多行（multiline）模式，即在到达一行文本末尾时还会继续查找下一行中是否存在与模式匹配的项。
+
+与其他语言中的正则表达式类似，模式中使用的所有元字符都必须转义。正则表达式中的元字符包括：
+
+`( [ { \ ^ $ | ) ? * + .]} `
+
+	```
+	/* 匹配第一个" [bc]at"，不区分大小写
+	*/
+	var pattern2 = /\[bc\]at/i;
+	
+	/*
+	* 匹配所有以"at"结尾的 3 个字符的组合，不区分大小写
+	*/
+	var pattern3 = /.at/gi;
+	
+	/*
+	* 匹配所有".at"，不区分大小写
+	*/
+	var pattern4 = /\.at/gi; 
+	```
+
+前面举的这些例子都是以字面量形式来定义的正则表达式。另一种创建正则表达式的方式是使用RegExp 构造函数，它接收两个参数：一个是要匹配的字符串模式，另一个是可选的标志字符串。
+
+可以使用字面量定义的任何表达式，都可以使用构造函数来定义
+
+	```
+	/*
+	* 匹配第一个"bat"或"cat"，不区分大小写
+	*/
+	var pattern1 = /[bc]at/i;
+	
+	/*
+	* 与 pattern1 相同，只不过是使用构造函数创建的
+	*/
+	var pattern2 = new RegExp("[bc]at", "i"); 
+	```
+
+
+要注意的是，传递给 RegExp 构造函数的两个参数都是**字符串**（不能把正则表达式字面量传递给 RegExp 构造函数）。
+
+由于 RegExp 构造函数的模式参数是字符串(反斜杠也要是字符串，而不能是转义符)，所以在某些情况下要对字符进行双重转义。
+
+所有元字符都必须双重转义，那些已经转义过的字符也是如此，例如\n（字符\在字符串中通常被转义为\\，而在正则表达式字符串中就会变成\\\\）
+
+> 因为Js的正则表达式是在字符串里的，“\”是Js字符串中的转义符，“\”也是正则表达式中的转义符。
+>
+> 那么只加一个“\”的话，只能说明在字符串中转义符，而Js需要进一步把普通字符串中的“\”变成正则表达式中的“\”，像是更深一层转化的意思，这样“\\”以后的意思是正则表达式中的转义符“\”。
+
+
+使用正则表达式字面量和使用 RegExp 构造函数创建的正则表达式不一样。
+
+在 ECMAScript 3 中，正则表达式字面量始终会共享同一个 RegExp 实例，而使用构造函数创建的每一个新 RegExp 实例都是一个新实例
+
+- 这意味着正则字面量的实例属性不会重置，因此用正则字面量来test字符串时，如果第一次调用在索引为3的地方找到了`hi`, 那么下次再调用这个正则字面量，会继续从索引为5的位置开始匹配
+
+- 在ES5中规定，使用正则字面量必须像直接调用RegExp构造函数一样，每次创建新的实例。IE9据此作出了修改，但IE8仍需要注意这个问题
+
+
+#### RegExp实例属性
+
+RegExp 的每个实例都具有下列属性，通过这些属性可以取得有关模式的各种信息。
+
+- global：布尔值，表示是否设置了 g 标志。
+- ignoreCase：布尔值，表示是否设置了 i 标志。
+- lastIndex：整数，表示开始搜索下一个匹配项的字符位置，从 0 算起。
+- multiline：布尔值，表示是否设置了 m 标志。
+- source：正则表达式的字符串表示，按照字面量形式而非传入构造函数中的字符串模式返回。（source 属性保存的是规范形式的字符串，即字面量形式所用的字符串）
+
+
+#### RegExp实例方法
+
+RegExp 对象的主要方法是 exec()，该方法是专门为**捕获组**而设计的。
+
+- exec()接受一个参数，即要应用模式的字符串，然后返回包含第一个匹配项信息的数组；或者在没有匹配项的情况下返回 null。
+
+- 返回的数组虽然是 Array 的实例，但包含两个额外的属性：index 和 input。其中，index 表示匹配项在字符串中的位置，而 input 表示应用正则表达式的字符串。
+
+- 在数组中，第一项是与整个模式匹配的字符串，其他项是与模式中的捕获组匹配的字符串（如果模式中没有捕获组，则该数组只包含一项）。
+
+	```
+	var text = "mom and dad and baby";
+	var pattern = /mom( and dad( and baby)?)?/gi;
+	var matches = pattern.exec(text);
+	alert(matches.index); // 0
+	alert(matches.input); // "mom and dad and baby"
+	alert(matches[0]); // "mom and dad and baby"
+	alert(matches[1]); // " and dad and baby"
+	alert(matches[2]); // " and baby" 
+	```
+
+> 这个例子中的模式包含两个捕获组。最内部的捕获组匹配"and baby"，而包含它的捕获组匹配"anddad"或者"and dad and baby"。当把字符串传入 exec()方法中之后，发现了一个匹配项。因为整个字符串本身与模式匹配，所以返回的数组 matchs 的 index 属性值为 0。数组中的第一项是匹配的整个字符串，第二项包含与第一个捕获组匹配的内容，第三项包含与第二个捕获组匹配的内容。
+
+
+对于 exec()方法而言，即使在模式中设置了全局标志（g），它每次也只会返回一个匹配项。
+
+在不设置全局标志的情况下，在同一个字符串上多次调用 exec()将始终返回第一个匹配项的信息。
+
+**而在设置全局标志的情况下，每次调用 exec()则都会在字符串中继续查找新匹配项**
+
+```
+var text = "cat, bat, sat, fat";
+var pattern2 = /.at/g;
+
+var matches = pattern2.exec(text);
+alert(matches.index); //0
+alert(matches[0]); //cat
+alert(pattern2.lastIndex); //3 
+
+matches = pattern2.exec(text);
+alert(matches.index); //5
+alert(matches[0]); //bat
+alert(pattern2.lastIndex); //8 
+```
+
+> pattern2 是全局模式，因此每次调用 exec()都会返回字符串中的下一个匹配项，直至搜索到字符串末尾为止。此外，还应该注意模式的 lastIndex 属性的变化情况。在全局匹配模式下，lastIndex 的值在每次调用 exec()后都会增加，而在非全局模式下则始终保持不变
+>
+>IE的JS实现在lastIndex属性上存在偏差，即使在非全局模式下，lastIndex每次也会变化
+
+
+正则表达式的第二个方法是`test()`
+
+- 它接受一个字符串参数，在模式与该参数匹配的情况下返回true
+
+- 在只想知道目标字符串与某个模式是否匹配，但不需要知道其文本内容的情况下使用这个方法很方便
+
+- test()方法经常被用在if语句中
+
+
+RegExp 实例继承的 toLocaleString()和 toString()方法都会返回正则表达式的**字面量**，与创建正则表达式的方式无关。例如：
+```
+var pattern = new RegExp("\\[bc\\]at", "gi");
+alert(pattern.toString()); // /\[bc\]at/gi
+alert(pattern.toLocaleString()); // /\[bc\]at/gi 
+```
+
+> 正则表达式的 valueOf()方法返回正则表达式本身(类型为Object)
+
+
+#### RegExp构造函数属性
+
+RegExp 构造函数包含一些属性（这些属性在其他语言中被看成是静态属性）。这些属性适用于作用域中的所有正则表达式，并且基于所执行的最近一次正则表达式操作而变化。
+
+![RegExp](./images/RegExp.png)
+
+```
+var text = "this has been a short summer";
+var pattern = /(.)hort/g;
+/*
+ * 注意：Opera 不支持 input、lastMatch、lastParen 和 multiline 属性
+ * Internet Explorer 不支持 multiline 属性
+ */
+if (pattern.test(text)){
+ alert(RegExp.input); // this has been a short summer
+ alert(RegExp.leftContext); // this has been a
+ alert(RegExp.rightContext); // summer
+ alert(RegExp.lastMatch); // short
+ alert(RegExp.lastParen); // s
+ alert(RegExp.multiline); // false
+} 
+
+if (pattern.test(text)){
+ alert(RegExp.$_); // this has been a short summer
+ alert(RegExp["$`"]); // this has been a
+ alert(RegExp["$'"]); // summer
+ alert(RegExp["$&"]); // short
+ alert(RegExp["$+"]); // s
+ alert(RegExp["$*"]); // false
+} 
+
+```
+
+除了上面介绍的几个属性之外，还有多达 9 个用于**存储捕获组**的构造函数属性。
+
+访问这些属性的语法是 `RegExp.$1`、`RegExp.$2`…`RegExp.$9`，分别用于存储第一、第二……第九个匹配的捕获组。
+
+在调用 `exec()`或 `test()`方法时，这些属性会被自动填充。然后，我们就可以像下面这样来使用它们
+
+```
+var text = "this has been a short summer";
+var pattern = /(..)or(.)/g;
+
+if (pattern.test(text)){
+ alert(RegExp.$1); //sh
+ alert(RegExp.$2); //t
+} 
+```
+
+> 这里创建了一个包含两个捕获组的模式，并用该模式测试了一个字符串。即使 test()方法只返回一个布尔值，但 RegExp 构造函数的属性$1 和$2 也会被匹配相应捕获组的字符串自动填充。
+
+
+
+#### 模式的局限性
+
+ES中的正则表达式仍缺少某些高级特性
+
+- 匹配字符串开始和结尾的\A 和\Z 锚	(但支持以插入符号（^）和美元符号（$）来匹配字符串的开始和结尾)
+- 向后查找（lookbehind）	(但完全支持向前查找（lookahead）)
+- 并集和交集类
+- 原子组（atomic grouping）
+- Unicode 支持（单个字符除外，如\uFFFF）
+- 命名的捕获组	(但支持编号的捕获组\1 \2...)
+- s（single，单行）和 x（free-spacing，无间隔）匹配模式
+- 条件匹配
+- 正则表达式注释
+
+
+<a name="5e">
+
+
+### Function类型
+
+函数通常是使用函数声明语法定义的，如下面的例子所示。
+```
+function sum (num1, num2) {
+ return num1 + num2;
+}
+```
+
+这与下面使用函数表达式定义函数的方式几乎相差无几。
+
+```
+var sum = function(num1, num2){
+ return num1 + num2;
+};
+```
+
+以上代码定义了变量 sum 并将其初始化为一个函数。有读者可能会注意到，function 关键字后面没有函数名。这是因为在使用函数表达式定义函数时，没有必要使用函数名——通过变量 sum 即可以引用函数。另外，还要注意函数末尾有一个分号，就像声明其他变量时一样
+
+最后一种定义函数的方式是使用 Function 构造函数。Function 构造函数可以接收任意数量的参数，
+但最后一个参数始终都被看成是函数体，而前面的参数则枚举出了新函数的参数。来看下面的例子：
+
+`var sum = new Function("num1", "num2", "return num1 + num2"); // 不推荐`
+
+不推荐使用这种方法定义函数，因为这种语法会导致解析两次代码（第一次是解析常规 ECMAScript 代码，第二次是解析传入构造函数中的字符串），从而影响性能
+
+
+#### 没有重载（深入理解）
+
+将函数名想象为指针，也有助于理解为什么 ECMAScript 中没有函数重载的概念
+```
+function addSomeNumber(num){
+ return num + 100;
+}
+function addSomeNumber(num) {
+ return num + 200;
+}
+var result = addSomeNumber(100); //300
+```
+显然，这个例子中声明了两个同名函数，而结果则是后面的函数覆盖了前面的函数。以上代码实际上与下面的代码没有什么区别。
+```
+var addSomeNumber = function (num){
+ return num + 100;
+};
+addSomeNumber = function (num) {
+ return num + 200;
+};
+var result = addSomeNumber(100); //300 
+```
+
+
+#### 函数声明与函数表达式
+
+解析器会率先读取函数声明，并使其在执行任何代码之前可用（可以访问）；
+
+至于函数表达式，则必须等到解析器执行到它所在的代码行，才会真正被解释执行。
+
+```
+alert(sum(10,10));
+var sum = function(num1, num2){
+ return num1 + num2;
+}; 
+```
+
+> 以上代码之所以会在运行期间产生错误，原因在于函数位于一个初始化语句中，而不是一个函数声明。换句话说，在执行到函数所在的语句之前，变量 sum 中不会保存有对函数的引用；而且，由于第一行代码就会导致“unexpected identifier”（意外标识符）错误，实际上也不会执行到下一行
+
+
+#### 作为值的函数
+
+因为ES中的函数本身就是变量，所以函数也可以作为值来使用
+
+```
+function callSomeFunction(someFunction, someArgument){
+ return someFunction(someArgument);
+} 
+```
+
+要访问函数的指针而不执行函数的话，必须去掉函数名后面的那对圆括号
+
+假设有一个对象数组，我们想要根据某个对象属性对数组进行排序。而传递给数组 sort()方法的比较函数要接收两个参数，即要比较的值。
+
+可是，我们需要一种方式来指明按照哪个属性来排序。要解决这个问题，可以定义一个函数，它接收一个属性名，然后根据这个属性名来创建一个比较函数
+
+```
+function createComparisonFunction(propertyName) {
+	return function(object1, object2){
+		var value1 = object1[propertyName];
+		var value2 = object2[propertyName];
+		if(value1 < value2) {
+			return -1;
+		} else if (value1 > value2) {
+			return 1;
+		} else {
+			return 0;
+		}
+	
+	};
+
+}
+
+
+var data = [{name: "Zachary", age: 28}, {name: "Nicholas", age: 29}];
+data.sort(createComparisonFunction("name"));
+alert(data[0].name); //Nicholas
+data.sort(createComparisonFunction("age"));
+alert(data[0].name); //Zachary 
+
+```
+
+
+#### 函数内部属性
+
+在函数内部，有两个特殊的对象：arguments 和 this
+
+1. 虽然 arguments 的主要用途是保存函数参数，但这个对象还有一个名叫 callee 的属性，该属性是一个指针，指向拥有这个 arguments 对象的函数
+
+	```
+	function factorial(num){
+	 if (num <=1) {
+	 return 1;
+	 } else {
+	 return num * arguments.callee(num-1)
+	 }
+	} 
+	```
+
+
+2. 函数内部的另一个特殊对象是 this，其行为与 Java 和 C#中的 this 大致类似。换句话说，this引用的是函数据以执行的环境对象——或者也可以说是 this 值（当在网页的全局作用域中调用函数时，this 对象引用的就是 window）
+
+	```
+	window.color = "red";
+	var o = { color: "blue" };
+	function sayColor(){
+	 alert(this.color);
+	}
+	sayColor(); //"red"
+	o.sayColor = sayColor;
+	o.sayColor(); //"blue" 
+	```
+
+> 函数的名字仅仅是一个包含指针的变量而已。
+> 因此，即使是在不同的环境中执行，全局的 sayColor()函数与 o.sayColor()指向的仍然是同一个函数
+
+
+3. ECMAScript 5 也规范化了另一个函数对象的属性：`caller`。
+
+- IE、Firefox、Chrome 和 Safari 的所有版本以及 Opera 9.6 都支持 caller 属性
+
+- 这个属性中保存着调用当前函数的函数的引用，如果是在全局作用域中调用当前函数，它的值为 `null`
+
+```
+function outer(){
+ inner();
+}
+function inner(){
+ alert(arguments.callee.caller);
+}
+outer(); 
+```
+
+
+> 以上代码会导致警告框中显示 outer()函数的源代码。因为 outer()调用了 inter()，所以inner.caller 就指向 outer()。
+
+
+![arguments和caller](./images/caller.png)
+
+JS的函数是可以无限嵌套的，就构成了一棵树，而function.caller就提供了一个访问父节点的方法，通过灵活应用function.caller，我们甚至可以用脚本画出整棵树，只要我们在任意地方成功插入一段JS代码，又或者是，像网站统计之类的第三方代码，我们就能窥视其他代码，所以为了安全期间，严格模式禁止调用caller、callee、arguments变量
+
+
+#### 函数属性和方法
+
+1. ES中的函数是对象，因此函数也有属性和方法，每个函数都包含两个属性: `length` 和 `prototype`
+
+	- length 属性表示函数希望接收的命名参数的个数
+	
+	- 对于ECMAScript 中的引用类型而言，prototype 是保存它们所有实例方法的真正所在
+	
+		- 诸如toString()和 valueOf()等方法实际上都保存在 prototype 名下，只不过是通过各自对象的实例访问罢了
+	
+		- 在创建自定义引用类型以及实现继承时，prototype 属性的作用是极为重要的（第 6 章将详细介绍）
+	
+		- 在 ECMAScript 5 中，prototype 属性是不可枚举的，因此使用 for-in 无法发现
+
+
+2. 每个函数都包含两个**非继承**而来的方法: `apply()`和`call()`，这两个方法的用途都是用来设置函数体内this对象的值
+
+	- apply()方法接收两个参数：一个是在其中运行函数的作用域，另一个是参数数组。其中，第二个参数可以是 Array 的实例，也可以是arguments 对象
+	
+	- call()方法与 apply()方法的作用相同，它们的区别仅在于接收参数的方式不同。对于 call()方法而言，第一个参数是 this 值没有变化，变化的是其余参数都直接传递给函数。换句话说，在使用call()方法时，传递给函数的参数必须逐个列举出来
+
+
+	> 在严格模式下，未指定环境对象而调用函数，则 this 值不会转型为 window。
+	> 除非明确把函数添加到某个对象或者调用 apply()或 call()，否则 this 值将是undefined
+
+
+3. ECMAScript 5 还定义了一个方法：bind()。这个方法会创建一个函数的实例，其 this 值会被绑定到传给 bind()函数的值
+
+```
+window.color = "red";
+var o = { color: "blue" };
+function sayColor(){
+ alert(this.color);
+}
+var objectSayColor = sayColor.bind(o);
+objectSayColor(); //blue 
+```
+
+> sayColor()调用 bind()并传入对象 o，创建了 objectSayColor()函数。objectSayColor()函数的this 值等于 o，因此即使是在全局作用域中调用这个函数，也会看到"blue"。这种技巧的优点请参考第 22 章。
+
+
+注意: IE8及以下不支持`bind()`方法
+
+
+> 每个函数继承的 toLocaleString()和 toString()方法始终都返回函数的代码。返回代码的格式则因浏览器而异——有的返回的代码与源代码中的函数代码一样，而有的则返回函数代码的内部表示，即由解析器删除了注释并对某些代码作了改动后的代码。由于存在这些差异，我们无法根据这两个方法返回的结果来实现任何重要功能；不过，这些信息在调试代码时倒是很有用。另外一个继承的valueOf()方法同样也只返回函数代码。
+
+
+
+<a name="5f">
+
+
+### 基本包装类型
+
+为了便于操作基本类型值，ECMAScript 还提供了 3 个特殊的引用类型：Boolean、Number 和String
+
+每当读取一个基本类型值的时候，后台就会创建一个对应的基本包装类型的对象，从而让我们能够调用一些方法来操作这些数据
+
+```
+var s1 = "some text";
+var s2 = s1.substring(2); 
+```
+
+基本类型值不是对象，因而从逻辑上讲它们不应该有方法。
+
+为了让我们实现这种直观的操作，后台已经自动完成了一系列的处理。当第二行代码访问 s1 时，访问过程处于一种读取模式，也就是要从内存中读取这个字符串的值。而在读取模式中访问字符串时，后台都会自动完成下列处理:
+
+1. 创建 String 类型的一个实例；
+2. 在实例上调用指定的方法；
+3. 销毁这个实例。
+
+可以将以上三个步骤想象成是执行了下列 ECMAScript 代码:
+```
+var s1 = new String("some text");
+var s2 = s1.substring(2);
+s1 = null; 
+```
+
+经过此番处理，基本的字符串值就变得跟对象一样了。而且，上面这三个步骤也分别适用于 Boolean和 Number 类型对应的布尔值和数字值
+
+> 引用类型与基本包装类型的主要区别就是对象的生存期。
+> 使用 new 操作符创建的引用类型的实例，在执行流离开当前作用域之前都一直保存在内存中。
+> 而自动创建的基本包装类型的对象，则只存在于一行代码的执行瞬间，然后立即被销毁。
+> 这意味着我们不能在运行时为基本类型值添加属性和方法
+
+
+```
+var s1 = "some text";
+s1.color = "red";
+alert(s1.color); //undefined （给它添加属性不会报错，但是会是undefined）
+
+```
+
+Object 构造函数也会像工厂方法一样，根据传入值的类型返回相应基本包装类型的实例。例如：
+
+```
+var obj = new Object("some text");
+alert(obj instanceof String); //true 
+```
+
+要注意的是，使用 new 调用基本包装类型的构造函数，与直接调用同名的转型函数是不一样的。
+例如：
+
+```
+var value = "25";
+var number = Number(value); //转型函数
+alert(typeof number); //"number"
+var obj = new Number(value); //构造函数
+alert(typeof obj); //"object" 
+```
+
+变量 number 中保存的是基本类型的值 25，而变量 obj 中保存的是 Number 的实例
+
+尽管我们不建议显式地创建基本包装类型的对象，但它们操作基本类型值的能力还是相当重要的。而每个基本包装类型都提供了操作相应值的便捷方法
+
+
+#### Boolean类型
+
+Boolean 类型是与布尔值对应的引用类型。要创建 Boolean 对象，可以像下面这样调用 Boolean构造函数并传入 true 或 false 值。
+
+`var booleanObject = new Boolean(true); `
+
+Boolean 类型的实例重写了valueOf()方法，返回基本类型值true 或false；重写了toString()方法，返回字符串"true"和"false"
+
+```
+var falseObject = new Boolean(false);
+var result = falseObject && true;
+alert(result); //true
+var falseValue = false;
+result = falseValue && true;
+alert(result); //false 
+```
+
+Boolean 对象在 ECMAScript 中的用处不大，因为它经常会造成人们的误解。
+
+基本类型与引用类型的布尔值还有两个区别。
+
+- 首先，typeof 操作符对基本类型返回"boolean"，而对引用类型返回"object"。
+
+- 其次，由于 Boolean 对象是 Boolean 类型的实例，所以使用 instanceof操作符测试 Boolean 对象会返回 true，而测试基本类型的布尔值则返回 false。
+
+```
+alert(typeof falseObject); //object
+alert(typeof falseValue); //boolean
+alert(falseObject instanceof Boolean); //true
+alert(falseValue instanceof Boolean); //false 
+```
+
+
+#### Number类型
+
+要创建 Number 对象，可以在调用 Number 构造函数时向其中传递相应的数值。
+
+`var numberObject = new Number(10);`
+
+与 Boolean 类型一样，Number 类型也重写了 valueOf()、toLocaleString()和 toString()方法。重写后的 valueOf()方法返回对象表示的基本类型的数值，另外两个方法则返回字符串形式的数值
+
+我们在第 3 章还介绍过，可以为 toString()方法传递一个表示基数的参数，告诉它返回几进制数值的字符串形式
+
+
+除了继承的方法之外，Number 类型还提供了一些用于将数值格式化为字符串的方法。
+
+1. `toFixed()`方法会按照指定的小数位返回数值的字符串表示
+
+	```
+	var num = 10;
+	alert(num.toFixed(2));  //"10.00"
+	```
+	
+	如果数值本身包含的小数位比指定的还多，那么接近指定的最大小数位的值就会舍入
+	
+	```
+	var num = 10.005;
+	alert(num.toFixed(2)); //"10.01" 
+	
+	```
+	
+	能够自动舍入的特性，使得 toFixed()方法很适合处理货币值。但需要注意的是，不同浏览器给这个方法设定的舍入规则可能会有所不同。
+	
+	- 在给 toFixed()传入 0 的情况下，IE8 及之前版本不能正确舍入范围在{(-0.94,-0.5],[0.5,0.94)}之间的值。
+	
+	- 对于这个范围内的值，IE 会返回 0，而不是 -1 或 1；其他浏览器都能返回正确的值。
+	
+	- IE9 修复了这个问题。
+
+
+2. 可用于格式化数值的方法是 `toExponential()`
+
+	- 该方法返回以指数表示法（也称 e 表示法）表示的数值的字符串形式。
+
+	- 与 toFixed()一样，toExponential()也接收一个参数，而且该参数同样也是指定输出结果中的小数位数
+
+	```
+	var num = 10;
+	alert(num.toExponential(1)); //"1.0e+1" 
+	```	
+
+
+3. 如果你想得到表示某个数值的最合适的格式，就应该使用 `toPrecision()` 方法
+
+	- 对于一个数值来说，toPrecision()方法可能会返回固定大小（fixed）格式，也可能返回指数（exponential）格式；具体规则是看哪种格式最合适。
+
+	-这个方法接收一个参数，即表示数值的所有数字的位数（不包括指数部分）
+
+	```
+	var num = 99;
+	alert(num.toPrecision(1)); //"1e+2"
+	alert(num.toPrecision(2)); //"99"
+	alert(num.toPrecision(3)); //"99.0" 
+	```
+
+**toPrecision()会根据要处理的数值决定到底是调用 toFixed()还是调用 toExponential()**
+
+而这三个方法都可以通过向上或向下舍入，做到以最准确的形式来表示带有正确小数位的值
+
+> 在使用 typeof 操作符测试基本类型数值时，始终会返回"number"，而在测试 Number 对象时，则会返回"object"。类似地，Number 对象是 Number 类型的实例，而基本类型的数值则不是。
+
+
+
+#### String类型
+
+
+
+
+
+
+
+
+
 
 
 
