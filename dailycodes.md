@@ -20,6 +20,7 @@
 16. [每天一道面试题: 16](#16)
 17. [每天一道面试题: 17](#17)
 18. [每天一道面试题: 18](#18)
+19. [每天一道面试题: 19](#19)
 
 
 
@@ -2002,10 +2003,158 @@ alert(year + '-' + month + '-' + day);
 <a name="19">
 
 
+## 每天一道面试题: 19
 
 
+### 为了保证页面输出安全，我们经常需要对一些特殊的字符进行转义，请写 一个函数 escapeHtml，将<, >, &, "进行转义
 
 
+**答案:**
+
+```
+function escapeHtml(str) {
+	return str.replace(/[<>"&]/g, function(match){
+	
+		switch (match) {
+		
+		case "<":
+			return "&lt;";
+		
+		case ">":
+			return "&gt;";
+		
+		case "&":
+			return "&amp;";
+		
+		case "\"":
+			return "&quot;";
+		
+		}
+	
+	});
+}
+
+```
+
+
+***
+
+### 用js实现随机选取10~100之间的10个数字，存入一个数组，并排序
+
+**答案:**
+
+```
+function getRand(start, end) {
+	var rand = end - start;
+	return Math.floor(Math.random() * rand + start);
+}
+
+var arr = [];
+var i = 10;
+while(i-- > 0){
+	arr.push(getRand(10, 100));
+}
+
+arr.sort();
+```
+
+
+***
+
+
+### 怎么添加、删除、复制、创建、查找节点
+
+**答案:**
+
+1. 创建新节点:
+	- `createDocumentFragment()`
+	- `createElement()`
+	- `createTextNode()`
+
+2. 添加、删除、替换、插入、复制：
+	- `appendChild()`
+	- `removeChild()`
+	- `replaceChild()`
+	- `insertBefore()`
+	- `cloneNode()`
+
+3. 查找:
+	- `getElementsByTagName()`
+	- `getElementsByName()`
+	- `getElementById()`
+
+
+***
+
+
+### 正则表达式构造函数 var reg=new RegExp(“xxx”)与正则表达字面量 var reg=//有什么不同？匹配邮箱的正则表达式？
+
+
+**答案:**
+
+当使用RegExp()构造函数的时候，不仅需要转义引号，并且还需要双反斜杠，而使用正则表达字面量的效率更高
+
+邮箱的正则匹配: `/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]{2,5}){1,2}$/`
+
+
+***
+
+### 写一个 function，清除字符串前后的空格。（兼容所有浏览器）
+
+**答案:**
+
+使用自带接口`trim()`，考虑兼容性:
+```
+if(!String.prototype.trim) {
+	String.prototype.trim = function() {
+		return this.replace(/^\s*|\s*$/, "");
+	// \s匹配空白字符: 回车、换行、制表符tab、空格
+	};
+
+}
+```
+
+
+***
+
+
+### Javascript 中 callee 和 caller 的作用？
+
+如果一对兔子每月生一对兔子；一对新生兔，从第二个月起就开始生兔子；
+假定每对兔子都是一雌一雄，试问一对兔子，第 n 个月能繁殖成多少对兔子？（使用 callee完成）
+
+**答案:**
+
+- arguments.callee：获得当前函数的引用
+- caller 是返回一个对函数的引用，该函数调用了当前函数；
+- callee 是返回正在被执行的 function 函数，也就是所指定的 function 对象的正文。
+
+
+```
+var result = [];
+
+function fn(n) {
+	if(n == 1 || n == 2) {
+		result[1] = result[2] = 1;
+		return 1;
+	} else {
+	
+		result[n] =  arguments.callee(n-1) + arguments.callee(n-2);
+		return result[n];
+	}
+	
+}
+// 其实就是一个fibonacci数列问题，用数组的形式，不仅可以打印出第n个数，还保存了前面所有的结果
+console.log(fn(7)); //13
+console.log(result); //,1,1,2,3,5,8,13
+
+```
+
+
+***
+
+
+<a name="20">
 
 
 
