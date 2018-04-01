@@ -21,6 +21,7 @@
 17. [每天一道面试题: 17](#17)
 18. [每天一道面试题: 18](#18)
 19. [每天一道面试题: 19](#19)
+20. [每天一道面试题: 20](#20)
 
 
 
@@ -635,6 +636,9 @@ var timer = setTimeout(function func(){
 ```
 
 
+<a name="7a">
+
+
 ***
 
 ### 下面的代码会输出什么？为什么？
@@ -665,7 +669,7 @@ MDN 上对于 reverse() 的描述是这样的：
 
 `slice()` 方法用于提取目标数组的一部分，返回一个新数组，原数组不变
 
-而数组与字符串""做加法运算输出，会将数组中除中括号外的字符全部打印出来
+而数组与字符串""做加法运算输出，会调用toString()方法，将数组中除中括号外的字符全部打印出来
 
 
 ***
@@ -2155,6 +2159,116 @@ console.log(result); //,1,1,2,3,5,8,13
 
 
 <a name="20">
+
+
+## 每天一道面试题: 20
+
+### JavaScript语句如何实现检索当前页面中的表单元素中的所有文本框，并将它们全部清空？
+
+
+**答案:**
+
+```
+for(var i=0; i < document.forms.length; i++) {
+	for(var j=0; j < document.forms[i].elements.length; j++) {
+		if(document.forms[i].elements[j].type == "text") {
+			document.forms[i].elements[j].value = "";
+		}
+	
+	}
+}
+```
+
+
+***
+
+
+### 写出下面程序运行的结果
+
+```
+for(i=0, j=0; i<10, j<6; i++, j++) {
+
+	k = i + j;
+
+}
+```
+
+**答案:**
+
+`10 // i=5, j=5`
+
+
+***
+
+
+### 阅读以下代码，分析出结果:
+
+```
+var arr = new Array(1,3,5);
+arr[4] = 'z';
+arr2 = arr.reverse();
+arr3 = arr.concat(arr2);
+alert(arr3);
+```
+
+**答案:**
+
+`z,,5,3,1,z,,5,3,1`
+
+
+关于Array类型、Array的转换方法请看: [Array类型](./JavaScript高级程序设计.md/#5b) 
+
+之前也做过这种题: [关于reverse方法](#7a)
+
+
+***
+
+
+### 写出简单描述html标签(不带属性的开始标签和结束标签)的正则表达式，并将以下字符串中的html标签去除
+
+`var str = "<div>这里是 div<p>里面的段落</p></div>";`
+
+
+**答案:**
+
+```
+var reg = /<\/?\w+\/?>/gi;
+var res = str.replace(reg, "");
+```
+
+为了加深对于正则的理解，试着将题目扩展。如何取出一对标签中的内容？如何将一对标签除去？
+
+```
+var str = "<div>这里是 div<p>里面的段落</p></div>";
+
+var pattern = /(\<(\w+\>))(.*?)(\<\/\2)/gi;
+var res = pattern.test(str);
+
+console.log(res); 
+
+// 正则表达式构造函数中用于存储捕获分组的属性: $1、$2、$3...
+console.log(RegExp.$1); // <div>
+console.log(RegExp.$2); // div>
+console.log(RegExp.$3); // 这里是 div<p>里面的段落</p>
+console.log(RegExp.$4); // </div>
+
+//这样就提取出了一对标签中的内容
+var s = str.replace(pattern, RegExp.$3); // 这里是 div<p>里面的段落</p>
+
+// 由于$1、$2、$3...这些属性只会存储最近一次匹配结果里的分组
+pattern.test(s); // 再匹配一次，获取div中的p
+console.log(s.replace(pattern, RegExp.$3)); // 这里是 div里面的段落
+
+
+// 当然也可以这样，反复调用，就可以把嵌套标签中的内容全部提取出来
+var s = str.replace(pattern, function(m,p1,p2,p3,p4){return p3});
+console.log(s); // 这里是 div<p>里面的段落</p>
+console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里是div里面的段落
+
+```
+
+关于正则表达式，请看JS高级程序设计中的详细解读: [正则表达式](./JavaScript高级程序设计.md/#5d)
+
 
 
 
