@@ -1800,8 +1800,8 @@ obj.removeChild() // 删除
 
 **答案:**
 
-1. 本地对象为 `array` `obj` `regexp` 等可以new实例化的对象
-2. 内置对象为 `global` `Math` 等不可以实例化的, 内置对象也属于本地对象
+1. 本地对象为 `Array` `Object` `RegExp` 等可以new实例化的对象
+2. 内置对象为 `Global` `Math` 等不可以实例化的, 内置对象也属于本地对象
 3. 宿主对象为浏览器自带的 `document`，`window` 等
 
 ***
@@ -2226,7 +2226,7 @@ alert(arr3);
 
 ### 写出简单描述html标签(不带属性的开始标签和结束标签)的正则表达式，并将以下字符串中的html标签去除
 
-`var str = "<div>这里是 div<p>里面的段落</p></div>";`
+`var str = "<div>这里是div<p>里面的段落</p></div>";`
 
 
 **答案:**
@@ -2239,7 +2239,7 @@ var res = str.replace(reg, "");
 为了加深对于正则的理解，试着将题目扩展。如何取出一对标签中的内容？如何将一对标签除去？
 
 ```
-var str = "<div>这里是 div<p>里面的段落</p></div>";
+var str = "<div>这里是div<p>里面的段落</p></div>";
 
 var pattern = /(\<(\w+\>))(.*?)(\<\/\2)/gi;
 var res = pattern.test(str);
@@ -2249,20 +2249,20 @@ console.log(res);
 // 正则表达式构造函数中用于存储捕获分组的属性: $1、$2、$3...
 console.log(RegExp.$1); // <div>
 console.log(RegExp.$2); // div>
-console.log(RegExp.$3); // 这里是 div<p>里面的段落</p>
+console.log(RegExp.$3); // 这里是div<p>里面的段落</p>
 console.log(RegExp.$4); // </div>
 
 //这样就提取出了一对标签中的内容
-var s = str.replace(pattern, RegExp.$3); // 这里是 div<p>里面的段落</p>
+var s = str.replace(pattern, RegExp.$3); // 这里是div<p>里面的段落</p>
 
 // 由于$1、$2、$3...这些属性只会存储最近一次匹配结果里的分组
 pattern.test(s); // 再匹配一次，获取div中的p
-console.log(s.replace(pattern, RegExp.$3)); // 这里是 div里面的段落
+console.log(s.replace(pattern, RegExp.$3)); // 这里是div里面的段落
 
 
 // 当然也可以这样，反复调用，就可以把嵌套标签中的内容全部提取出来
 var s = str.replace(pattern, function(m,p1,p2,p3,p4){return p3});
-console.log(s); // 这里是 div<p>里面的段落</p>
+console.log(s); // 这里是div<p>里面的段落</p>
 console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里是div里面的段落
 
 ```

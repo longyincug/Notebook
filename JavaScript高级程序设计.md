@@ -63,6 +63,17 @@
 	
 	- [小结](#5h)
 
+6. [第六章 面向对象的程序设计](#6)
+
+	- [理解对象](#6a)
+	
+	- [创造对象](#6b)
+	
+	- [继承](#6c)
+	
+	- [小结](#6d)
+
+
 
 
 ***
@@ -115,7 +126,8 @@
 	- Web浏览器对DOM的支持
 		- 目前支持DOM已经成为浏览器开发商的首要目标，Mozilla开发团队的目标更是构建与标准100%兼容的浏览器
 		- 主流浏览器对DOM标准的支持情况:
-		- ![DOM兼容情况](./images/DOM.png)
+		
+		![DOM兼容情况](./images/DOM.png)
 
 
 5. **浏览器对象模型（BOM）**
@@ -1575,37 +1587,37 @@ ES通过RegExp类型来支持正则表达式
 
 `( [ { \ ^ $ | ) ? * + .]} `
 
-	```
-	/* 匹配第一个" [bc]at"，不区分大小写
-	*/
-	var pattern2 = /\[bc\]at/i;
-	
-	/*
-	* 匹配所有以"at"结尾的 3 个字符的组合，不区分大小写
-	*/
-	var pattern3 = /.at/gi;
-	
-	/*
-	* 匹配所有".at"，不区分大小写
-	*/
-	var pattern4 = /\.at/gi; 
-	```
+```
+/* 匹配第一个" [bc]at"，不区分大小写
+*/
+var pattern2 = /\[bc\]at/i;
+
+/*
+* 匹配所有以"at"结尾的 3 个字符的组合，不区分大小写
+*/
+var pattern3 = /.at/gi;
+
+/*
+* 匹配所有".at"，不区分大小写
+*/
+var pattern4 = /\.at/gi; 
+```
 
 前面举的这些例子都是以字面量形式来定义的正则表达式。另一种创建正则表达式的方式是使用RegExp 构造函数，它接收两个参数：一个是要匹配的字符串模式，另一个是可选的标志字符串。
 
 可以使用字面量定义的任何表达式，都可以使用构造函数来定义
 
-	```
-	/*
-	* 匹配第一个"bat"或"cat"，不区分大小写
-	*/
-	var pattern1 = /[bc]at/i;
-	
-	/*
-	* 与 pattern1 相同，只不过是使用构造函数创建的
-	*/
-	var pattern2 = new RegExp("[bc]at", "i"); 
-	```
+```
+/*
+* 匹配第一个"bat"或"cat"，不区分大小写
+*/
+var pattern1 = /[bc]at/i;
+
+/*
+* 与 pattern1 相同，只不过是使用构造函数创建的
+*/
+var pattern2 = new RegExp("[bc]at", "i"); 
+```
 
 
 要注意的是，传递给 RegExp 构造函数的两个参数都是**字符串**（不能把正则表达式字面量传递给 RegExp 构造函数）。
@@ -2167,6 +2179,871 @@ alert(falseValue instanceof Boolean); //false
 
 
 #### String类型
+
+String 类型是字符串的对象包装类型，可以像下面这样使用 String 构造函数来创建。
+
+`var stringObject = new String("hello world"); `
+
+String 对象的方法也可以在所有基本的字符串值中访问到。
+其中，继承的 `valueOf()`、`toLocaleString()`和`toString()`方法，都返回对象所表示的基本字符串值
+
+每个String实例都有一个`length`属性，表示字符串中包含的字符个数。
+
+	- 即使字符中包含双字节字符(不是占一个字节的 ASCII 字符)，每个字符也仍然算一个字符
+
+1. 字符方法
+
+	- `charAt()`和 `charCodeAt()`
+	- 分别返回指定位置的字符和字符编码
+
+	```
+	var stringValue = "hello world";
+	alert(stringValue.charAt(1)); //"e" 
+	
+	var stringValue = "hello world";
+	alert(stringValue.charCodeAt(1)); //输出"101" 
+	```
+	
+	- ECMAScript 5 还定义了另一个访问个别字符的方法。在支持此方法的浏览器中，可以使用方括号加数字索引来访问字符串中的特定字符
+	- `stringValue[1]`
+
+
+2. 字符串操作方法
+
+	- `concat()`，用于将一或多个字符串拼接起来，返回拼接得到的新字符串
+		- 虽然concat专门用来拼接字符串，但是实际中使用更多的还是加号操作符，更加简便
+	
+	- `slice()`、`substring()`
+		- 第一个参数指定子字符串的开始位置，第二个参数表示子字符串到哪里结束
+		- 如果没有指定第二个参数，则将字符串长度作为结束位置
+		- 注意: `substring()`这个方法会将较小的数作为开始位置，将较大的数作为结束位置
+		- 负数的情况:
+			- `slice`会将传入的负值与字符串长度相加
+			- `substring`会将所有的负值参数都转换为0
+	
+	- `substr()`
+		- 第一个参数指定起始位置，第二个参数指定的是**返回的字符个数**
+		- 如果没有指定第二个参数，则将字符串长度作为结束位置
+		- 负数的情况:
+			- `substr`会将负的第一个参数加上字符串的长度
+			- 将负的第二个参数转换为0
+
+	```
+	var stringValue = "hello world";
+	alert(stringValue.slice(-3)); //"rld"
+	alert(stringValue.substring(-3)); //"hello world"
+	alert(stringValue.substr(-3)); //"rld"
+	alert(stringValue.slice(3, -4)); //"lo w"
+	alert(stringValue.substring(3, -4)); //"hel"
+	alert(stringValue.substr(3, -4)); //""（空字符串）
+	
+	```
+
+	> IE 的 JavaScript 实现在处理向 substr()方法传递负值的情况时存在问题，它会返回原始的字符串。IE9 修复了这个问题
+
+
+3. 字符串位置方法
+
+	- 有两个可以从字符串中查找子字符串的方法：`indexOf()`和 `lastIndexOf()`
+	- 返回子字符串的位置，如果没有找到，则返回-1
+	-一个从前往后，一个从后往前
+
+	```
+	var stringValue = "hello world";
+	alert(stringValue.indexOf("o")); //4
+	alert(stringValue.lastIndexOf("o")); //7
+	```
+
+	- 这两个方法都可以接收可选的第二个参数，表示从字符串中的哪个位置开始搜索
+	
+	- 在使用第二个参数的情况下，可以通过循环调用 indexOf()或 lastIndexOf()来找到所有匹配的子字符串
+
+	```
+	var stringValue = "Lorem ipsum dolor sit amet, consectetur adipisicing elit";
+	var positions = new Array();
+	var pos = stringValue.indexOf("e");
+	while(pos > -1){
+	 positions.push(pos);
+	 pos = stringValue.indexOf("e", pos + 1);
+	}
+	
+	alert(positions); //"3,24,32,35,52" 
+	```
+
+
+4. `trim()`方法
+
+	- ES5为所有字符串定义了trim()方法
+	- 这个方法创建一个字符串的副本，删除前置和后缀的所有空格，然后返回结果
+
+	- IE8及以下不支持
+	- Firefox 3.5+、Safari 5+和 Chrome 8+还支持非标准的 trimLeft()和 trimRight()方法，分别用于删除字符串开头和末尾的空格
+
+
+5. 字符串大小写转换方法
+
+	- `toLowerCase()`、`toLocaleLowerCase()`、`toUpperCase()`和 `toLocaleUpperCase()`
+
+
+6. 字符串的模式匹配方法
+
+	- String类型定义了几个用于在字符串中匹配模式的方法
+
+	- `match()`，在字符串上调用这个方法，**本质上与调用 RegExp 的 exec()方法相同**。
+
+		- match()方法只接受一个参数，要么是一个正则表达式，要么是一个 RegExp 对象
+		
+		```
+		var text = "cat, bat, sat, fat";
+		var pattern = /.at/;
+
+		//返回结果数组与 pattern.exec(text)相同
+		var matches = text.match(pattern);
+		alert(matches.index); //0
+		alert(matches[0]); //"cat"
+		alert(pattern.lastIndex); //0 在不设置全局标志的情况下，在同一个字符串上多次调用 exec()将始终返回第一个匹配项的信息
+		// 如果pattern是/.at/g, 那么pattern.lastIndex将返回3
+		
+		```
+		
+		- 数组的第一项是与整个模式匹配的字符串，之后的每一项（如果有）保存着与正则表达式中的捕获组匹配的字符串
+
+	- `search()`，这个方法的唯一参数与 match()方法的参数相同：由字符串或 RegExp 对象指定的一个正则表达式
+	
+		- 返回字符串中第一个匹配项的索引；如果没有找到匹配项，则返回-1
+		- 始终从字符串的开头向后查找
+
+
+	- `replace()`，这个方法接受两个参数，第一个是RegExp对象，或者一个字符串，第二个参数是一个字符串或者一个函数
+		
+		- 如果第一个参数是字符串，那么**只会**替换第一个子字符串！要想替换所有字符串，唯一的办法就是提供一个正则表达式，且要指定全局(g)标志
+
+		- 如果第二个参数是字符串，那么还可以使用一些特殊的字符序列，将正则表达式操作得到的值插入到结果字符串中。
+
+		- 下表列出了 ECMAScript 提供的这些特殊的字符序列
+	
+		![replace](./images/replace.png)
+
+		```
+		var text = "cat, bat, sat, fat";
+		result = text.replace(/(.at)/g, "word ($1)");
+		alert(result); //word (cat), word (bat), word (sat), word (fat)
+		```
+
+
+		- replace()方法的第二个参数也可以是一个函数
+		
+			- 在只有一个匹配项（即与模式匹配的字符串）的情况下，会向这个函数传递3个参数：**模式的匹配项**、**模式匹配项在字符串中的位置**和**原始字符串**
+
+			- 在定义了多个捕获组的情况下，传递给函数的参数依次是模式的匹配项、第一个捕获组的匹配项、第二个捕获组的匹配项……，但最后两个参数仍然分别是模式的匹配项在字符串中的位置和原始字符串。
+
+			```
+			function htmlEscape(text){
+				return text.replace(/[<>"&]/g, function(match, pos, originalText){
+					switch(match){
+						case "<":
+							return "&lt;";
+						case ">":
+							return "&gt;";
+						case "&":
+							return "&amp;";
+						case "\"":
+							return "&quot;";
+					}
+				});
+			} 
+			```
+
+	- `split()`，这个方法基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中
+		
+		- 分割符可以是字符串，也可以是一个RegExp对象
+		- split可以接受可选的第二个参数，用于指定数组的大小
+		
+		```
+		var colorText = "red,blue,green,yellow";
+		var colors1 = colorText.split(","); //["red", "blue", "green", "yellow"]
+		var colors2 = colorText.split(",", 2); //["red", "blue"]
+		var colors3 = colorText.split(/[^,]+/); //["", ",", ",", ",", ""] 
+		```
+		
+		- 第一项和最后一项是两个空字符串。之所以会这样，是因为通过正则表达式指定的分隔符出现在了字符串的开头（即子字符串"red"）和末尾（即子字符串"yellow"）
+
+
+7. `localeCompare()`方法
+
+	- 这个方法比较两个字符串，并返回下列值中的一个：
+
+		- 如果字符串在字母表中应该排在字符串参数之前，则返回一个负数（大多数情况下是-1，具体的值要视实现而定）；
+
+		- 如果字符串等于字符串参数，则返回 0；
+
+		- 如果字符串在字母表中应该排在字符串参数之后，则返回一个正数（大多数情况下是 1，具体的值同样要视实现而定）。
+
+	```
+	var stringValue = "yellow";
+	alert(stringValue.localeCompare("brick")); //1
+	alert(stringValue.localeCompare("yellow")); //0
+	alert(stringValue.localeCompare("zoo")); //-1 
+	```
+
+	- 所支持的地区（国家和语言）决定了这个方法的行为，在美国，`localeCompare()` 就是区分大小写的，于是大写字母在字母表中排在小写字母前头就成为了一项决定性的比较规则。但在别的国家就不是这样了(如中国)
+
+
+
+8. `fromCharCode()`方法
+
+	- String构造函数本身的一个静态方法
+	- 接收一或多个字符编码，然后将它们转换成一个字符串，和实例方法`charCodeAt()`执行的是相反的操作
+	
+	```
+	alert(String.fromCharCode(104, 101, 108, 108, 111)); //"hello"
+	```
+
+
+
+<a name="5g">
+
+
+### 单体内置对象
+
+**内置对象**: “由 ECMAScript 实现提供的、不依赖于宿主环境的对象，这些对象在 ECMAScript 程序执行之前就已经存在了。
+
+开发人员不必显式地实例化内置对象，因为它们已经实例化了
+
+前面我们已经介绍了大多数内置对象，例如 Object、Array 和 String
+
+两个单体内置对象: `Global`和`Math`
+
+
+#### Global对象
+
+Global对象又叫全局对象，不属于任何其他对象的属性和方法，最终都是它的属性和方法
+
+实际上没有全局变量或全局函数；所有在全局作用域中定义的属性和函数，都是 Global 对象的属性
+
+诸如 `isNaN()`、`isFinite()`、`parseInt()`以及 `parseFloat()`，实际上全都是 Global对象的方法。除此之外，Global 对象还包含其他一些方法。
+
+1. URI编码方法
+
+	- Global 对象的 `encodeURI()`和 `encodeURIComponent()`方法可以对 URI（Uniform ResourceIdentifiers，通用资源标识符）进行编码，以便发送给浏览器
+
+		- encodeURI()不会对本身属于 URI 的特殊字符进行编码，例如冒号、正斜杠、问号和井字号
+		- 而 encodeURIComponent()则会对它发现的任何非标准字符进行编码
+
+	```
+	var uri = "http://www.wrox.com/illegal value.htm#start";
+
+	//"http://www.wrox.com/illegal%20value.htm#start"
+	alert(encodeURI(uri));
+
+	//"http%3A%2F%2Fwww.wrox.com%2Fillegal%20value.htm%23start"
+	alert(encodeURIComponent(uri)); 
+	```
+
+	- 可以对整个 URI 使用 encodeURI()，而只能对附加在现有 URI 后面的字符串使用 encodeURIComponent()
+
+	> 一般来说，我们使用 encodeURIComponent() 方法的时候要比使用encodeURI()更多，因为在实践中更常见的是对查询字符串参数而不是对基础 URI进行编码
+
+
+	- 与 encodeURI()和 encodeURIComponent()方法对应的两个方法分别是 decodeURI()和decodeURIComponent()
+
+
+2. `eval()`方法
+
+	- 大概是整个 ECMAScript 语言中最强大的一个方法：eval()
+
+	- 只接受一个参数，即要执行的 ECMAScript（或 JavaScript）字符串
+
+	- `eval("alert('hi')");`这行代码的作用等价于这行代码：`alert("hi"); `
+
+	- 在 eval()中创建的任何变量或函数都不会被提升，因为在解析代码的时候，它们被包含在一个字符串中；它们只在 eval()执行的时候创建
+
+	- 严格模式下，在外部访问不到 eval()中创建的任何变量或函数，因此前面的例子都会导致错误。同样，在严格模式下，为 eval 赋值也会导致错误
+
+	> 能够解释代码字符串的能力非常强大，但也非常危险。因此在使用 eval()时必须极为谨慎，特别是在用它执行用户输入数据的情况下。否则，可能会有恶意用户输入威胁你的站点或应用程序安全的代码（即所谓的代码注入）。
+
+
+
+3. `Global`对象的属性
+
+	- 特殊的值undefined、NaN 以及 Infinity 都是 Global 对象的属性。此外，所有原生引用类型的构造函数，像Object 和 Function，也都是 Global 对象的属性
+
+	![global](./images/global.png)
+
+	- ECMAScript 5 明确禁止给 undefined、NaN 和 Infinity 赋值，这样做即使在非严格模式下也会导致错误
+
+
+4. `window`对象
+
+	- ES虽然没有指出如何直接访问Global对象，但web浏览器都是将这个全局对象作为window对象的一部分加以实现的，因此在全局作用域里声明的所有变量和函数，都成为了window对象的属性
+
+	- JavaScript中的window对象除了扮演ECMAScript规定的Global对象的角色外，还承担了很多别的任务。第 8 章在讨论浏览器对象模型时将详细介绍 window 对象
+
+	- 另一种取得 Global 对象的方法是使用以下代码
+
+	```
+	var global = function(){
+	 return this;
+	}(); 
+	```
+
+
+
+#### Math对象
+
+1. Math对象的属性
+
+	![Math](./images/math.png)
+
+
+2. `min()`和`max()`方法
+
+	```
+	var max = Math.max(3, 54, 32, 16);
+	alert(max); //54
+	var min = Math.min(3, 54, 32, 16);
+	alert(min); //3 
+	```
+
+	- 要找到数组中的最大或最小值，可以像下面这样使用 `apply()`方法:
+
+	```
+	var values = [1, 2, 3, 4, 5, 6, 7, 8];
+	var max = Math.max.apply(Math, values); 
+	```
+
+
+3. 舍入方法
+
+	- Math.ceil()执行向上舍入，即它总是将数值向上舍入为最接近的整数
+
+	- Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数
+
+	- Math.round()执行标准舍入，即它总是将数值四舍五入为最接近的整数
+
+
+4. `random()`方法
+
+	- `Math.random()`方法返回大于等于 0 小于 1 的一个随机数
+
+	- 自定义一个函数，根据最大值和最小值，来获取一个随机的整数值
+	```
+	function selectFrom(lowerValue, upperValue) {
+		var choices = upperValue - lowerValue + 1;
+		return Math.floor(Math.random() * choices + lowerValue);
+	}
+	
+	```
+
+	- 函数 `selectFrom()`接受两个参数：应该返回的最小值和最大值。
+
+	- 利用这个函数，可以方便地从数组中随机取出一项
+
+
+5. 其他方法
+
+	![Math的其他方法](./images/mathFunc.png)
+
+
+<a name="5h">
+
+
+### 小结
+
+对象在 JavaScript 中被称为引用类型的值，而且有一些内置的引用类型可以用来创建特定的对象，现简要总结如下：
+
+- 引用类型与传统面向对象程序设计中的类相似，但实现不同；
+
+- Object 是一个基础类型，其他所有类型都从 Object 继承了基本的行为；
+
+- Array 类型是一组值的有序列表，同时还提供了操作和转换这些值的功能；
+
+- Date 类型提供了有关日期和时间的信息，包括当前日期和时间以及相关的计算功能；
+
+- RegExp 类型是 ECMAScript 支持正则表达式的一个接口，提供了最基本的和一些高级的正则表达式功能。
+
+
+函数实际上是 Function 类型的实例，因此函数也是对象；而这一点正是 JavaScript 最有特色的地方。由于函数是对象，所以函数也拥有方法，可以用来增强其行为。
+
+因为有了基本包装类型，所以 JavaScript 中的基本类型值可以被当作对象来访问。
+
+三种基本包装类型分别是：`Boolean`、`Number` 和 `String`。以下是它们共同的特征：
+
+- 每个包装类型都映射到同名的基本类型；
+
+- 在读取模式下访问基本类型值时，就会创建对应的基本包装类型的一个对象，从而方便了数据操作；
+
+- 操作基本类型值的语句一经执行完毕，就会立即销毁新创建的包装对象。
+
+在所有代码执行之前，作用域中就已经存在两个内置对象：Global 和 Math。
+
+在大多数 ECMAScript实现中都不能直接访问 Global 对象；不过，Web 浏览器实现了承担该角色的 window 对象。
+
+全局变量和函数都是 Global 对象的属性。
+
+Math 对象提供了很多属性和方法，用于辅助完成复杂的数学计算任务。
+
+
+
+
+***
+
+
+
+
+<a name="6">
+
+
+## 第六章 面向对象的程序设计
+
+
+对象: 无序属性的集合，其属性可以包含基本值、对象或者函数
+
+可以把 ECMAScript 的对象想象成**散列表**: 无非就是一组名值对，其中值可以是数据或函数
+
+每个对象都是基于一个引用类型创建的，这个引用类型可以是第5章讨论的原生类型，也可以是开发人员定义的类型
+
+
+<a name="6a">
+
+
+
+
+### 理解对象
+
+创建自定义对象的最简单方式就是创建一个 Object 的实例，然后再为它添加属性和方法。
+
+早期的 JavaScript 开发人员经常使用这个模式创建新对象。几年后，对象字面量成为创建这种对象的首选模式。
+
+#### 属性类型
+
+ES中有两种属性：数据属性和访问器属性
+
+1. 数据属性: 数据属性包含一个数据值的位置。在这个位置可以读取和写入值。数据属性有4个特性：
+
+	- [[Configurable]]：表示能否通过 delete 删除属性从而重新定义属性，能否修改属性的特性，或者能否把属性修改为访问器属性。像前面例子中那样直接在对象上定义的属性，它们的这个特性默认值为 true。
+	
+	- [[Enumerable]]：表示能否通过 for-in 循环返回属性。像前面例子中那样直接在对象上定义的属性，它们的这个特性默认值为 true。
+	
+	- [[Writable]]：表示能否修改属性的值。像前面例子中那样直接在对象上定义的属性，它们的这个特性默认值为 true。
+	
+	- [[Value]]：包含这个属性的数据值。读取属性值的时候，从这个位置读；写入属性值的时候，把新值保存在这个位置。这个特性的默认值为 undefined。
+
+	要修改属性默认的特性，必须使用 ECMAScript 5 的 `Object.defineProperty()`方法。这个方法接收三个参数：**属性所在的对象**、**属性的名字**和**一个描述符对象**。
+
+	其中，描述符（descriptor）对象的属性必须是：configurable、enumerable、writable 和 value。设置其中的一或多个值，可以修改对应的特性值。
+
+	```
+	var person = {};
+	Object.defineProperty(person, "name", {
+	 writable: false,
+	 value: "Nicholas"
+	});
+	alert(person.name); //"Nicholas"
+	person.name = "Greg";
+	alert(person.name); //"Nicholas"
+	```
+
+	这个例子创建了一个名为 name 的属性，它的值"Nicholas"是只读的。这个属性的值是不可修改的，如果尝试为它指定新值，则在非严格模式下，赋值操作将被忽略；在严格模式下，赋值操作将会导致抛出错误。
+
+
+2. 访问器属性
+
+	- 访问器属性不包含数据值；它们包含一对 `getter` 和 `setter` 函数
+
+	- 访问器属性有4个特性:
+		- [[Configurable]]：表示能否通过 delete 删除属性从而重新定义属性，能否修改属性的特性，或者能否把属性修改为数据属性。对于直接在对象上定义的属性，这个特性的默认值为true。
+		
+		- [[Enumerable]]：表示能否通过 for-in 循环返回属性。对于直接在对象上定义的属性，这个特性的默认值为 true。
+		
+		- [[Get]]：在读取属性时调用的函数。默认值为 undefined。
+		
+		- [[Set]]：在写入属性时调用的函数。默认值为 undefined。
+
+	- 访问器属性不能直接定义，必须使用 `Object.defineProperty()`来定义
+
+	```
+	var book = {
+	 _year: 2004,
+	 edition: 1
+	};
+	Object.defineProperty(book, "year", {
+	 get: function(){
+	 return this._year;
+	 },
+	 set: function(newValue){
+	 if (newValue > 2004) {
+	 this._year = newValue;
+	 this.edition += newValue - 2004;
+	 }
+	 }
+	});
+	book.year = 2005;
+	alert(book.edition); //2 
+	```
+
+	- 这是使用访问器属性的常见方式，即设置一个属性的值会导致其他属性发生变化。
+
+	> 不一定非要同时指定 getter 和 setter。只指定 getter 意味着属性是不能写，尝试写入属性会被忽略。在严格模式下，尝试写入只指定了 getter 函数的属性会抛出错误。类似地，只指定 setter 函数的属性也不能读，否则在非严格模式下会返回 undefined，而在严格模式下会抛出错误
+	> IE8不支持这个ES5中的方法
+
+
+	- 旧有方法创建访问器属性:
+
+	```
+	var book = {
+	 _year: 2004,
+	 edition: 1
+	};
+	//定义访问器的旧有方法
+	book.__defineGetter__("year", function(){
+	 return this._year;
+	});
+	book.__defineSetter__("year", function(newValue){
+	 if (newValue > 2004) {
+	 this._year = newValue;
+	 this.edition += newValue - 2004;
+	 }
+	});
+	book.year = 2005;
+	alert(book.edition); //2
+	```
+
+
+#### 定义多个属性
+
+由于为对象定义多个属性的可能性很大，ECMAScript 5 又定义了一个 Object.defineProperties()方法。利用这个方法可以通过描述符一次定义多个属性。这个方法接收两个对象参数：第一个对象是要添加和修改其属性的对象，第二个对象的属性与第一个对象中要添加或修改的属性一一对应。
+
+```
+var book = {};
+Object.defineProperties(book, {
+	_year: {
+		value: 2004
+	},
+
+	edition: {
+		value: 1
+	},
+	year: {
+		get: function(){ 
+			return this._year;
+		},
+		
+		set: function(newValue){
+			if (newValue > 2004) {
+				this._year = newValue;
+				this.edition += newValue - 2004;
+			}
+		}
+	}
+}); 
+```
+
+> 以上代码在 book 对象上定义了两个数据属性（_year 和 edition）和一个访问器属性（year）。最终的对象与上一节中定义的对象相同。唯一的区别是这里的属性都是在同一时间创建的
+>
+> 不支持IE8
+
+
+
+#### 读取属性的特性
+
+使用 ECMAScript 5 的 `Object.getOwnPropertyDescriptor()`方法，可以取得给定属性的描述符。
+
+这个方法接收两个参数：**属性所在的对象**和**要读取其描述符的属性名称**，返回值是一个对象
+
+- 如果是访问器属性，这个对象的属性有 configurable、enumerable、get 和 set；
+
+- 如果是数据属性，这个对象的属性有 configurable、enumerable、writable 和 value
+
+```
+var book = {};
+Object.defineProperties(book, {
+	_year: {
+		value: 2004
+	},
+	edition: {
+		value: 1
+	},
+	year: {
+		get: function(){
+			return this._year;
+		},
+		set: function(newValue){
+			if (newValue > 2004) {
+				this._year = newValue;
+				this.edition += newValue - 2004;
+			}
+		}
+	}
+}); 
+
+var descriptor = Object.getOwnPropertyDescriptor(book, "_year");
+alert(descriptor.value); //2004
+alert(descriptor.configurable); //false 
+alert(typeof descriptor.get); //"undefined"
+
+var descriptor = Object.getOwnPropertyDescriptor(book, "year");
+alert(descriptor.value); //undefined
+alert(descriptor.enumerable); //false
+alert(typeof descriptor.get); //"function"
+```
+
+
+> 对于数据属性_year，value 等于最初的值，configurable 是 false，而 get 等于 undefined。对于访问器属性 year，value 等于 undefined，enumerable 是 false，而 get 是一个指向 getter函数的指针
+>
+> JavaScript 中，可以针对任何对象——包括 DOM 和 BOM 对象，使用 Object.getOwnPropertyDescriptor()方法。IE8不支持这个方法
+
+
+
+<a name="6b">
+
+
+
+
+### 创建对象
+
+虽然 Object 构造函数或对象字面量都可以用来创建单个对象，但这些方式有个明显的缺点：使用同一个接口创建很多对象，会产生大量的重复代码。为解决这个问题，人们开始使用工厂模式的一种变体。
+
+#### 工厂模式
+
+考虑到在 ECMAScript 中无法创建类，开发人员就发明了一种函数，用函数来封装以特定接口创建对象的细节。
+
+```
+function createPerson(name, age, job) {
+	var o = new Object();
+	o.name = name;
+	o.age = age;
+	o.job = job;
+	o.sayName = function() {
+		alert(this.name);
+	};
+	
+	return o;
+}
+
+var person1 = createPerson("Nicholas", 29, "Software Engineer");
+
+var person2 = createPerson("Greg", 27, "Doctor"); 
+
+```
+
+工厂模式虽然解决了创建多个相似对象的问题，但却没有解决对象识别的问题（即怎样知道一个对象的类型）。
+
+
+#### 构造函数模式
+
+ECMAScript 中的构造函数可用来创建特定类型的对象。我们可以自定义构造函数:
+
+```
+function Person(name, age, job){
+ this.name = name;
+ this.age = age;
+ this.job = job;
+ this.sayName = function(){
+ alert(this.name);
+ };
+}
+var person1 = new Person("Nicholas", 29, "Software Engineer");
+var person2 = new Person("Greg", 27, "Doctor"); 
+```
+
+用这种方式，存在以下不同:
+- 没有显式地创建对象；
+- 直接将属性和方法赋给了 this 对象；
+- 没有 return 语句。
+
+要创建 Person 的新实例，必须使用 new 操作符。以这种方式调用构造函数实际上会经历以下 4个步骤：
+1. 创建一个新对象；
+2. 将构造函数的作用域赋给新对象（因此 this 就指向了这个新对象）；
+3. 执行构造函数中的代码（为这个新对象添加属性）；
+4. 返回新对象。
+
+在前面例子的最后，person1 和 person2 分别保存着 Person 的一个不同的实例。这两个对象都有一个 constructor（构造函数）属性，该属性指向 Person
+
+对象的 constructor 属性最初是用来标识对象类型的。但是，提到检测对象类型，还是 instanceof操作符要更可靠一些。我们在这个例子中创建的所有对象既是 Object 的实例，同时也是 Person的实例，这一点通过 instanceof 操作符可以得到验证
+
+```
+alert(person1 instanceof Object); //true
+alert(person1 instanceof Person); //true
+alert(person2 instanceof Object); //true
+alert(person2 instanceof Person); //true 
+```
+
+创建自定义的构造函数意味着将来可以将它的实例标识为一种特定的类型；而这正是构造函数模式胜过工厂模式的地方。在这个例子中，person1 和 person2 之所以同时是 Object 的实例，是因为所有对象均继承自 Object。
+
+> 以这种方式定义的构造函数是定义在 Global 对象（在浏览器中是 window 对象）中的
+
+
+
+1. 将构造函数当作函数
+
+	- 构造函数与其他函数的唯一区别，就在于调用它们的方式不同。不过，构造函数毕竟也是函数，不存在定义构造函数的特殊语法。任何函数，只要通过 new 操作符来调用，那它就可以作为构造函数；而任何函数，如果不通过 new 操作符来调用，那它跟普通函数也不会有什么两样。
+	
+	```
+	// 当作构造函数使用
+	var person = new Person("Nicholas", 29, "Software Engineer");
+	person.sayName(); //"Nicholas"
+	// 作为普通函数调用
+	Person("Greg", 27, "Doctor"); // 添加到 window
+	window.sayName(); //"Greg"
+	// 在另一个对象的作用域中调用
+	var o = new Object();
+	Person.call(o, "Kristen", 25, "Nurse");
+	o.sayName(); //"Kristen" 
+	
+	```
+
+	当在全局作用域中调用一个函数时，this 对象总是指向 Global 对象（在浏览器中就是 window 对象）
+
+
+2. 构造函数的问题
+
+	- 构造函数模式虽然好用，但也并非没有缺点。使用构造函数的主要问题，就是每个方法都要在每个实例上重新创建一遍。在前面的例子中，person1 和 person2 都有一个名为 sayName()的方法，但那两个方法不是同一个 Function 的实例。不要忘了——ECMAScript 中的函数是对象，因此每定义一个函数，也就是实例化了一个对象。
+
+	- 从逻辑角度讲，此时的构造函数也可以这样定义。
+
+	```
+	function Person(name, age, job){
+	 this.name = name;
+	 this.age = age;
+	 this.job = job;
+	 this.sayName = new Function("alert(this.name)"); // 与声明函数在逻辑上是等价的
+	}
+	```
+
+	- 每个 Person 实例都包含一个不同的 Function 实例（以显示 name 属性），不同实例上的同名函数是不相等的
+
+	- `alert(person1.sayName == person2.sayName); //false`
+
+	
+	然而，创建两个完成同样任务的 Function 实例的确没有必要；况且有 this 对象在，根本不用在执行代码前就把函数绑定到特定对象上面。因此，大可像下面这样，通过把函数定义转移到构造函数外部来解决这个问题。
+
+	```
+	function Person(name, age, job){
+	 this.name = name;
+	 this.age = age;
+	 this.job = job;
+	 this.sayName = sayName;
+	}
+	
+	function sayName(){
+	 alert(this.name);
+	}
+	
+	var person1 = new Person("Nicholas", 29, "Software Engineer");
+	var person2 = new Person("Greg", 27, "Doctor"); 
+	```
+
+
+	> 由于 sayName 包含的是一个指向函数的指针，因此 person1 和 person2 对象就共享了在全局作用域中定义的同一个 sayName()函数。这样做确实解决了两个函数做同一件事的问题，可是新问题又来了：在全局作用域中定义的函数实际上只能被某个对象调用，这让全局作用域有点名不副实。而更让人无法接受的是：如果对象需要定义很多方法，那么就要定义很多个全局函数，于是我们这个自定义的引用类型就丝毫没有封装性可言了。好在，这些问题可以通过使用原型模式来解决。
+
+
+#### 原型模式
+
+我们创建的每个函数都有一个 `prototype`（原型）属性，这个属性是一个指针，指向一个对象，而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法。
+
+如果按照字面意思来理解，那么 `prototype` 就是通过调用构造函数而创建的那个对象实例的原型对象。使用原型对象的好处是可以让所有对象实例共享它所包含的属性和方法。换句话说，不必在构造函数中定义对象实例的信息，而是可以将这些信息直接添加到原型对象中。
+
+
+1. 理解原型对象
+
+	![原型对象1](./images/prototype1.png)
+
+	![原型对象2](./images/prototype2.png)
+
+
+	- 虽然可以通过对象实例访问保存在原型中的值，但却不能通过对象实例重写原型中的值。
+
+	- 如果我们在实例中添加了一个属性，而该属性与实例原型中的一个属性同名，那我们就在实例中创建该属性，该属性将会屏蔽原型中的那个属性
+
+	> 当为对象实例添加一个属性时，这个属性就会屏蔽原型对象中保存的同名属性；换句话说，添加这个属性只会阻止我们访问原型中的那个属性，但不会修改那个属性。即使将这个属性设置为 null，也只会在实例中设置这个属性，而不会恢复其指向原型的连接。不过，使用 delete 操作符则可以完全删除实例属性，从而让我们能够重新访问原型中的属性。
+
+	```
+	function Person(){
+	}
+
+	Person.prototype.name = "Nicholas";
+	Person.prototype.age = 29;
+	Person.prototype.job = "Software Engineer";
+	Person.prototype.sayName = function(){
+	 alert(this.name);
+	};
+
+	var person1 = new Person();
+	var person2 = new Person();
+
+	person1.name = "Greg";
+	alert(person1.name); //"Greg"——来自实例
+	alert(person2.name); //"Nicholas"——来自原型
+	
+	delete person1.name;
+	alert(person1.name); //"Nicholas"——来自原型
+	```
+
+
+	- 使用 `hasOwnProperty()`方法可以检测一个属性是存在于实例中，还是存在于原型中。这个方法（不要忘了它是从 Object 继承来的）只在给定属性存在于对象实例中时，才会返回 true
+
+	```
+	function Person(){
+	}
+
+	Person.prototype.name = "Nicholas";
+	Person.prototype.age = 29;
+	Person.prototype.job = "Software Engineer";
+	Person.prototype.sayName = function(){ 
+		alert(this.name);
+	};
+
+	var person1 = new Person();
+	var person2 = new Person();
+
+	alert(person1.hasOwnProperty("name")); //false
+
+	person1.name = "Greg";
+	alert(person1.name); //"Greg"——来自实例
+	alert(person1.hasOwnProperty("name")); //true
+
+	alert(person2.name); //"Nicholas"——来自原型
+	alert(person2.hasOwnProperty("name")); //false
+
+	delete person1.name;
+	alert(person1.name); //"Nicholas"——来自原型
+	alert(person1.hasOwnProperty("name")); //false 
+	```
+
+	- 通过使用 hasOwnProperty()方法，什么时候访问的是实例属性，什么时候访问的是原型属性就一清二楚了
+
+	> ECMAScript 5 的 Object.getOwnPropertyDescriptor()方法只能用于实例属性，要取得原型属性的描述符，必须直接在原型对象上调用 Object.getOwnPropertyDescriptor()方法。
+
+
+
+
+
+<a name="6c">
+
+
+
+
+### 继承
+
+
+
+
+
+
+
+<a name="6d">
+
+
+
+
+### 小结
+
+
+
+
+
+
 
 
 
