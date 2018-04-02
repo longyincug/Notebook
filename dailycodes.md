@@ -2301,22 +2301,207 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 ***
 
 
+
 ### JavaScript创建对象的几种方式
 
 **答案:**
 
-1. Object构造函数创建对象
-2. 对象字面量
-3. 工厂模式
-4. 构造函数模式
-5. 原型模式
-6. 混合构造函数原型模式
-7. 动态原型模式
-8. 寄生构造函数模式
-9. 稳妥构造函数模式
+1. Object构造函数创建对象 : 不再赘述
+
+2. 对象字面量 : 不再赘述
+
+3. 工厂模式 : 用函数来封装以特定接口创建对象的细节
+
+	```
+	function createPerson(name, age, job) {
+		var o = new Object();
+		o.name = name;
+		o.age = age;
+		o.job = job;
+		o.sayName = function() {
+			alert(this.name);
+		};
+		
+		return o;
+	}
+	
+	var person = createPerson("Tom", 25, "Software Engineer");
+	```
+	
+	
+	> 缺点: 都是Object实例，无法区分所创建对象的类型。
 
 
-详细请见[JavaScript高级程序设计: 创建对象](./JavaScript高级程序设计.md/#6b)
+4. 构造函数模式 : 自定义构造函数，创建特定类型的对象，同一个构造函数创建出来的对象属于一类
+	
+	```
+	function Person(name, age, job) {
+		this.name = name;
+		this.age = age;
+		this.job = job;
+		this.sayName = function() {
+			alert(this.name);
+		};
+	
+	}
+	
+	var person = new Person("Tom", 25, "Software Engineer");
+	```
+
+
+	> 缺点: 对于一些可以共享且相同的函数方法，却要多次创建在实例化对象中，占用内存，且复用性差。
+
+
+5. 原型模式 : 让所有的对象实例共享原型对象所包含的属性和方法，不必在构造函数中定义然后多次在实例对象中创建了，只需要添加给原型即可
+
+	```
+	function Person() {
+	}
+	
+	Person.prototype.name = "Tom";
+	Person.prototype.age = 25;
+	Person.prototype.job = "Software Engineer";
+	Person.prototype.sayName = function() {
+		alert(this.name);
+	};
+	
+	// 当然也可以通过用对象字面量来重写整个原型对象，比上面的更简洁，但不要忘了constructor变化
+	// Person.prototype = {};
+	
+	var person1 = new Person();
+	
+	// 可以指定实例属性，屏蔽来自原型的属性值
+	person1.name = "Jerry";
+	
+	```
+
+
+	> 缺点: 省略了传递给构造函数初始化参数这一环节，导致所有的实例默认都具有相同的属性值。更大的问题是对于原型上的引用类型属性，所有的实例之间会共享修改，丧失了独特性。
+
+
+6. 混合构造函数原型模式 : 最常见的创建自定义类型方式，构造函数中定义实例属性，原型对象中添加共享属性和方法
+
+	```
+	function Person(name, age, job) {
+		this.name = name;
+		this.age = age;
+		this.job = job;
+		this.friends = ["Shelby", "Court"];
+	}
+	
+	Person.prototye = {
+		constructor : Person,
+		sayName : function() {
+			alert(this.name);
+		}
+	}
+	
+	var person1 = new Person("Tom", 25, "Software Engineer");
+	var person2 = new Person("Jerry", 24, "Software Engineer");
+
+	person1.friends.push("Van");
+	alert(person1.friends); //"Shelby,Count,Van"
+	alert(person2.friends); //"Shelby,Count"
+	
+	alert(person1.sayName === person2.sayName); //true
+	```
+
+
+	> 优点: 支持向构造函数传递参数，每个实例都有自己的一份实例属性的副本，每个实例共享对方法的引用，最大限度节省内存。
+
+
+
+7. 动态原型模式 : 将构造函数和原型对象等定义统一到一个函数中，封装性更强，并且通过检测必要情况来决定是否初始化原型，效率更高
+	```
+	function Person(name, age, job){
+
+		//属性
+		this.name = name;
+		this.age = age;
+		this.job = job; 
+	
+		//方法
+		if (typeof this.sayName != "function"){
+	
+			Person.prototype.sayName = function(){
+				alert(this.name);
+			};
+		}
+	} 
+	
+	var friend = new Person("Nicholas", 29, "Software Engineer");
+	friend.sayName(); 
+	```
+
+
+	> 评价: 原型方法的添加只执行一次，对原型所做的修改也能立即在实例中反映，可以说相当完美，但是需要注意不能使用对象字面量重写原型，否则会切断现有实例与新原型的联系。
+
+
+
+8. 寄生构造函数模式 : 当有特殊需求比如说创建一个具有额外方法的数组，由于不能直接修改Array，就可以使用这个模式
+	
+	```
+	function SpecialArray(){
+
+		//创建数组
+		var values = new Array();
+	
+		//添加值
+		values.push.apply(values, arguments);
+	
+		//添加方法
+		values.toPipedString = function(){
+			return this.join("|");
+		};
+	
+		//返回数组
+		return values;
+	}
+	
+	var colors = new SpecialArray("red", "blue", "green");
+	alert(colors.toPipedString()); //"red|blue|green" 
+	```
+
+
+	- 除了使用了new操作符，并且把使用的包装函数叫做构造函数外，其余和工厂模式一模一样。
+
+	- 注意: 返回的对象与构造函数和原型没有关系，与在构造函数外部创建的对象没有什么不同，因此不能使用instanceof操作符来确定对象类型。
+
+	- 建议在可以使用其他模式的情况下，不要使用这种模式。
+
+
+
+9. 稳妥构造函数模式 : 用来创建没有公共属性，不引用this的安全稳妥对象
+
+	```
+	function Person(name, age, job){
+
+		//创建要返回的对象
+		var o = new Object(); 
+	
+		//可以在这里定义私有变量和函数
+	
+		//添加方法
+		o.sayName = function(){
+			alert(name);
+		};
+	
+		//返回对象
+		return o;
+	} 
+
+	var friend = Person("Nicholas", 29, "Software Engineer");
+	friend.sayName(); //"Nicholas" 
+	```
+
+	- 除了使用sayName方法外，没有其他办法访问name的值。
+	
+	- 与寄生构造函数模式类似，使用稳妥构造函数模式创建的对象与构造函数之间没有什么关系，因此instanceof操作符也没有意义。
+
+
+
+
+详细解读请见笔记: [JavaScript高级程序设计: 创建对象](./JavaScript高级程序设计.md/#6b)
 
 
 
