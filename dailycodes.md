@@ -23,6 +23,7 @@
 19. [每天一道面试题: 19](#19)
 20. [每天一道面试题: 20](#20)
 21. [每天一道面试题: 21](#21)
+22. [每天一道面试题: 22](#22)
 
 
 
@@ -1566,7 +1567,7 @@ alert(bb);
 
 **答案:**
 
-在aa函数中，bb是以传值的方式传入的，在函数中，会重新定义一个bb变量，并将其值覆为2，并不影响函数体外的bb变量，所以其值仍然为1
+在aa函数中，bb是以**值传递**的方式传入的，在函数中，会重新定义一个bb变量，并将其值覆为2，并不影响函数体外的bb变量，所以外部值仍然为1
 
 注意这一题中的特殊情况，不要误以为函数内没有用var声明的都是隐式全局变量
 
@@ -2515,11 +2516,22 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 **答案:**
 
 1. 原型链继承
+
+
 2. 借用构造函数继承
+
+
 3. 组合继承
+
+
 4. 原型式继承
+
+
 5. 寄生式继承
+
+
 6. 寄生组合式继承
+
 
 
 详细请见[JavaScript高级程序设计: 继承](./JavaScript高级程序设计.md/#6c)
@@ -2547,7 +2559,181 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 <a name="22">
 
 
+## 每天一道面试题: 22
+
+
+### 哪些操作会造成内存泄漏？
+
+
+**答案:**
+
+JS中的垃圾收集器跟踪每个变量，对不再有用的变量打上标记，以备将来收回其占用的内存。
+
+内存泄漏指任何对象在您不再拥有或需要它之后仍然存在。
+
+
+哪些操作会造成内存泄漏？
+
+1. 意外的全局变量引起的内存泄漏
+
+	```
+	function leak() {
+		leak = "xxx"; //leak成为一个全局变量，不会被回收
+	}
+	```
+
+2. 闭包引起的内存泄漏
+
+	```
+	function bindEvent() {
+		var obj = document.createElement("xxx");
+		obj.onclick = function() {
+		}
+	}
+	```
+	
+	- 函数内定义函数，并且内部函数的引用外暴了，形成了闭包
+	
+	- 闭包可以维持函数内局部变量，使其得不到释放。
+	
+	- 解决方法:
+		- 将事件处理函数定义在外部，解除闭包
+		- 或者在定义事件处理函数的外部函数中，删除对DOM的引用
+
+
+
+3. 没有清理的DOM元素引用
+
+	```
+	var elements={  
+	    button: document.getElementById("button"),  
+	    image: document.getElementById("image"),  
+	    text: document.getElementById("text")  
+	};  
+	```
+
+
+4. 被遗忘的定时器或者回调
+
+	```
+	var someResouce=getData();  
+	setInterval(function(){  
+	    var node=document.getElementById('Node');  
+	    if(node){  
+	        node.innerHTML=JSON.stringify(someResouce)  
+	    }  
+	},1000)  
+	```
+	
+	- 如果node元素被移除，该定时器仍会存在，同时因为回调函数包含对someResource的引用，外面的someResource也不会被释放。
+
+
+5. 子元素引起的内存泄漏
+
+6. IE7/8循环引用
+
+
+怎样避免内存泄露？
+
+1. 减少不必要的全局变量，或者生命周期较长的对象，及时对无用的数据进行垃圾回收；
+
+2. 注意程序逻辑，避免“死循环”之类的 ；
+
+3. 避免创建过多的对象  原则：不用了的东西要及时归还。
+
+
+
+***
+
+
+
+### 下面代码的输出是什么？
+
+```
+function changeObjectProperty(o) {
+	o.siteUrl = "http://www.csser.com/";
+	o = new Object();
+	o.siteUrl = "http://www.popcg.com/";
+}
+
+var CSSer = new Object();
+changeObjectProperty(CSSer);
+console.log(CSSer.siteUrl);
+
+
+```
+
+
+**答案:**
+
+如果 CSSer 参数是按引用传递的，那么结果应该是"http://www.popcg.com/"，但实际结果却仍是"http://www.csser.com/"。
+
+
+事实是这样的：在函数内部修改了引用类型值的参数，该参数值的原始引用保持不变。我们可以把参数想象成局部变量，当参数被重写时，这个变量引用的就是一个局部变量，局部变量的生存期仅限于函数执行的过程中，函数执行完毕，局部变量即被销毁以释放内存。
+
+
+
+回忆一下之前做过的: [关于函数参数值传递](#14a)
+
+回忆一下JS高级程序设计: [基本类型和引用类型](./JavaScript高级程序设计.md/#4a)
+
+
+
+***
+
+
+### 下面代码输出结果是什么？
+
+```
+function  foo() {
+	foo.a = function(){alert(1)};
+	this.a = function(){alert(2)};
+	a = function(){alert(3)};
+	var a = function(){alert(4)};
+}
+
+foo.prototype.a = function(){alert(5)};
+foo.a = function(){alert(6)};
+foo.a();
+var obj = new foo();
+obj.a();
+foo.a();
+
+```
+
+**答案:**
+
+```
+function  foo() {
+	foo.a = function(){alert(1)};
+	this.a = function(){alert(2)};
+	a = function(){alert(3)}; // 由于变量a声明提前，这句会被覆盖
+	var a = function(){alert(4)}; // 最终这才是变量a的值
+}
+
+foo.prototype.a = function(){alert(5)}; // 构造函数中的实例属性，会屏蔽原型中的属性
+foo.a = function(){alert(6)}; // 构造函数中的静态属性，覆盖
+foo.a(); // 6
+var obj = new foo(); // 别忘了，每次实例化对象，会执行构造函数内部代码，所以在这里，静态属性a又被覆盖了，foo.a()变回了1
+obj.a(); // 2
+foo.a(); // 1
+
+```
+
+
+***
+
+
+
+<a name="23">
+
+
 ## 
+
+
+
+
+
 
 
 
