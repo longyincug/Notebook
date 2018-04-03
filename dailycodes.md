@@ -2606,25 +2606,131 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 	> 实际上是借用了构造函数，以覆盖的方式，解决了在原型链继承中原型的引用类型属性共享在所有实例中的问题。
 	> 
-	> 因为在子类型中借调构造函数(SuperType.call(this))时，会在自己的所有实例中执行一遍SuperType中的代码，由于每个实例this都是不同的，因此SuperType中定义的属性会在每个实例中有一份副本，也就避免了原型链继承中，原型属性共享的问题。
+	> 因为在子类型中借调构造函数(SuperType.call(this))时，会在自己的所有实例中执行一遍SuperType中的代码，由于每个实例this都是不同的，因此SuperType中定义的属性会在每个实例中有一份副本，也就避免了原型链继承中，原型属性共享的问题（覆盖了原型属性）。
 
 
 
 4. 原型式继承
 
+
 	> 不自定义类型的情况下，临时创建一个构造函数，借助已有的对象作为临时构造函数的原型，然后在此基础实例化对象，并返回。
 
+
+	```
+	function object(o){
+	 function F(){}
+	 F.prototype = o;
+	 return new F();
+	} 
+	```
+
+	- 本质上是object()对传入其中的对象执行了一次浅复制
+
+	```
+	var person = {
+	 name: "Nicholas",
+	 friends: ["Shelby", "Court", "Van"]
+	};
+	
+	var anotherPerson = object(person);
+	anotherPerson.name = "Greg";
+	anotherPerson.friends.push("Rob");
+
+	var yetAnotherPerson = object(person);
+	yetAnotherPerson.name = "Linda";
+	yetAnotherPerson.friends.push("Barbie");
+
+	alert(person.friends); //"Shelby,Court,Van,Rob,Barbie" 
+	```
+
+
+	- 原型的引用类型属性会在各实例之间共享。
+	
+	- 当只想单纯地让一个对象与另一个对象保持类似的情况下，原型式继承是完全可以胜任的。
 
 
 
 5. 寄生式继承
 
+	> 其实就是在原型式继承得到对象的基础上，在内部再以某种方式来增强对象，然后返回。
+	
+	
+	```
+	function createAnother(original) {
+		var clone = object(original);
+		clone.sayHi = function() {
+			alert("hi");
+		};
+		return clone;
+	}
+	```
+
+	- 思路与寄生构造函数和工厂模式类似。
+	
+	- 新的对象中不仅具有original的所有属性和方法，而且还有自己的sayHi()方法。
+	
+	- 寄生式继承在主要考虑对象而不是自定义类型和构造函数的情况下非常有用。
+	
+	- 由于寄生式继承为对象添加函数不能做到函数复用，因此效率降低。
+
+
 
 6. 寄生组合式继承
 
+	> 组合继承是JS中最常用的继承模式，但其实它也有不足，组合继承无论什么情况下都会调用两次超类型的构造函数，并且创建的每个实例中都要屏蔽超类型对象的所有实例属性。
+	> 
+	> 寄生组合式继承就解决了上述问题，被认为是最理想的继承范式
 
 
-详细请见[JavaScript高级程序设计: 继承](./JavaScript高级程序设计.md/#6c)
+	```
+	function object(o) {
+		function F(){}
+		F.prototype = o;
+		return new F();
+	}
+	
+	function inheritPrototype(superType, subType) {
+		var prototype = object(superType.prototype);
+		prototype.constructor = subType;
+		subType.prototype = prototype;
+	}
+	
+	function SuperType(name) {
+		this.name = name;
+		this.colors = ["red", "blue", "green"];
+	}
+	
+	SuperType.prototype.sayName = function() {
+		alert(this.name);
+	};
+	
+	function SubType(name, age) {
+		SuperType.call(this, name);
+		this.age = age;
+	}
+	
+	inheritPrototype(SuperType, SubType);	// 这一句，替代了组合继承中的SubType.prototype = new SuperType()
+	
+	SubType.prototype.sayAge = function() {
+		alert(this.age);
+	};
+	```
+
+	- 既然在组合模式中我们通过借调构造函数来为每个实例定义实例属性，从而覆盖原型属性，影响了效率，那么是否可以把原型改变一下呢，不让它作为SuperType的实例，这样就不会有一些无用的原型属性了。
+	
+
+	> 不必为了指定子类型的原型而调用超类型的构造函数，我们需要的只不过是超类型原型的一个副本。
+
+
+	1. 在inheritPrototype函数中用到了原型式继承中的object()方法，将超类型的原型指定为一个临时的空构造函数的原型，并返回构造函数的实例。
+	2. 此时由于构造函数内部为空（不像SuperType里面有实例属性），所以返回的实例也不会自带实例属性，这很重要！因为后面用它作为SubType的原型时，就不会产生无用的原型属性了，也就不用借调构造函数进行所谓的“重写”了。
+	3. 此时返回的实例对象的constructor指向那个空构造函数。
+	4. 然后为这个对象重新指定constructor为SubType，并将其赋值给SubType的原型。这样，就达到了将超类型构造函数的实例作为子类型原型的目的，同时没有一些从SuperType继承过来的无用原型属性。
+
+
+
+
+详细解读请见笔记: [JavaScript高级程序设计: 继承](./JavaScript高级程序设计.md/#6c)
 
 
 
