@@ -25,6 +25,7 @@
 21. [每天一道面试题: 21](#21)
 22. [每天一道面试题: 22](#22)
 23. [每天一道面试题: 23](#23)
+24. [每天一道面试题: 24](#24)
 
 
 
@@ -3003,7 +3004,71 @@ readonly只针对input(text/password)和textarea有效，而disabled对于所有
 <a name="24">
 
 
-## 
+## 每天一道面试题: 24
+
+
+### 如何判断一个JS变量是数组类型？
+
+
+**答案:**
+
+- ES5中: `Array.isArray()`
+
+- `[] instanceof Array`
+
+- `Object.prototype.toString.call([]);` // "[object Array]"
+
+
+
+***
+
+
+### 如何获取对象 a 拥有的所有属性（可枚举的、不可枚举的，不包括继承来的属性）
+
+
+**答案:**
+
+`Object.keys`——IE9+ (获取所有可枚举实例属性)
+
+或者使用 for…in 并过滤出继承的可枚举属性
+
+```
+for(o in obj){
+	if(obj.hasOwnproperty(o)){
+	//把 o 这个属性放入到一个数组中
+	}
+}
+```
+
+要获取所有可枚举或不可枚举实例属性: `Object.getOwnPropertyNames()`
+
+
+
+***
+
+
+### 只允许使用 + - * / 和 Math.* ，求一个函数 y = f(x, a, b);当 x > 100时返回 a 的值，否则返回 b 的值，不能使用 if else 等条件语句，也不能使用|,?:,数组。
+
+
+**答案:**
+
+```
+function f(x, a, b) {
+	var temp = Math.ceil(Math.max(Math.min(x-100, 1), 0));
+
+	return temp * a + (1 - temp) * b;
+
+}
+```
+
+
+***
+
+
+
+##
+
+
 
 
 
