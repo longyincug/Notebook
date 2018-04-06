@@ -26,6 +26,7 @@
 22. [每天一道面试题: 22](#22)
 23. [每天一道面试题: 23](#23)
 24. [每天一道面试题: 24](#24)
+25. [每天一道面试题: 25](#25)
 
 
 
@@ -3066,7 +3067,78 @@ function f(x, a, b) {
 
 
 
-##
+## 每天一道面试题: 25
+
+
+### 关于IE的window对象表述正确的有:
+
+A. window.opener属性本身就是指向window对象
+
+B. window.reload()方法可以用来刷新当前页面
+
+C. window.location="a.html"和window.location.href="a.html"的作用都是把当前页面替换成a.html页面
+
+D. 定义了全局变量g，可以用window.g的方式来存取该变量
+
+
+**答案:**
+
+
+> A选项，错误。window.opener返回打开当前窗口的那个窗口的引用，如果当前窗口是由另一个窗口打开的，window.opener保留了那个窗口的引用，如果当前窗口不是由其他窗口打开的，则该属性返回null
+>
+> B选项，错误。应该是location.reload或者window.location.reload
+>
+> C选项和D选项，正确。
+
+
+
+***
+
+
+### 下面描述错误的是:
+
+A. http状态码302表示暂时性转移
+
+B. DOMContentLoaded事件早于onload事件
+
+C. IE678不支持事件捕获
+
+D. localStorage存储的数据在电脑重启后丢失
+
+
+**答案:**
+
+A正确，B正确。当onload事件触发时，页面上所有的DOM，样式表，脚本，图片，flash都已经加载完成了；当DOMContentLoaded事件触发时，仅当DOM加载完成，不包括样式表，图片，flash。
+C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，localStorage存储的数据没有时间限制。
+
+
+***
+
+### 列出 3 条以上 ff 和 IE 的脚本兼容问题
+
+
+**答案:**
+
+
+1、在 IE 下可通过 document.frames["id"];得到该 IFRAME 对象，而在火狐下则是通过 document.getElementById("content_panel_if").contentWindow;
+
+2、childNodes和children
+
+3、模拟点击事件
+
+4、事件注册
+
+5、取消事件冒泡
+
+6、鼠标滚轮事件
+
+
+
+
+
+
+
+
 
 
 

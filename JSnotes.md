@@ -1017,14 +1017,37 @@ window.onload = function(){
 
 - **.childNodes**
 	- 返回元素的所有子节点(包括空白文本节点)
+	- E6/IE7/IE8/Safari/Chrome/Opera 支持childNodes
+	- IE9/Firefox，不支持childNodes
 
 - **.children**
 	- 返回元素的所有子元素节点
+	- 支持IE9及以上
+	- IE8及以下支持该属性，但是可能会错误地包含注释 Comment 节点
+	- 可以通过nodeType属性来进行筛选，nodeType==1的节点为元素节点
+
+- 获取子元素节点的兼容性解决方案:
+	
+	```
+	var getChildNodes=function(ele){
+		var childArr=ele.children|| ele.childNodes,  //兼容更多的浏览器
+		childArrTem=new Array();  // 临时数组，用来存储符合条件的节点
+		for(vari=0,len=childArr.length;i++{
+			if(childArr[i].nodeType==1){
+				childArrTem.push(childArr[i]);
+			}
+    	}
+    	returnchildArrTem;
+	}
+	```
+
 
 - **.firstChild**
 	- 返回第一个子节点
 	- 可能返回空白文本节点
 	- lastChild 同理
+	- IE8.0及其以下版本的浏览器会忽略节点间的空白节点（空格、回车和Tab键），遵循W3C规范的浏览器（Chrome、FireFox、Safari等）则会把这些空白作为文本节点处理。
+
 
 - **.firstElementChild**
 	- 获取当前元素的第一个子元素
