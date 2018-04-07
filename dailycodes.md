@@ -27,6 +27,7 @@
 23. [每天一道面试题: 23](#23)
 24. [每天一道面试题: 24](#24)
 25. [每天一道面试题: 25](#25)
+26. [每天一道面试题: 26](#26)
 
 
 
@@ -3084,11 +3085,9 @@ D. 定义了全局变量g，可以用window.g的方式来存取该变量
 **答案:**
 
 
-> A选项，错误。window.opener返回打开当前窗口的那个窗口的引用，如果当前窗口是由另一个窗口打开的，window.opener保留了那个窗口的引用，如果当前窗口不是由其他窗口打开的，则该属性返回null
->
-> B选项，错误。应该是location.reload或者window.location.reload
->
-> C选项和D选项，正确。
+A选项，错误。window.opener返回打开当前窗口的那个窗口的引用，如果当前窗口是由另一个窗口打开的，window.opener保留了那个窗口的引用，如果当前窗口不是由其他窗口打开的，则该属性返回null。
+B选项，错误。应该是location.reload()或者window.location.reload()。
+C选项和D选项，正确。
 
 
 
@@ -3120,7 +3119,7 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 **答案:**
 
 
-1、在 IE 下可通过 document.frames["id"];得到该 IFRAME 对象，而在火狐下则是通过 document.getElementById("content_panel_if").contentWindow;
+1、在IE下可通过 document.frames["id"];得到该 IFRAME 对象，而在火狐下则是通过 document.getElementById("content_panel_if").contentWindow;
 
 2、childNodes和children
 
@@ -3130,8 +3129,99 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 5、取消事件冒泡
 
-6、鼠标滚轮事件
+6、触发事件的源对象
 
+7、鼠标滚轮事件
+
+8、currentStyle和getComputedStyle
+
+
+***
+
+
+## 每天一道面试题: 26
+
+
+### 在JavaScript中什么是伪数组？如何将伪数组转化为标准数组？
+
+
+**答案:**
+
+伪数组（类数组）: 无法调用数组方法或期望length属性有什么特殊的行为，但仍可以用对真正数组遍历方法来遍历它们。
+
+典型的是函数的arguments参数，还有调用getElementByTagName，document.childNodes之类，它们都返回NodeList对象，属于伪数组。
+
+
+***
+
+
+### 请写一个正则表达式：要求最短 6 位数，最长 20 位，阿拉伯数和英文字母（不区分大小写）组成
+
+
+**答案:**
+
+
+`^(?=.*\d)(?=.*[A-z])[A-z\d]{6,20}$`
+
+
+
+- `(?=pattern)` 正向先行断言
+
+	- 代表字符串中的一个位置，紧接该位置之后的字符序列**能够**匹配pattern。
+ 
+	- 例如对`a regular expression`这个字符串，要想匹配regular中的re，但不能匹配expression中的re，可以用`re(?=gular)`，该表达式限定了re右边的位置，这个位置之后是gular，但并不消耗gular这些字符，将表达式改为`re(?=gular).`，将会匹配reg，元字符.匹配了g，括号这一砣匹配了e和g之间的位置。
+
+
+- `(?!pattern)` 负向先行断言
+
+	- 代表字符串中的一个位置，紧接该位置之后的字符序列**不能**匹配pattern。 
+
+	- 例如对`regex represents regular expression`这个字符串，要想匹配除regex和regular之外的re，可以用`re(?!g)`，该表达式限定了re右边的位置，这个位置后面不是字符g。负向和正向的区别，就在于该位置之后的字符能否匹配括号中的表达式。
+
+
+
+***
+
+
+### 下列 JavaScript 代码执行后，依次 alert 的结果是？
+
+```
+var obj = {proto: {a:1,b:2}};
+function F(){};
+F.prototype = obj.proto;
+var f = new F();
+obj.proto.c = 3;
+obj.proto = {a:-1, b:-2};
+alert(f.a);
+alert(f.c);
+delete F.prototype['a'];
+alert(f.a);
+alert(obj.proto.a);
+```
+
+
+**答案:**
+
+```
+var obj = {proto: {a:1,b:2}};
+function F(){};
+F.prototype = obj.proto; // 指向的是同一个对象{a:1, b:2}
+var f = new F();
+obj.proto.c = 3;
+obj.proto = {a:-1, b:-2}; // 这一步重写了proto，把proto指向了一个新的地址，与F.prototype已经无关
+alert(f.a); // 1
+alert(f.c); // 3
+delete F.prototype['a'];
+alert(f.a); // undefined
+alert(obj.proto.a); // -1
+```
+
+
+***
+
+
+
+## 
 
 
 

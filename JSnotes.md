@@ -1029,15 +1029,15 @@ window.onload = function(){
 - 获取子元素节点的兼容性解决方案:
 	
 	```
-	var getChildNodes=function(ele){
-		var childArr=ele.children|| ele.childNodes,  //兼容更多的浏览器
-		childArrTem=new Array();  // 临时数组，用来存储符合条件的节点
-		for(vari=0,len=childArr.length;i++{
-			if(childArr[i].nodeType==1){
+	var getChildNodes = function(ele){
+		var childArr = ele.children || ele.childNodes,  //兼容更多的浏览器
+		childArrTem = new Array();  // 临时数组，用来存储符合条件的节点
+		for(var i=0; i < childArr.length; i++){
+			if(childArr[i].nodeType == 1){
 				childArrTem.push(childArr[i]);
 			}
     	}
-    	returnchildArrTem;
+    	return childArrTem;
 	}
 	```
 
