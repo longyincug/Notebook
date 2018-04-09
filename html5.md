@@ -439,6 +439,10 @@ url类型、email类型、date类型、time类型、datetime类型、datetime-lo
 
 
 
+***
+
+
+
 ## HTML5增强的页面元素
 
 
@@ -553,7 +557,6 @@ H5对dl进行重新定义，表示多个名字的列表项，每项包含一条�
 cite表示作品的标题。
 
 small变成专门用来标识小字印刷体的展示元素。
-
 
 ***
 
@@ -818,7 +821,6 @@ function showRange() {
 <button onclick="showRange()">显示Range内容</button>
 ```
 
-
 ***
 
 
@@ -903,6 +905,10 @@ function clickBig() {
 	v.width = 800; // 因为video标签有width和height属性，可以直接设置。
 }
 ```
+
+
+
+***
 
 
 
