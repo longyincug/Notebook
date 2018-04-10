@@ -1046,7 +1046,7 @@ function dropLocalImg(e){
 	};
 	fileReader.readAsDataURL(f); // 读取文件
 }
-				
+
 
 ```
 
