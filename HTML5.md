@@ -1,6 +1,34 @@
 # HTML5
 
 
+
+## 目录
+
+
+
+1. [HTML5与HTML4的区别](#1)
+2. [HTML5新增的结构元素](#2)
+3. [表单新增元素与属性](#3)
+4. [HTML5改良的input元素种类及表单验证](#4)
+5. [HTML5增强的页面元素](#5)
+6. [HTML5中编辑API中的Range对象](#6)
+7. [HTML5音频视频](#7)
+8. [HTML5拖放](#8)
+
+
+
+
+
+
+***
+
+
+
+<a name="1">
+
+
+
+
 ## HTML5与HTML4的区别
 
 
@@ -88,6 +116,12 @@
 
 
 ***
+
+
+
+<a name="2">
+
+
 
 
 ## HTML5新增的结构元素
@@ -192,7 +226,13 @@
 
 
 
+<a name="3">
+
+
+
 ## 表单新增元素与属性
+
+
 
 
 ### 表单内元素的`form`属性
@@ -388,7 +428,13 @@ function myclick() {
 
 
 
+<a name="4">
+
+
+
 ## HTML5改良的input元素种类及表单验证
+
+
 
 ### HTML5 input类型
 
@@ -443,7 +489,13 @@ url类型、email类型、date类型、time类型、datetime类型、datetime-lo
 
 
 
+<a name="5">
+
+
+
 ## HTML5增强的页面元素
+
+
 
 
 ### 新增的figure元素和figcaption元素
@@ -561,7 +613,14 @@ small变成专门用来标识小字印刷体的展示元素。
 ***
 
 
+
+<a name="6">
+
+
+
 ## HTML5中编辑API中的Range对象
+
+
 
 一个Range对象代表页面上的一段连续区域，通过Range对象，可以获取或修改网页上的任何区域。
 
@@ -824,7 +883,14 @@ function showRange() {
 ***
 
 
+
+<a name="7">
+
+
+
 ## HTML5音频视频
+
+
 
 
 ### 音频播放
@@ -912,8 +978,13 @@ function clickBig() {
 
 
 
+<a name="8">
+
+
 
 ## HTML5拖放
+
+
 
 ### HTML5拖放
 
