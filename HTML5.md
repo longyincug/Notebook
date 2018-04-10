@@ -1147,9 +1147,9 @@ function drawImage(){
 
 
 	- 使用 beginPath() 绘制路径的起始点， 使用 moveTo()移动画笔， 使用 stroke() 方法真正地画线。
-	
-	
-	​```
+
+
+	```
 	function draw(id){
 		var canvas = document.getElementById(id);
 		var context = canvas.getContext("2d");
@@ -1173,8 +1173,8 @@ function drawImage(){
 		context.fill();
 		context.stroke();
 	}
-	​```
-	
+	```
+
 
 	![lineTo绘制路径](./images/lineTo.png)
 
@@ -1223,90 +1223,93 @@ function drawImage(){
 ### canvas渐变和变形
 
 
-- 绘制线性渐变图形
+#### 绘制线性渐变图形
+
+- `context.createLinearGradient(xstart, ystart, xend, yend)`创建一个沿参数坐标指定的直线的渐变。
+
+- 创建成功后， 你就可以使用 CanvasGradient.addColorStop() 方法，根据指定的偏移和颜色定义一个新的终止。 
+
+- 如例子所示，渐变允许赋值给当前的fillStyle，使用fillRect() 方法时，在 canvas 上绘制出效果。
 
 
-	- `context.createLinearGradient(xstart, ystart, xend, yend)`创建一个沿参数坐标指定的直线的渐变。
+```
+function draw(id) {
+	var canvas = document.getElementById(id);
+	var context = canvas.getContext("2d");
+	var g1 = context.createLinearGradient(0,0,0,500);
+	g1.addColorStop(0,"rgb(255,255,0");
+	g1.addColorStop(1,"rgb(0,255,255");
 	
-	- 创建成功后， 你就可以使用 CanvasGradient.addColorStop() 方法，根据指定的偏移和颜色定义一个新的终止。 
-	- 如例子所示，渐变允许赋值给当前的fillStyle，使用fillRect() 方法时，在 canvas 上绘制出效果。
-	
-	​```
-	function draw(id){
-		var canvas = document.getElementById(id);
-		var context = canvas.getContext("2d");
-		var g1 = context.createLinearGradient(0,0,0,500);
-		g1.addColorStop(0,"rgb(255,255,0");
-		g1.addColorStop(1,"rgb(0,255,255");
-		context.fillStyle = g1; // 将沿直线渐变的颜色效果赋给fillStyle
-		context.fillRect(0,0,500,500);
-		
-		// 还可以同时指定给路径渐变效果
-		var g2 = context.createLinearGradient(0,0,500,0);
-		g2.addColorStop(0,"rgba(0,0,255,0.5)");
-		g2.addColorStop(1,"rgba(255,0,0,0.5)");
-		for(var i = 0; i < 10; i++){
-			context.beginPath();
-			context.fillStyle = g2;
-			context.arc(i*25, i*25, i*10, 0, Math.PI*2, true);
-			context.closePath();
-			context.fill();
-		}
+	//将沿直线渐变的颜色效果赋给fillStyle
+	context.fillStyle = g1; 
+	context.fillRect(0,0,500,500);
+
+	//还可以同时指定给路径渐变效果
+	var g2 = context.createLinearGradient(0,0,500,0);
+	g2.addColorStop(0,"rgba(0,0,255,0.5)");
+	g2.addColorStop(1,"rgba(255,0,0,0.5)");
+	for(var i = 0; i < 10; i++){
+		context.beginPath();
+		context.fillStyle = g2;
+		context.arc(i*25, i*25, i*10, 0, Math.PI*2, true);
+		context.closePath();
+		context.fill();
 	}
-	​```
-	
-	![图形线性渐变](./images/linear.png)
+}
+```
+
+
+![图形线性渐变](./images/linear.png)
 
 
 
-- 绘制径向渐变
+#### 绘制径向渐变
 
-
-
-	​```
-	function draw(id){
-		var canvas = document.getElementById(id);
-		if(canvas == null){
-			return false;  // 更严谨的应该加上这一步
-		}
-		var context = canvas.getContext("2d");
-		var g1 = context.createRadialGradient(400,0,0,400,0,400); // 参数分别为开始和结束的圆心坐标、半径
-		g1.addColorStop(0.1,"rgb(255,255,0");
-		g1.addColorStop(0.3,"rgb(255,0,255");
-		g1.addColorStop(1,"rgb(0,255,255");
-		context.fillStyle = g1;
-		context.fillRect(0,0,500,500);
+```
+function draw(id){
+	var canvas = document.getElementById(id);
+	if(canvas == null){
+		return false;  // 更严谨的应该加上这一步
 	}
-	​```
-	
-	![图形径向渐变](./images/radial.png)
+	var context = canvas.getContext("2d");
+	var g1 = context.createRadialGradient(400,0,0,400,0,400); // 参数分别为开始和结束的圆心坐标、半径
+	g1.addColorStop(0.1,"rgb(255,255,0");
+	g1.addColorStop(0.3,"rgb(255,0,255");
+	g1.addColorStop(1,"rgb(0,255,255");
+	context.fillStyle = g1;
+	context.fillRect(0,0,500,500);
+}
+```
+
+
+![图形径向渐变](./images/radial.png)
 
 
 
-- 绘制变形图形
+#### 绘制变形图形
 
 
-
-	​```
-	function draw(id){
-		var canvas = document.getElementById(id);
-		if(canvas == null){return null;}
-		var context = canvas.getContext("2d");
-		context.fillStyle = "#eeeeef";
-		context.fillRect(0,0,500,500);
-		context.translate(250, 100);
-		context.fillStyle = "rgba(255,0,0,0.25)";
-		for(var i=0; i<30; i++){
-			context.translate(20,20);
-			context.scale(0.95, 0.95);
-			context.rotate(Math.PI/15);
-			context.fillRect(0,0,100,50);
-		}
+```
+function draw(id){
+	var canvas = document.getElementById(id);
+	if(canvas == null){return null;}
+	var context = canvas.getContext("2d");
+	context.fillStyle = "#eeeeef";
+	context.fillRect(0,0,500,500);
+	context.translate(250, 100);
+	context.fillStyle = "rgba(255,0,0,0.25)";
+	for(var i=0; i<30; i++){
+		context.translate(20,20);
+		context.scale(0.95, 0.95);
+		context.rotate(Math.PI/15);
+		context.fillRect(0,0,100,50);
 	}
-	​```
-	
-	![变形图形](./images/变形.png)
-	
+}
+```
+
+
+![变形图形](./images/变形.png)
+
 
 
 
@@ -1318,122 +1321,131 @@ function drawImage(){
 
 
 
-- 图形组合
+#### 图形组合
 
-	- `globalCompositeOperation = type` 属性
+`globalCompositeOperation = type` 属性
 
-		- `source-atop`, 只绘制新图层遮盖的部分和原图层的其他部分。
-		- `source-in`, 只显示新图层与原图层重叠的部分。
-		- `source-out`, 只显示新图形与原图形不重叠的部分。
-		- `source-over`, 默认值，表示新图层覆盖在原图层之上。
-		- `destination-atop`, 只绘制原有图形中被覆盖的部分与新图形的其他部分。
-		- `destination-in`, 只显示原有图形中被覆盖的部分，其余部分透明。
-		- `destination-out`, 只显示原有图形中未被遮盖的部分，其余部分透明。
-		- `destination-over`, 原图形覆盖新图形。
-		- `lighter`, 原图形与新图形均绘制，重叠的部分加色处理。
-		- `copy`, 只绘制新图形，原图形未重叠的部分变为透明。
-		- `xor`，只绘制新图形与原图形不重叠的部分，重叠部分透明。
+- `source-atop`, 只绘制新图层遮盖的部分和原图层的其他部分。
+- `source-in`, 只显示新图层与原图层重叠的部分。
+- `source-out`, 只显示新图形与原图形不重叠的部分。
+- `source-over`, 默认值，表示新图层覆盖在原图层之上。
+- `destination-atop`, 只绘制原有图形中被覆盖的部分与新图形的其他部分。
+- `destination-in`, 只显示原有图形中被覆盖的部分，其余部分透明。
+- `destination-out`, 只显示原有图形中未被遮盖的部分，其余部分透明。
+- `destination-over`, 原图形覆盖新图形。
+- `lighter`, 原图形与新图形均绘制，重叠的部分加色处理。
+- `copy`, 只绘制新图形，原图形未重叠的部分变为透明。
+- `xor`，只绘制新图形与原图形不重叠的部分，重叠部分透明。
 
 
-	​```
-	function draw(id){
-		var canvas = document.getElementById(id);
-		var context = canvas.getContext("2d");
-		var oprtns = new Array(
-			"source-atop", 
-			'source-in', 
-			'source-out', 
-			'source-over', 
-			'destination-atop', 
-			'destination-in', 
-			'destination-out', 
-			'destination-over', 
-			'lighter', 
-			'copy', 
-			'xor'
-		);
-		var i = 0; // 通过改变i的值，来体会不同组合的效果
-		context.fillStyle = "blue";
-		context.fillRect(10,10,60,60);
-		context.globalCompositeOperation = oprtns[i];
-		context.beginPath();
-		context.fillStyle = "red";
-		context.arc(60, 60, 30, 0, Math.PI*2, false);
-		context.closePath();
+```
+function draw(id){
+	var canvas = document.getElementById(id);
+	var context = canvas.getContext("2d");
+	var oprtns = new Array(
+		"source-atop", 
+		'source-in', 
+		'source-out', 
+		'source-over', 
+		'destination-atop', 
+		'destination-in', 
+		'destination-out', 
+		'destination-over', 
+		'lighter', 
+		'copy', 
+		'xor'
+	);
+	var i = 0; // 通过改变i的值，来体会不同组合的效果
+	context.fillStyle = "blue";
+	context.fillRect(10,10,60,60);
+	context.globalCompositeOperation = oprtns[i];
+	context.beginPath();
+	context.fillStyle = "red";
+	context.arc(60, 60, 30, 0, Math.PI*2, false);
+	context.closePath();
+	context.fill();
+}
+```
+
+
+
+#### 给图形绘制阴影
+
+- shadowOffsetX，阴影横向位移
+- shadowOffsetY，阴影纵向位移
+- shadowColor，阴影颜色
+- shadowBlur，阴影模糊范围
+
+
+```
+function draw(id){
+	var canvas = document.getElementById(id);
+	var context = canvas.getContext("2d");
+	context.fillStyle = "#eeeeef";
+	context.fillRect(0,0,500,500);
+	context.shadowOffsetX = 10;
+	context.shadowOffsetY = 10;
+	context.shadowColor = "rgba(100,100,100,0.5)";
+	context.shadowBlur = 8;
+	
+	for(var i=0; i<3; i++){
+		context.translate(60,60);
+		create5Star(context);
 		context.fill();
 	}
-	​```
+}
 
-
-- 给图形绘制阴影
-	- shadowOffsetX，阴影横向位移
-	- shadowOffsetY，阴影纵向位移
-	- shadowColor，阴影颜色
-	- shadowBlur，阴影模糊范围
-
-	​```
-	function draw(id){
-		var canvas = document.getElementById(id);
-		var context = canvas.getContext("2d");
-		context.fillStyle = "#eeeeef";
-		context.fillRect(0,0,500,500);
-		context.shadowOffsetX = 10;
-		context.shadowOffsetY = 10;
-		context.shadowColor = "rgba(100,100,100,0.5)";
-		context.shadowBlur = 8;
-		
-		for(var i=0; i<3; i++){
-			context.translate(60,60);
-			create5Star(context);
-			context.fill();
-		}
+function create5Star(context){
+	var dx = 100;
+	var dy = 100;
+	var s = 50;
+	context.beginPath();
+	context.fillStyle = "rgba(255,0,0,0.5)";
+	var x = Math.sin(0);
+	var y = Math.cos(0);
+	var dig = Math.PI / 5 * 4;
+	for(var i=0; i<5; i++){
+		var x = Math.sin(i*dig);
+		var y = Math.cos(i*dig);
+		context.lineTo(dx+x*s, dy+y*s);
 	}
-	
-	function create5Star(context){
-		var dx = 100;
-		var dy = 100;
-		var s = 50;
-		context.beginPath();
-		context.fillStyle = "rgba(255,0,0,0.5)";
-		var x = Math.sin(0);
-		var y = Math.cos(0);
-		var dig = Math.PI / 5 * 4;
-		for(var i=0; i<5; i++){
-			var x = Math.sin(i*dig);
-			var y = Math.cos(i*dig);
-			context.lineTo(dx+x*s, dy+y*s);
-		}
-		context.closePath();
-	}
-	​```
-	
-	![shadow](./images/shadow.png)
-
-- 绘制图像
-	- `context.drawImage(img, x, y);`
-	- `context.drawImage(img, x, y, w, h);`
-	- `context.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);`
-
-	- 第三个方法所带的参数，是对已有的图像进行选取区域，并复制。
-
-	![drawImg](./images/drawimg.png)
+	context.closePath();
+}
+```
 
 
-	​```
-	function drawImage(context, image){
-		context.drawImage(image, 0, 0, 200, 200);
-		context.drawImage(image, 0, 0, 100, 100, 150, 150, 300, 300);
-	}
-	
-	function draw(id){
-		var canvas = document.getElementById(id);
-		var context = canvas.getContext("2d");
-		context.fillStyle = "#eeeeef";
-		context.fillRect(0,0,500,500);
-		var image = new Image();
-		image.src = "image.png";
-		image.onload = function(){
-			drawImage(context, image);
-		};
-	}
-	​```
+
+![shadow](./images/shadow.png)
+
+
+
+#### 绘制图像
+
+- `context.drawImage(img, x, y);`
+- `context.drawImage(img, x, y, w, h);`
+- `context.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);`
+
+- 第三个方法所带的参数，是对已有的图像进行选取区域，并复制。
+
+![drawImg](./images/drawimg.png)
+
+
+
+```
+function drawImage(context, image){
+	context.drawImage(image, 0, 0, 200, 200);
+	context.drawImage(image, 0, 0, 100, 100, 150, 150, 300, 300);
+}
+
+function draw(id){
+	var canvas = document.getElementById(id);
+	var context = canvas.getContext("2d");
+	context.fillStyle = "#eeeeef";
+	context.fillRect(0,0,500,500);
+	var image = new Image();
+	image.src = "image.png";
+	image.onload = function(){
+		drawImage(context, image);
+	};
+}
+```
