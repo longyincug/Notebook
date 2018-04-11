@@ -31,6 +31,7 @@
 27. [每天一道面试题: 27](#27)
 28. [每天一道面试题: 28](#28)
 29. [每天一道面试题: 29](#29)
+30. [每天一道面试题: 30](#30)
 
 
 
@@ -3464,7 +3465,109 @@ background-color: yellow\0;
 
 
 
-## 
+## 每天一道面试题: 30
+
+
+### 行内元素的padding和margin可以设置吗？
+
+
+**答案:**
+
+内联元素的宽度、高度、内边距的top和bottom都不可改变，外边距的top和bottom也不可改变，但是可以设置padding和margin的left、right。
+
+浏览器还有天生的inline-block元素，拥有内在尺寸，可以设置高宽，但不会自动换行。
+
+如: `<input>`、`<img>`、`<button>`、`<textarea>`、`<label>`
+
+
+***
+
+
+### rgba()和opacity的透明效果有什么不同？
+
+**答案:**
+
+rgba()和opacity都能实现透明效果，但最大的不同是opacity作用于元素，以及元素内所有内容的透明度，
+而rgba()只作用于元素的颜色或其背景色，设置rgba透明的元素的子元素不会继承透明效果。
+
+
+***
+
+
+### 如何垂直居中一个浮动元素？
+
+
+**答案:**
+
+
+方法一: 已知元素的高宽。
+
+```
+#div1{
+	background-color:#6699FF;
+	width:200px;
+	height:200px;
+	position: absolute; //父元素需要相对定位
+	top: 50%;
+	left: 50%;
+	margin-top:-100px ; //二分之一的 height，width
+	margin-left: -100px;
+}
+```
+
+方法二: 未知元素的高宽
+
+```
+#div1{
+	width: 200px;
+	height: 200px;
+	background-color: #6699FF;
+	margin:auto;
+	position: absolute; //父元素需要相对定位
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+```
+
+
+如何居中一个img？
+
+```
+#container {
+	display:table-cell;
+	text-align:center;
+	vertical-align:middle;
+}
+```
+
+
+***
+
+
+### Sass、Less是什么？为什么要使用他们？
+
+**答案:**
+
+他们是CSS预处理器，CSS上的一种抽象层，使用特殊的语法编译成CSS。
+
+例如Less是一种动态样式语言，给CSS赋予了动态语言的特性，如变量、继承、运算、函数。Less既可以在客户端上运行，也可以在服务器上运行（借助Node.js）。
+
+结构清晰，便于扩展。可以方便地屏蔽浏览器的私有语法差异，封装了对差异的重复处理，减少了无意义的机械劳动。完全兼容CSS代码，可以方便地应用到老项目中。
+
+
+
+***
+
+
+##
+
+
+
+
+
+
 
 
 
