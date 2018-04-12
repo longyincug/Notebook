@@ -7,7 +7,9 @@
 >
 > 本文中内容基本摘录自原书。
 
+
 ## 目录
+
 
 1. [第一章 JavaScript简介](#1)
 
@@ -72,6 +74,16 @@
 	- [继承](#6c)
 	
 	- [小结](#6d)
+
+21. [Ajax与Comet](#21)
+
+	- [XMLHttpRequest对象](#21a)
+
+	- [XMLHttpRequest事件](#21b)
+
+	- [跨域资源共享](#21c)
+	
+	- [其他跨域技术](#21d)
 
 
 
@@ -3836,6 +3848,446 @@ JavaScript 主要通过原型链实现继承。原型链的构建是通过将一
 
 	- 寄生组合式继承，集寄生式继承和组合继承的优点与一身，是实现基于类型继承的最有效方式。
 
+
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+<a name="21">
+
+
+
+## Ajax与Comet
+
+
+> Ajax是对 Asynchronous JavaScript + XML 的简写。
+>
+> Ajax技术的核心是XMLHttpRequest对象（简称XHR），在XHR出现之前，Ajax式的通信必须借助一些hack手段来实现，大多数是使用隐藏的框架或内嵌框架。
+>
+> XHR为向服务器发送请求和解析服务器响应提供了流畅的接口，能够以异步方式从服务器获取更多信息。
+>
+> 虽然名字中包含XML的成分，但Ajax通信与数据格式无关，这种技术就是无须刷新页面即可从服务器取得数据，但不一定是XML数据。
+
+
+
+<a name="21a">
+
+
+
+### XMLHttpRequest对象
+
+
+在 IE 中可能会遇到三种不同版本的 XHR 对象，即 MSXML2.XMLHttp、MSXML2.XMLHttp.3.0 和 MXSML2.XMLHttp.6.0。要使用 MSXML 库中的 XHR 对象，需要编写一个函数。
+
+在IE7+后，支持原生的XHR对象，在这些浏览器中创建XHR对象只需要使用XMLHttpRequest构造函数。`var xhr = new XMLHttpRequest();`
+
+如果还要支持IE的早期版本，则需要在createXHR函数中加入对原生XHR对象的支持。
+
+```
+function createXHR(){
+	if (typeof XMLHttpRequest != "undefined"){
+		return new XMLHttpRequest();
+	} else if (typeof ActiveXObject != "undefined"){
+		if (typeof arguments.callee.activeXString != "string"){
+			var versions = [ "MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0","MSXML2.XMLHttp"], i, len;
+			for (i=0,len=versions.length; i < len; i++){
+				try {
+					new ActiveXObject(versions[i]);
+					arguments.callee.activeXString = versions[i];
+					break;
+				} catch (ex){
+					//跳过
+				}
+			}
+		}
+		return new ActiveXObject(arguments.callee.activeXString);
+	} else {
+		throw new Error("No XHR object available.");
+	}
+} 
+```
+
+这个函数中新增的代码首先检测原生 XHR 对象是否存在，如果存在则返回它的新实例。如果原生对象不存在，则检测 ActiveX 对象。如果这两种对象都不存在，就抛出一个错误。然后，就可以使用下面的代码在所有浏览器中创建 XHR 对象了。
+
+`var xhr = createXHR(); `
+
+
+
+#### XHR的用法
+
+
+使用XHR对象，要调用的第一个方法是`open()`方法，它接受3个参数：要发送的请求的类型，请求的url和是否异步发送请求的布尔值。
+
+- `xhr.open("get", "example.php", false);`
+
+- url相对于执行代码的当前页面，当然也可以使用绝对路径。
+
+- 调用`open()`方法并不会真正发送请求，而只是启动一个请求以备发送。
+
+
+> 只能向同一个域中使用相同端口和协议的URL发送请求，如果URL与启动请求的页面有任何差别，都会引发安全错误。
+
+
+要发送特定的请求，必须接着调用`send()`方法。`xhr.send(null);`
+
+- 接受的参数作为请求主体发送的数据，如果不需要通过请求主体发送数据，则必须传入null，因为这个参数对于有些浏览器来说是必须的。调用`send()`之后，请求就会被分派到服务器。
+
+- 由于open的第三个参数是false，所以js代码会等到服务器响应之后再继续执行，收到响应后，响应的数据会自动填充XHR对象的属性。
+	- `responseText`: 作为响应主体被返回的文本。
+	- `responseXML`: 如果响应的内容类型是"text/xml"或"application/xml"，这个属性中将保存包含着响应数据的XML DOM文档。
+	- `status`: 响应的HTTP状态。
+	- `statusText`: HTTP状态的说明。
+
+
+在接收到响应后，第一步是检查 `status` 属性，以确定响应已经成功返回。一般来说，可以将 HTTP
+状态代码为 200 作为成功的标志。此时，`responseText` 属性的内容已经就绪，而且在内容类型正确的
+情况下，`responseXML` 也应该能够访问了。此外，状态代码为 304 表示请求的资源并没有被修改，可
+以直接使用浏览器中缓存的版本；当然，也意味着响应是有效的。为确保接收到适当的响应，应该像下
+面这样检查上述这两种状态代码:
+
+```
+xhr.open("get", "example.txt", false);
+xhr.send(null);
+if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+	alert(xhr.responseText);
+} else {
+	alert("Request was unsuccessful: " + xhr.status);
+}
+```
+
+
+多数情况下，我们还是要发送异步请求，才能让js继续执行而不必等待响应。此时，可以检测XHR对象的`readyState`属性:
+- 0: 未初始化。尚未调用open()方法。
+- 1: 启动。已经调用open()方法，但尚未调用send()方法。
+- 2: 发送。已经调用 send()方法，但尚未接收到响应。
+- 3: 接收。已经接收到部分响应数据。
+- 4: 完成。已经接收到全部响应数据，而且已经可以在客户端使用了。
+
+只要 `readyState` 属性的值由一个值变成另一个值，都会触发一次 `readystatechange` 事件。可以利用这个事件来检测每次状态变化后 `readyState` 的值。
+
+在调用 `open()`之前指定 `onreadystatechange`事件处理程序才能确保跨浏览器兼容性。
+
+
+```
+var xhr = createXHR();
+xhr.onreadystatechange = function(){
+	if (xhr.readyState == 4){
+		if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+			alert(xhr.responseText);
+		} else {
+			alert("Request was unsuccessful: " + xhr.status);
+		}
+	}
+};
+xhr.open("get", "example.txt", true);
+xhr.send(null); 
+```
+
+
+> 这个例子在 onreadystatechange 事件处理程序中使用了 xhr 对象，没有使用this 对象，原因是 onreadystatechange 事件处理程序的作用域问题。如果使用this 对象，在有的浏览器中会导致函数执行失败，或者导致错误发生。因此，使用实际的 XHR 对象实例变量是较为可靠的一种方式。
+
+
+在接收到响应之前还可以调用 abort()方法来取消异步请求: `xhr.abort();`
+
+调用这个方法后，XHR 对象会停止触发事件，而且也不再允许访问任何与响应有关的对象属性。在终止请求之后，还应该对 XHR 对象进行解引用操作。由于内存原因，不建议重用 XHR 对象。
+
+
+
+#### HTTP头部信息
+
+默认情况下，在发送 XHR 请求的同时，还会发送下列头部信息。
+- Accept：浏览器能够处理的内容类型。
+- Accept-Charset：浏览器能够显示的字符集。
+- Accept-Encoding：浏览器能够处理的压缩编码。
+- Accept-Language：浏览器当前设置的语言。
+- Connection：浏览器与服务器之间连接的类型。
+- Cookie：当前页面设置的任何 Cookie。
+- Host：发出请求的页面所在的域 。
+- Referer：发出请求的页面的 URI。
+- User-Agent：浏览器的用户代理字符串。
+
+使用`setRequestHeader()`方法可以设置自定义的请求头部信息。必须在调用open()方法之后且调用send()方法之前调用setRequestHeader()。
+
+```
+var xhr = createXHR();
+xhr.onreadystatechange = function(){
+	if (xhr.readyState == 4){
+		if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+			alert(xhr.responseText);
+		} else {
+			alert("Request was unsuccessful: " + xhr.status);
+		}
+	}
+};
+xhr.open("get", "example.php", true);
+xhr.setRequestHeader("MyHeader", "MyValue");
+xhr.send(null); 
+```
+
+有的浏览器允许开发人员重写默认的头部信息，但有的浏览器则不允许这样做。
+
+调用 XHR 对象的 `getResponseHeader()`方法并传入头部字段名称，可以取得相应的响应头部信息。而调用 `getAllResponseHeaders()`方法则可以取得一个包含所有头部信息的多行文本内容。
+
+```
+var myHeader = xhr.getResponseHeader("MyHeader");
+var allHeaders = xhr.getAllResponseHeaders();
+```
+
+
+#### get请求
+
+下面这个函数可以辅助向现有 URL 的末尾添加查询字符串参数：
+```
+function addURLParam(url, name, value) {
+ url += (url.indexOf("?") == -1 ? "?" : "&");
+ url += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+ return url;
+}
+```
+
+这个 addURLParam()函数接受三个参数：要添加参数的 URL、参数的名称和参数的值。这个函数首先检查 URL 是否包含问号（以确定是否已经有参数存在）。如果没有，就添加一个问号；否则，就添加一个和号。然后，将参数名称和值进行编码，再添加到 URL 的末尾。最后返回添加参数之后的 URL。
+
+
+
+#### post请求
+
+POST 请求的主体可以包含非常多的数据，而且格式不限。在 open()方法第一个参数的位置传入"post"，就可以初始化一个 POST 请求。
+
+`xhr.open("post", "example.php", true);`
+
+默认情况下，服务器对 POST 请求和提交 Web 表单的请求并不会一视同仁。因此，服务器端必须有程序来读取发送过来的原始数据，并从中解析出有用的部分。
+
+不过，我们可以使用 XHR 来模仿表单提交：首先将 `Content-Type` 头部信息设置为 `application/x-www-form-urlencoded`，也就是表单提交时的内容类型，其次是以适当的格式创建一个字符串。
+
+在必要时候需要将页面中表单的数据进行序列化。
+
+```
+function submitData(){
+ var xhr = createXHR();
+ xhr.onreadystatechange = function(){
+ if (xhr.readyState == 4){
+ if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+ alert(xhr.responseText);
+ } else {
+ alert("Request was unsuccessful: " + xhr.status);
+ }
+ }
+ };
+ xhr.open("post", "postexample.php", true);
+ xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+ var form = document.getElementById("user-info");
+ xhr.send(serialize(form)); // 将表单数据序列化并发送
+} 
+```
+
+这个函数可以将 ID 为"user-info"的表单中的数据序列化之后发送给服务器。而下面的示例 PHP文件 postexample.php 就可以通过$_POST 取得提交的数据了：
+```
+<?php
+ header("Content-Type: text/plain");
+ echo <<<EOF
+Name: {$_POST[‘user-name’]}
+Email: {$_POST[‘user-email’]}
+EOF;
+?> 
+```
+
+
+如果不设置 Content-Type 头部信息，那么发送给服务器的数据就不会出现在$_POST 超级全局变量中。这时候，要访问同样的数据，就必须借助$HTTP_RAW_POST_DATA。
+
+
+
+#### XMLHttpRequest 2级
+
+##### FormData: XMLHttpRequest 2级定义了FormData类型。
+
+FormData为序列化表单以及创建与表单格式相同的数据（用于通过 XHR 传输）提供了便利。
+
+```
+var data = new FormData();
+data.append("name", "Nicholas"); 
+```
+
+也可以用表单元素的数据预先向其中填入键值对:
+```
+var data = new FormData(document.forms[0]);
+```
+
+然后可以传给XHR的send()方法:
+```
+var xhr = createXHR();
+xhr.onreadystatechange = function(){
+ if (xhr.readyState == 4){
+ if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+ alert(xhr.responseText); 
+ } else {
+ alert("Request was unsuccessful: " + xhr.status);
+ }
+ }
+};
+xhr.open("post","postexample.php", true);
+var form = document.getElementById("user-info");
+xhr.send(new FormData(form)); 
+```
+
+使用 FormData 的方便之处体现在不必明确地在 XHR 对象上设置请求头部。XHR 对象能够识别传入的数据类型是 FormData 的实例，并配置适当的头部信息。
+
+支持 FormData 的浏览器有 Firefox 4+、Safari 5+、Chrome 和 Android 3+版 WebKit。
+
+
+##### XMLHttpRequest2级规范加入了timeout功能
+
+如果在规定的时间内浏览器还没有接收到响应，那么就会触发 timeout 事件，进而会调用 `ontimeout` 事件处理程序。
+
+```
+var xhr = createXHR();
+xhr.onreadystatechange = function(){
+	if (xhr.readyState == 4){
+		try {
+			if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+				alert(xhr.responseText);
+			} else {
+				alert("Request was unsuccessful: " + xhr.status);
+			}
+		} catch (ex){
+			//假设由 ontimeout 事件处理程序处理
+		}
+	}
+};
+
+xhr.open("get", "timeout.php", true);
+xhr.timeout = 1000; //将超时设置为 1 秒钟（仅适用于 IE8+）
+xhr.ontimeout = function(){
+	alert("Request did not return in a second.");
+};
+xhr.send(null); 
+```
+
+将这个属性设置为 1000 毫秒，意味着如果请求在 1 秒钟内还没有返回，就会自动终止。
+请求终止时，会调用 ontimeout 事件处理程序。但此时 readyState可能已经改变为 4 了，
+这意味着会调用 onreadystatechange 事件处理程序。可是，如果在超时终止
+请求之后再访问 status 属性，就会导致错误。为避免浏览器报告错误，可以将检查 status 属性的语句封装在一个try-catch语句中。
+
+
+
+
+
+
+
+<a name="21b">
+
+
+### XMLHttpRequest进度事件
+
+**进度事件**
+
+有以下 6 个进度事件。
+- loadstart：在接收到响应数据的第一个字节时触发。
+- progress：在接收响应期间持续不断地触发。
+- error：在请求发生错误时触发。
+- abort：在因为调用 abort()方法而终止连接时触发。
+- load：在接收到完整的响应数据时触发。
+- loadend：在通信完成或者触发 error、abort 或 load 事件后触发。
+
+每个请求都从触发 loadstart 事件开始，接下来是一或多个 progress 事件，然后触发 error、
+abort 或 load 事件中的一个，最后以触发 loadend 事件结束。
+支持前 5 个事件的浏览器有 Firefox 3.5+、Safari 4+、Chrome、iOS 版 Safari 和 Android 版 WebKit。
+Opera（从第 11 版开始）、IE 8+只支持 load 事件。目前还没有浏览器支持 loadend 事件。
+
+这些事件大都很直观，但其中两个事件有一些细节需要注意。
+
+
+#### load事件
+
+Firefox 实现中引入了`load` 事件，用以替代 `readystatechange` 事件。
+响应接收完毕后将触发 load 事件，因此也就没有必要去检查 `readyState` 属性了。
+而 onload 事件处理程序会接收到一个 event 对象，其 target 属性
+就指向 XHR 对象实例，因而可以访问到 XHR 对象的所有方法和属性。然而，并非所有浏览器都为这个事件实现了适当的事件对象。因此为了兼容考虑还是要使用XHR对象变量。
+
+```
+var xhr = createXHR();
+xhr.onload = function(){
+	if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+		alert(xhr.responseText);
+	} else {
+		alert("Request was unsuccessful:" + xhr.status);
+	}
+};
+xhr.open("get", "demo.php", true);
+xhr.send(null);
+```
+
+只要浏览器接收到服务器的响应，不管其状态如何，都会触发 load 事件。而这意味着你必须要检
+查 status 属性，才能确定数据是否真的已经可用了。Firefox、Opera、Chrome 和 Safari 都支持 load
+事件。
+
+
+#### progress事件
+
+
+Mozilla 对 XHR 的另一个革新是添加了 `progress` 事件，这个事件会在浏览器接收新数据期间周期
+性地触发。而 `onprogress` 事件处理程序会接收到一个 `event` 对象，其 `target` 属性是 XHR 对象，但
+包含着三个额外的属性：`lengthComputable`、`position` 和 `totalSize`。其中，lengthComputable
+是一个表示进度信息是否可用的布尔值，position 表示已经接收的字节数，totalSize 表示根据
+Content-Length 响应头部确定的预期字节数。有了这些信息，我们就可以为用户创建一个进度指示器
+了。
+
+```
+var xhr = createXHR();
+xhr.onload = function(){
+	if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+		alert(xhr.responseText);
+	} else {
+		alert("Request was unsuccessful:" + xhr.status);
+	}
+};
+
+xhr.onprogress = function(event){
+	var divStatus = document.getElementById("status");
+	if(event.lengthComputable){
+		divStatus.innerHTML = "Received" + event.position + " of " + event.totalSize + "bytes";
+	}
+};
+
+xhr.open("get", "demo.php", true);
+xhr.send(null);
+```
+
+
+
+
+<a name="21c">
+
+
+### 跨域资源共享
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a name="21d">
+
+
+### 其他跨域技术
 
 
 

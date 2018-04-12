@@ -2815,8 +2815,20 @@ JS中的垃圾收集器跟踪每个变量，对不再有用的变量打上标记
 	    button: document.getElementById("button"),  
 	    image: document.getElementById("image"),  
 	    text: document.getElementById("text")  
-	};  
+	}; 
+	
+	function doStuff(){  
+	    image.src="http://some.url/image";  
+	    button.click():  
+	    console.log(text.innerHTML)  
+	}
+	
+	function removeButton(){  
+	    document.body.removeChild(document.getElementById('button'))  
+	}  
 	```
+
+	- 对于button的引用，一个在DOM树中，另外一个在字典中。如果在将来的某些点你决定要清除这个元素，需要让两个引用都不可用。
 
 
 4. 被遗忘的定时器或者回调
