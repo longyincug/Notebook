@@ -19,6 +19,12 @@
 	- [canvas使用路径](#9b)
 	- [canvas渐变与变形](#9c)
 	- [图形绘制处理](#9d)
+10. [SVG](#10)
+11. [HTML5 File API](#11)
+12. [HTML5 Web存储](#12)
+13. [HTML5 应用缓存与Web Workers](#13)
+14. [HTML5服务器推送事件](#14)
+15. [响应式布局](#15)
 
 
 
@@ -1055,6 +1061,8 @@ function dropLocalImg(e){
 
 
 
+***
+
 <a name="9">
 
 
@@ -1449,6 +1457,345 @@ function draw(id){
 	};
 }
 ```
+
+
+
+<a name="10">
+
+***
+
+
+
+## SVG
+
+
+
+什么是SVG？
+- SVG指可伸缩矢量图形
+- SVG用来定义用于网络的基于矢量的图形
+- SVG使用XML格式定义图形
+- SVG图像在放大或改变尺寸的情况下其图形质量不会有损失
+- SVG是W3C的标准
+
+SVG的优势
+- SVG图像可通过文本编辑器来创建和修改
+- SVG可被搜索、索引、脚本化或压缩
+- SVG是可伸缩的，可在任何的分辨率下被高质量的打印
+
+
+SVG绘制矢量图形:
+```
+<svg width="120" height="120" viewBox="0 0 120 120" version="1.1">
+	<circle cx="50" cy="50" r="50"></circle>
+</svg>
+```
+
+
+引入外部SVG文件:
+```
+<iframe src="demo.svg" width="500" height="500" frameboder="no"></iframe>
+```
+
+
+
+***
+
+<a name="11">
+
+
+
+## HTML5 File API
+
+
+HTML5 File API协议族
+
+- Directories and System 文件系统和目录读取
+
+- FileWriter 写入文件
+
+- FileReader 读取文件
+
+- File API 页面选择文件处理
+
+
+
+
+***
+
+
+<a name="12">
+
+
+## HTML5 Web存储
+
+
+客户端浏览器储存数据：两种方式
+
+- localStorage 没有时间限制的数据存储
+- sessionStorage 针对一个session的数据存储
+
+与cookie对比，cookie不适合大量数据的存储，因为它们由每个对服务器的请求来传递，这使得cookie速度很慢且效率不高。
+
+
+### localStorage
+
+存储的数据没有时间限制，关闭浏览器、几天几月或者下一年，数据依然可用。
+
+```
+var txt = document.getElementById("textarea");
+if(localStorage.text){
+	txt.value = localStorage.text; //如果有存储数据，就填充使用
+}
+btn.onclick = function(){
+	localStorage.text = txt.value; // 将文本域中的内容储存
+};
+
+```
+
+
+### sessionStorage
+
+针对一个session进行数据存储，当用户关闭浏览器窗口后，数据就会被删除。
+
+
+```
+var txt = document.getElementById("textarea");
+if(sessionStorage.text){
+	txt.value = sessionStorage.text; // 如果有存储数据，就填充使用
+}
+btn.onclick = function(){
+	sessionStorage.text = txt.value; // 将文本域中的内容储存
+};
+```
+
+
+
+***
+
+
+
+<a name="13">
+
+
+## HTML5 应用缓存与Web Workers
+
+
+### 应用缓存
+
+HTML5引入了应用程序缓存，这意味着web应用可进行缓存，并可在没有因特网链接时进行访问。
+
+应用缓存的优势：
+- 离线浏览。用户可在应用离线时使用它们。
+- 速度。已缓存资源加载得更快。
+- 减少服务器负载。浏览器将只从服务器下载更新过或更改过的资源。
+
+实现缓存:
+- 如果需要启动应用程序缓存，在html标签中包含`manifest`属性，manifest文件的建议扩展名是`.appcache`。
+
+manifest文件:
+- `CACHE` 在此标题下列出的文件将在首次下载后进行缓存。
+- `NETWORK` 在此标题下列出的文件需要与服务器的连接，且不会被缓存。
+- `FALLBACK` 在此标题下列出的文件规定当页面无法访问时的回退页面（比如404页面）。
+
+
+```
+<html manifest="index.appcache"> // 设置启动缓存
+
+// 编写index.appcache文件
+
+CACHE MANIFEST
+
+CACHE: // 设置需要缓存的数据
+index.html
+index.js
+
+NETWORK: // 设置不要缓存的数据
+style.css
+```
+
+
+### Web Workers
+
+Web Worker是运行在后台的JavaScript，独立于其他脚本，不会影响页面的性能。
+
+方法:
+- `postMessage()` 它用于向HTML页面传回一段消息。
+
+- `terminate()` 终止web worker，并释放浏览器/计算机资源。
+
+事件: `onmessage`
+
+
+```
+var numDiv = document.getElementById("numdiv");
+var work = new Worker("js/count.js");
+work.onmessage = function(e){ // 监听事件
+	numDiv.innerHTML = e.data; // 接受web worker发送过来的数据
+};
+
+document.getElementById("stop").onclick = function() {
+	if(work){
+		work.terminate();
+		work = null;
+	}
+};
+
+// count.js:
+
+var countNum = 0;
+function count(){
+	postMessage(countNum);
+	countNum++;
+	setTimeout(count, 1000);
+}
+count(); 
+```
+
+
+
+
+***
+
+
+<a name="14">
+
+
+
+## HTML5服务器推送事件
+
+
+服务器推送事件是HTML5规范中的一个组成部分，可以用来从服务端实时推送数据到浏览器端。
+
+传统的服务器推送数据技术:
+
+- WebSocket: 使用套接字连接，基于TCP协议，建立连接后，可以进行双向的数据传输。WebSocket的功能是很强大的，使用起来也比较灵活，可以适用于不同的场景。不过WebSocket技术也比较复杂，包括服务器端和浏览器端的实现都不同于一般的Web应用。
+
+- HTTP协议: 简易轮询，即浏览器定时向服务器端发出请求，来查询是否有数据更新，这种做法比较简单。对于轮询的时间间隔需要仔细考虑，过长会导致用户不能及时接受到更新的数据，过短会导致查询请求过多，增加服务器的负担。
+
+
+
+HTML5服务器推送事件的实现:
+
+
+```
+// index.php
+<?php
+
+header('Content-Type:text/event-stream');
+
+for($i=0; $i<100; $i++){
+	date_default_timezone_set("Asia/Shanghai");
+	echo 'data:'.date('Y-m-d H-i-s');
+	echo "\n\n";
+	flush();
+	sleep(1);
+}
+
+// index.js
+var SERVER_URL = "index.php";
+var serverData = document.getElementById("dataDiv");
+var statusDiv = document.getElementById("statusDiv");
+startlistenServer();
+
+function startlistenServer(){
+	statusDiv.innerHTML = "start Connect Server...";
+	var es = new EventSource(SERVER_URL);
+	es.onopen = openHandler;
+	es.onerror = errorHandler;
+	es.onmessage = messageHandler;
+}
+
+function openHandler(e){
+	statusDiv.innerHTML = "Server Open";
+}
+
+function errorHandler(e){
+	statusDiv.innerHTML = "Error";
+}
+
+function messageHandler(e){
+	serverData.innerHTML = e.data;
+}
+```
+
+
+
+***
+
+
+
+<a name="15">
+
+
+## 响应式布局
+
+
+响应式布局，简而言之，就是一个网站能够兼容多个终端，而不是为每个终端做一个特定的版本。这个概念是为解决移动互联网浏览而诞生的。其目的是为用户提供更加舒适的界面和更好的用户体验。
+
+优点:
+- 面对不同分辨率设备灵活性强。
+- 能够快捷解决多设备显示适应问题。
+
+缺点:
+- 兼容各种设备工作量大，效率低下。
+- 代码累赘，会出现隐藏无用的元素，加载时间加长。
+
+
+
+### 响应式布局基本实现:
+
+CSS3中的Media Query(媒介查询):
+
+- 设备宽高: `device-width`、`device-height`
+
+- 渲染窗口的宽和高: `width`、`height`
+
+- 设备的手持方向: `orientation`
+
+- 设备的分辨率: `resolution`
+
+
+使用方法: 外联、内嵌样式
+
+```
+// 初始默认缩放为1
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+// 窗口宽度在600px以下采用这种样式
+<link href="style.css" type="text/css" rel="stylesheet" media="only screen and (max-width:600px)">
+
+<style>
+	// 窗口宽度在960px以上采用这种样式
+	@media screen and (min-width:640px){
+		body {
+			background-color: green;
+		}
+	}
+	
+	// 窗口在600px以上，960px以下时采用这种样式
+	@media screen and (min-width: 600px) and (max-width: 960px){
+	
+	}
+</style>
+```
+
+
+
+### 响应式布局之Bootstrap
+
+
+简洁、直观、灵活的前端开发框架，小而强大，响应式布局，跨平台等。
+
+
+
+
+
+
+
+
+
+
+
 
 
 
