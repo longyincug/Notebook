@@ -33,6 +33,7 @@
 29. [每天一道面试题: 29](#29)
 30. [每天一道面试题: 30](#30)
 31. [每天一道面试题: 31](#31)
+32. [每天一道面试题: 32](#32)
 
 
 
@@ -3486,8 +3487,8 @@ _background-color: yellow;
 //添加了*的样式只有IE7及以下的浏览器认识
 *background-color: yellow;
 
-//在样式最后添加一个\0只有IE8及以上的浏览器才能识别
-background-color: yellow\0;
+//在样式最后添加一个\9只有IE8及以下的浏览器才能识别
+background-color: yellow\9;
 ```
 
 条件Hack:
@@ -3700,27 +3701,149 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 
 
-##
+## 每天一道面试题: 32
+
+
+### html5有哪些新特性、移除了哪些元素？如何处理html5新标签的浏览器兼容问题？如何区分html和html5？
+
+
+**答案:**
+
+新特性:
+- 拖拽释放API（drag、drop）
+- 语义化更好的内容标签（header、footer、nav、aside、article、section）
+- 音频、视频API（audio、video）
+- 画布API（canvas）
+- Web存储（localStorage、sessionStorage）
+- 表单控件（calendar、date、time、email、url、search）
+- 新的技术（应用缓存、web worker、服务器推送事件）
+
+移除的元素:
+- 纯表现的元素：`basefont`、`font`、`big`、`center`、`s`、`strike`、`tt`、`u`、
+- 对可用性产生负面影响的元素：`frame`、`frameset`、`noframes`、
+
+如何让IE低版本浏览器支持HTML5新标签？
+- IE6~8支持通过`document.createElement`方法产生的标签，可以通过这一特性让这些浏览器支持HTML5新标签，还需要添加标签默认的样式。
+- 最好的方式是直接使用成熟的框架，比如html5shim框架:
+	```
+	<!--[if lt IE 9]>
+		<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+	<![endif]-->
+	```
+
+如何区分HTML5？
+- DOCTYPE声明、新增的结构元素、功能元素。
+
+
+***
+
+
+### 本地存储（Local Storage ）和 cookies（储存在用户本地终端上的数据）之间的区别是什么？
+
+**答案:**
+
+- Cookies:服务器和客户端都可以访问；大小只有 4KB 左右；有有效期，过期后将会删除；
+
+- 本地存储：只有本地浏览器端可访问数据，服务器不能访问本地存储直到故意通过 POST 或
+者 GET 的通道发送到服务器；每个域 5MB；没有过期数据，它将保留直到用户从浏览器清除
+或者使用 Javascript 代码移除。
+
+
+#### `session`、`cookie`和`sessionStorage`、`localStorage`的区别:
+
+
+1. cookie和session都是用来**跟踪浏览器用户身份的会话方式**，可以利用cookie和session等跟服务端进行数据交互。
+	- 保持状态: cookie保存在浏览器端，session保存在服务器端。
+	- 使用方式: 
+		- cookie是服务器发给客户端的特殊信息，可以设置过期时间，以文本的形式保存在客户端，每次请求都会带上cookie。
+		- 当服务器收到请求需要创建session对象时，会检查客户端请求中是否包含sessionid，如果有则返回相应session对象，如果没有则创建并把sessionid返回给客户端。sessionid通常储存在cookie中，如果用户禁用cookie，则要使用url重写，将sessionid拼接到访问地址后。
+	- 存储内容:
+		- cookie只能以文本的方式保存字符串类型。
+		- session通过类似HashTable的数据结构来保存，能支持任何类型的对象。
+	- 存储大小:
+		- 单个cookie保存的数据不能超过4kb，session大小没有限制。
+	- 安全性:
+		- 针对cookie的攻击很多，cookie欺骗、cookie截获等。
+		- sessionid是加密存储在cookie中的，并且随session过期而失效，安全性较高。
+	- 应用场景:
+		- cookie常用来保存用户登录时间、浏览历史等信息。
+		- session用于保存每个用户的专用信息，如购物车等，可以将某些数据放入session中，供同一用户的不同页面使用。
+	- 缺点:
+		- cookie大小受限，容易被操作禁用，安全性低，每次访问都要传输cookie，浪费带宽。
+		- session保存的东西越多，越会给服务器带来内存压力。依赖于cookie，如果禁用cookie则使用url重写，不安全。过度使用session变量会导致代码不好维护。
+
+
+2. WebStorage目的是克服由cookie所带来的一些限制，当数据需要被严格控制在客户端时，不需要持续的将数据发回服务器。
+
+	- 两个主要目标:
+		- 提供一种在cookie之外存储会话数据的路径。
+		- 提供一种可以存储大量跨会话存在的数据的机制。
+
+	1、生命周期:
+	- localStorage:localStorage的生命周期是永久的，关闭页面或浏览器之后localStorage中的数据也不会消失。localStorage除非主动删除数据，否则数据永远不会消失。
+	- sessionStorage的生命周期是在仅在当前会话下有效。sessionStorage引入了一个“浏览器窗口”的概念，sessionStorage是在同源的窗口中始终存在的数据。只要这个浏览器窗口没有关闭，即使刷新页面或者进入同源另一个页面，数据依然存在。但是sessionStorage在关闭了浏览器窗口后就会被销毁。同时独立的打开同一个窗口同一个页面，sessionStorage也是不一样的。
+
+	2、存储大小：localStorage和sessionStorage的存储数据大小一般都是：5MB
+
+	3、存储位置：localStorage和sessionStorage都保存在客户端，不与服务器进行交互通信。
+
+	4、存储内容类型：localStorage和sessionStorage只能存储字符串类型，对于复杂的对象可以使用ECMAScript提供的JSON对象的stringify和parse来处理
+
+	5、获取方式：localStorage：window.localStorage;；sessionStorage：window.sessionStorage;。
+
+	6、应用场景：localStoragese：常用于长期登录（+判断用户是否已登录），适合长期保存在本地的数据。sessionStorage：敏感账号一次性登录；
+
+
+	WebStorage的优点：
+
+	- （1）存储空间更大：cookie为4KB，而WebStorage是5MB；
+
+	- （2）节省网络流量：WebStorage不会传送到服务器，存储在本地的数据可以直接获取，也不会像cookie一样美词请求都会传送到服务器，所以减少了客户端和服务器端的交互，节省了网络流量；
+
+	- （3）对于那种只需要在用户浏览一组页面期间保存而关闭浏览器后就可以丢弃的数据，sessionStorage会非常方便；
+
+	- （4）快速显示：有的数据存储在WebStorage上，再加上浏览器本身的缓存。获取数据时可以从本地获取会比从服务器端获取快得多，所以速度更快；
+
+	- （5）安全性：WebStorage不会随着HTTP header发送到服务器端，所以安全性相对于cookie来说比较高一些，不会担心截获，但是仍然存在伪造问题；
+
+	- （6）WebStorage提供了一些方法，数据操作比cookie方便；
+
+		- `setItem (key, value)` ——  保存数据，以键值对的方式储存信息。
+		
+		- `getItem (key)` ——  获取数据，将键值传入，即可获取到对应的value值。
+		
+		- `removeItem (key)` ——  删除单个数据，根据键值移除对应的信息。
+		
+		- `clear ()` ——  删除所有的数据
+		
+		- `key (index)` —— 获取某个索引的key
+
+
+参考资料: [浅谈session,cookie,sessionStorage,localStorage的区别及应用场景](https://www.cnblogs.com/cencenyue/p/7604651.html)
+
+
+***
+
+
+
+### 如何实现浏览器内多个标签页之间的通信?
+
+**答案:**
+
+调用 localstorge、cookies 等本地存储方式。
 
 
 
 
+***
 
 
 
+<a name="33">
 
 
 
-
-
-
-
-
-
-
-
-
-
+## 
 
 
 

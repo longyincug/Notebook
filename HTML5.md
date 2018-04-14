@@ -1557,6 +1557,8 @@ btn.onclick = function(){
 
 针对一个session进行数据存储，当用户关闭浏览器窗口后，数据就会被删除。
 
+页面会话在浏览器打开期间一直保持，并且重新加载或恢复页面仍会保持原来的页面会话。在新标签或窗口打开一个页面会初始化一个新的会话，
+这点和 session cookies 的运行方式不同
 
 ```
 var txt = document.getElementById("textarea");

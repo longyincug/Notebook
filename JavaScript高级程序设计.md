@@ -75,7 +75,7 @@
 	
 	- [小结](#6d)
 
-21. [Ajax与Comet](#21)
+21. [第二十一章 Ajax与Comet](#21)
 
 	- [XMLHttpRequest对象](#21a)
 
@@ -3867,7 +3867,7 @@ JavaScript 主要通过原型链实现继承。原型链的构建是通过将一
 
 
 
-## Ajax与Comet
+## 第21章 Ajax与Comet
 
 
 > Ajax是对 Asynchronous JavaScript + XML 的简写。
