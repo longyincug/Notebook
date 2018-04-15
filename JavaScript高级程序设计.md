@@ -4016,7 +4016,7 @@ xhr.send(null);
 - Referer：发出请求的页面的 URI。
 - User-Agent：浏览器的用户代理字符串。
 
-使用`setRequestHeader()`方法可以设置自定义的请求头部信息。必须在调用open()方法之后且调用send()方法之前调用setRequestHeader()。
+使用`setRequestHeader()`方法可以设置自定义的请求头部信息。**必须在调用open()方法之后且调用send()方法之前**调用setRequestHeader()。
 
 ```
 var xhr = createXHR();

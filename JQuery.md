@@ -1065,7 +1065,7 @@ $(".comment>li").mouseenter(function(){
 	// 鼠标移开，先清除所有实心，如果用户之前没有点击，这时就结束了
 	$(".comment>li").text("☆");
 	// 判断，获取带有flag标记的li，然后将其前面的设置为实心，后面的设置为空心
-	$(".comment>li[index=1]").text("★").prevAll("li").text("★");
+	$(".comment>li[flag=1]").text("★").prevAll("li").text("★");
 	
 });
 

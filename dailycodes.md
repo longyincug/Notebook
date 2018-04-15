@@ -34,6 +34,7 @@
 30. [每天一道面试题: 30](#30)
 31. [每天一道面试题: 31](#31)
 32. [每天一道面试题: 32](#32)
+33. [每天一道面试题: 33](#33)
 
 
 
@@ -3642,19 +3643,19 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 **当开启元素的BFC以后，元素将会具有如下特性:**
 
-1.父元素的垂直外边距不会和子元素重叠
-2.开启BFC的元素不会被浮动元素所覆盖
-3.开启BFC的元素可以包含浮动的子元素
+1. 父元素的垂直外边距不会和子元素重叠
+2. 开启BFC的元素不会被浮动元素所覆盖
+3. 开启BFC的元素可以包含浮动的子元素
 
 
 **如何开启元素的BFC？**
 
-1.设置元素浮动
+1. 设置元素浮动
 	- 使用这种方式开启，虽然可以撑开父元素，解决高度塌陷，但是会导致父元素的宽度丢失而且使用这种方式也会导致下边元素上移，带来新的问题。
-2.设置元素绝对定位
-3.设置元素为inline-block
+2. 设置元素绝对定位
+3. 设置元素为inline-block
 	- 可以解决问题，但是会导致宽度丢失，不推荐使用这种方式。
-4.将元素的overflow设置为一个非visible的值
+4. 将元素的overflow设置为一个非visible的值
 	- 将overflow设置为hidden是副作用最小的开启BFC的方式。
 
 
@@ -3798,7 +3799,7 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 	- （1）存储空间更大：cookie为4KB，而WebStorage是5MB；
 
-	- （2）节省网络流量：WebStorage不会传送到服务器，存储在本地的数据可以直接获取，也不会像cookie一样美词请求都会传送到服务器，所以减少了客户端和服务器端的交互，节省了网络流量；
+	- （2）节省网络流量：WebStorage不会传送到服务器，存储在本地的数据可以直接获取，也不会像cookie一样每次请求都会传送到服务器，所以减少了客户端和服务器端的交互，节省了网络流量；
 
 	- （3）对于那种只需要在用户浏览一组页面期间保存而关闭浏览器后就可以丢弃的数据，sessionStorage会非常方便；
 
@@ -3814,9 +3815,9 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 		
 		- `removeItem (key)` ——  删除单个数据，根据键值移除对应的信息。
 		
-		- `clear ()` ——  删除所有的数据
+		- `clear ()` ——  删除所有的数据。
 		
-		- `key (index)` —— 获取某个索引的key
+		- `key (index)` —— 获取某个索引的key。
 
 
 参考资料: [浅谈session,cookie,sessionStorage,localStorage的区别及应用场景](https://www.cnblogs.com/cencenyue/p/7604651.html)
@@ -3830,8 +3831,44 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 **答案:**
 
-调用 localstorge、cookies 等本地存储方式。
+调用 localStorge、cookies 等本地存储方式。
 
+
+方法一:
+
+localStorage在一个标签页里被添加、修改或删除时，都会触发一个storage事件，通过在另一个标签页里监听storage事件，即可得到localStorage存储的值，实现不同标签之间的通信。
+
+```
+$("#btn").click(function(){    
+    var name=$("#name").val();    
+    localStorage.setItem("name", name);   
+});
+
+// 另一标签页
+window.addEventListener("storage", function(event){    
+    console.log(event.key + "=" + event.newValue);    
+});
+```
+
+
+方法二：
+
+使用cookie+setInterval，将要传递的信息存储在cookie中，每隔一定时间读取cookie信息，即可随时获取要传递的信息。
+
+```
+$("#btn").click(function(){    
+    var name=$("#name").val();    
+    document.cookie="name="+name;    
+});
+
+//另一标签页
+function getCookie(key){
+	return JSON.parse("{\"" + document.cookie.replace(/;\s+/gim,"\",\"").replace(/=/gim, "\":\"") + "\"}")[key];
+}
+setInterval(function(){    
+    console.log("name=" + getCookie("name"));    
+}, 10000);
+```
 
 
 
@@ -3843,11 +3880,75 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 
 
+## 每天一道面试题: 33
+
+
+### 什么是响应式设计？
+
+**答案:**
+
+它是关于网页制作的过程中让不同的设备有不同的尺寸和不同的功能。
+响应式设计是让网站在所有的设备上运行正常。
+
+
+***
+
+
+### Ajax 是什么? 如何创建一个 Ajax？
+
+
+**答案:**
+
+Ajax全称asynchronous javascript and xml，主要用来实现客户端与服务器端的异步通信效果，实现页面的局部刷新，早期的浏览器并不能原生支持ajax，可以使用隐藏帧(iframe)方式变相实现异步效果，后来的浏览器提供了对ajax的原生支持。
+
+使用ajax原生方式发送请求主要通过XMLHttpRequest（标准浏览器）、ActiveXObject（IE浏览器）对象实现异步通信效果。
+
+```
+function createXHR(){
+	if (typeof XMLHttpRequest != "undefined"){
+		return new XMLHttpRequest();
+	} else if (typeof ActiveXObject != "undefined"){
+		if (typeof arguments.callee.activeXString != "string"){
+			var versions = [ "MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0","MSXML2.XMLHttp"], i, len;
+			for (i=0,len=versions.length; i < len; i++){
+				try {
+					new ActiveXObject(versions[i]);
+					arguments.callee.activeXString = versions[i];
+					break;
+				} catch (ex){
+					//跳过
+				}
+			}
+		}
+		return new ActiveXObject(arguments.callee.activeXString);
+	} else {
+		throw new Error("No XHR object available.");
+	}
+}
+
+// 创建XHR对象
+var xhr = createXHR();
+
+// 根据readyState变化指定回调函数
+xhr.onreadystatechange = function(){};
+
+// 初始化请求
+xhr.open();
+
+// 设置http头信息，可以模仿表单提交
+xhr.setRequestHeader();
+
+// 发送请求
+xhr.send();
+```
+
+
+***
+
+
+
+
 ## 
-
-
-
-
 
 
 
