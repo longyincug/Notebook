@@ -4055,7 +4055,7 @@ JSONP是一种用来跨域获取数据的解决方案，具体是通过动态创
 该脚本的内容是一个函数调用，参数就是服务器返回的数据，为了处理这些数据，需要事先在页面定义好回调函数，本质上使用的并不是ajax技术。
 
 
-详细介绍请见笔记: [JavaScript高级程序设计](https://github.com/longyincug/Notebook/blob/master/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1.md#21d)
+详细介绍请见笔记: [JavaScript高级程序设计:JSONP](https://github.com/longyincug/Notebook/blob/master/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1.md#21d)
 
 
 
