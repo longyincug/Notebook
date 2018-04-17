@@ -810,7 +810,7 @@ console.log(0 && 2 || 1); //1
 
 **在 JavaScript，常见的 false 值:**
 
-`0, '0', +0, -0, false, '', null, undefined, null, NaN`
+`0, '0', +0, -0, false, '', null, undefined, NaN`
 
 要注意**空数组([])**和**空对象({})**:
 ```
