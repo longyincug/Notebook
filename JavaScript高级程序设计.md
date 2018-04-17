@@ -4165,7 +4165,7 @@ xhr.onreadystatechange = function(){
 };
 
 xhr.open("get", "timeout.php", true);
-xhr.timeout = 1000; //将超时设置为 1 秒钟（仅适用于 IE8+）
+xhr.timeout = 1000; //将超时设置为 1 秒钟
 xhr.ontimeout = function(){
 	alert("Request did not return in a second.");
 };
@@ -4290,9 +4290,51 @@ xhr.send(null);
 ### 其他跨域技术
 
 
+#### JSONP
 
 
+JSONP 是 JSON with padding（填充式 JSON 或参数式 JSON）的简写，是应用 JSON 的一种新方法，
+在后来的 Web 服务中非常流行。JSONP 看起来与 JSON 差不多，只不过是被包含在函数调用中的 JSON，
+就像下面这样。
 
+`callback({ "name": "Nicholas" });`
+
+JSONP 由两部分组成：回调函数和数据。
+
+回调函数是当响应到来时应该在页面中调用的函数。回调函数的名字一般是在请求中指定的。而数据就是传入回调函数中的JSON数据。
+
+下面是一个典型的JSONP请求。
+`http://freegeoip.net/json/?callback=handleResponse`
+
+这个 URL 是在请求一个 JSONP 地理定位服务。通过查询字符串来指定 JSONP 服务的回调参数是很
+常见的，就像上面的 URL 所示，这里指定的回调函数的名字叫 `handleResponse()`。
+
+JSONP 是通过动态<script>元素来使用的，使用时可以为
+src 属性指定一个跨域 URL。这里的<script>元素与<img>元素类似，都有能力不受限制地从其他域
+加载资源。因为 JSONP 是有效的 JavaScript 代码，所以在请求完成后，即在 JSONP 响应加载到页面中
+以后，就会立即执行。
+
+来看一个例子。
+```
+function handleResponse(response){
+ alert("You’re at IP address " + response.ip + ", which is in " +
+ response.city + ", " + response.region_name);
+}
+var script = document.createElement("script");
+script.src = "http://freegeoip.net/json/?callback=handleResponse";
+document.body.insertBefore(script, document.body.firstChild);
+```
+
+这个例子通过查询地理定位服务来显示你的 IP 地址和位置信息。
+
+JSONP 之所以在开发人员中极为流行，主要原因是它非常简单易用。与图像 Ping 相比，它的优点
+在于能够直接访问响应文本，支持在浏览器与服务器之间双向通信。
+
+不过，JSONP 也有两点不足:
+
+- 首先，JSONP 是从其他域中加载代码执行。如果其他域不安全，很可能会在响应中夹带一些恶意代码，而此时除了完全放弃 JSONP 调用之外，没有办法追究。因此在使用不是你自己运维的 Web 服务时，一定得保证它安全可靠。
+
+- 其次，要确定 JSONP 请求是否失败并不容易。虽然 HTML5 给<script>元素新增了一个 onerror事件处理程序，但目前还没有得到任何浏览器支持。为此，开发人员不得不使用计时器检测指定时间内
 
 
 
