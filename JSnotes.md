@@ -87,14 +87,14 @@
 		- 当声明一个变量, 但是并不给变量赋值时, 它的值就是undefined
 		- 使用typeof检查一个undefined时也会返回undefined
 
-- **Math**
+- **常用对象Math**
 	- Math.abs();       取绝对值
 	- Math.floor();      向下取整
 	- Math.ceil();       向上取整
 	- Math.round();     四舍五入取整
 	- Math.random();   随机数0-1
 
-- **Date**
+- **常用对象Date**
 
 ```
 var d = new Date();
@@ -144,10 +144,10 @@ var start = Date.now();
 		- 该方法不会影响到原变量, 它会将转换的结果返回
 		- 但是注意：null和undefined这两个值没有toString()方法, 如果调用他们的方法, 会报错
 	
-				注意:
-				-	无参数, 转化为字符串
-				-	如果有参数, 就会将数值转化为对应参数的进制
-					- 如 num.toString(2) 转化为2进制数字符串
+			注意:
+			- 无参数, 转化为字符串
+			- 如果有参数, 就会将数值转化为对应参数的进制
+				- 如 num.toString(2) 转化为2进制数字符串
 
 	2. 方式二：
 		- 调用String()函数, 并将被转换的数据作为参数传递给函数
@@ -228,25 +228,25 @@ var start = Date.now();
 
 	```
 	//判断索引是否超过最大索引, 若超过则将index设置为0
-	/*if(index >= imgArr.length){
+	/*if(index >= arr.length){
 	 * 
 	 *	index = 0;
-	}*/
+	*/}
 	
-	index %= imgArr.length;
+	index %= arr.length;
 	```
 
 
 - **一元运算符, 只需要一个操作数**
-		+ 正号
-			- 正号不会对数字产生任何影响
-		- 负号
-			- 负号可以对数字进行负号的取反
+	+ 正号
+		- 正号不会对数字产生任何影响
+	- 负号
+		- 负号可以对数字进行负号的取反
 
-		- 对于非Number类型的值, 
-			它会将先转换为Number, 然后再运算
-			可以对一个其他的数据类型使用+, 来将其转换为number
-			它的原理和Number()函数一样
+	- 对于非Number类型的值, 
+		它会将先转换为Number, 然后再运算
+		可以对一个其他的数据类型使用+, 来将其转换为number
+		它的原理和Number()函数一样
 
 - **逻辑运算符**
 	- JS中为我们提供了三种逻辑运算符
