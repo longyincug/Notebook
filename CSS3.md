@@ -162,7 +162,7 @@ div {
 语法: `border-image: source slice width outset repeat`
 
 
-**不兼容IE。**
+**不兼容IE！**
 
 
 **border-image-source**: 指定要使用的图像，而不是由`border-style`属性设置的边框样式。

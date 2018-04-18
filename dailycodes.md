@@ -37,6 +37,7 @@
 33. [每天一道面试题: 33](#33)
 34. [每天一道面试题: 34](#34)
 35. [每天一道面试题: 35](#35)
+36. [每天一道面试题: 36](#36)
 
 
 
@@ -4155,12 +4156,46 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 
 
 
+## 每天一道面试题: 36
+
+### CSS3有哪些新特性？
+
+
+**答案:**
+
+1. 实现了圆角(border-radius)、阴影(box-shadow)
+2. 文字特效(text-shadow)、渐变(gradient)、动画(transition)
+3. 旋转(transform)、缩放(scale)、定位(translate)、倾斜(skew)
+4. 增加了更多的CSS选择器，以及多背景、rgba
+5. 引入了伪元素 `::selection`
+6. 媒体查询、多栏布局
+7. border-image
+
+
+***
+
+
+### CSS实现：一个矩形内容，有投影，有圆角，hover状态慢慢变透明
+
+
+**答案:**
+
+```
+div {width: 200px;height: 100px;border-radius: 10px;box-shadow: 10px 10px 5px #888888; background-color: green;transition: 0.7s; }  
+div:hover {opacity: 0;}
+   
+```
+
+
+
+***
+
+
+
+<a name="37">
+
+
 ## 
-
-
-
-
-
 
 
 
