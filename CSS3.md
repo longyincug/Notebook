@@ -23,6 +23,7 @@
 	- [CSS3线性渐变](#3f)
 	- [CSS3径向渐变](#3g)
 	- [低版本IE的渐变](#3h)
+	- [彩虹和方格案例](#3i)
 
 4. [CSS3转换](#4)
 
@@ -582,9 +583,40 @@ div.iegradent {
 ***
 
 
+<a name="3i">
+
+### 两个小案例
+
+彩虹棒棒糖:
+```
+height: 500px;
+width: 500px;
+background-image: -webkit-repeating-radial-gradient(red 0%, orange 5%, yellow 10%, green 15%, blue 20%, indigo 25%, violet 30%);
+background-image:    -moz-repeating-radial-gradient(red 0%, orange 5%, yellow 10%, green 15%, blue 20%, indigo 25%, violet 30%);
+background-image:      -o-repeating-radial-gradient(red 0%, orange 5%, yellow 10%, green 15%, blue 20%, indigo 25%, violet 30%);
+background-image:         repeating-radial-gradient(red 0%, orange 5%, yellow 10%, green 15%, blue 20%, indigo 25%, violet 30%);
+```
+
+![彩虹](./images/rainbow.png)
 
 
 
+方格图案纸:
+
+![方格code](./images/square-code.png)
+
+![方格图案](./images/square.png)
+
+
+
+***
+
+
+
+<a name="4">
+
+
+##
 
 
 
