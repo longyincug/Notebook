@@ -38,6 +38,7 @@
 34. [每天一道面试题: 34](#34)
 35. [每天一道面试题: 35](#35)
 36. [每天一道面试题: 36](#36)
+37. [每天一道面试题: 37](#37)
 
 
 
@@ -3392,6 +3393,8 @@ em: 斜体强调标签，表示内容的强调点。
 - 防止不必要的安全问题
 
 
+***
+
 
 ### 简述一下 src 与 href 的区别
 
@@ -3466,7 +3469,9 @@ HTML 标签语义化，简单来说，就是让标签有含义，给某块内容
 
 基本的：设置display为none，设置visibility为hidden。
 
-技巧性：设置宽高为0，设置透明度为0，设置z-index位置为-1000，隐藏文字可以设置text-indent为-9999px。
+技巧性：设置宽高为0; 设置透明度为0;
+可以设置absolute，然后left为-9999px;
+隐藏文字可以设置text-indent为-9999px。
 
 
 ***
@@ -4165,7 +4170,7 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 
 1. 实现了圆角(border-radius)、阴影(box-shadow)
 2. 文字特效(text-shadow)、渐变(gradient)、动画(transition)
-3. 旋转(transform)、缩放(scale)、定位(translate)、倾斜(skew)
+3. 变形(transform)
 4. 增加了更多的CSS选择器，以及多背景、rgba
 5. 引入了伪元素 `::selection`
 6. 媒体查询、多栏布局
@@ -4187,6 +4192,83 @@ div:hover {opacity: 0;}
 ```
 
 
+***
+
+
+### 用CSS写一个简单的幻灯片
+
+
+**答案:**
+
+
+方法一: 使用`display`和`checked`
+```
+<style>
+    img {
+      display: none;
+      width: 100px;
+      height: 100px;
+    }
+ 
+    input:checked + img {
+      display: block;
+    }
+ 
+    input {
+      position: absolute;
+      left: -9999px;
+    }
+ 
+    label {
+      cursor: pointer;
+    }
+</style>
+
+<div>
+	<input id="img1" name="img" type="radio" checked="checked">
+	<img src="a.png">
+	<input id="img2" name="img" type="radio">
+	<img src="b.png">
+</div>
+<div id="nav">
+	<label for="img1">第一张</label>
+	<label for="img2">第二张</label>
+</div>
+```
+
+
+方法二: 使用`z-index`和`target`
+```
+#cont {
+	position: relative;
+	height: 100px;
+}
+img {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	z-index: 1;
+}
+img:first-child,
+img:target {
+	z-index: 2;
+}
+
+<div id="cont">
+	<img id="img1" src="a.jpg">
+	<img id="img2" src="b.jpg">
+</div>
+<div>
+	<a href="#img1">one</a>
+	<a href="#img2">two</a>
+</div>
+```
+
+
+方法三: 还可以利用CSS3的动画效果实现
+
+
+
 
 ***
 
@@ -4195,7 +4277,112 @@ div:hover {opacity: 0;}
 <a name="37">
 
 
+## 每天一道面试题: 37
+
+
+### 一个页面从输入URL到页面加载显示完成，发生了什么？
+
+
+**答案:**
+
+
+以访问百度为例。
+
+1. 先解析出baidu.com对应的ip地址
+	1. 先知道默认网关的mac
+		1. 使用arp获取默认网关的mac地址
+	2. 组织数据 发送给默认网关（ip还是dns服务器的ip，但是mac地址是默认网关的mac地址）
+	3. 默认网关拥有转发数据的能力，把数据转发给路由器
+	4. 路由器根据自己的路由协议，来选择一个合适的较快的路径，转发数据给目的网关。
+	5. 目的网关（dns服务器所在网关）把数据转发给dns服务器
+	6. dns服务器查询解析出baidu.com对应的ip地址，并把它原路返回给请求这个域名的client
+2. 得到了baidu.com对应的ip地址之后，会发送tcp的3次握手，进行连接
+3. 使用http协议发送请求数据给web服务器
+4. web服务器收到数据之后，通过查询自己的服务器得到相应的结果，原路返回给浏览器
+5. 浏览器接收到数据后，通过浏览器自己的渲染功能来显示这个网页
+6. 浏览器关闭tcp链接，即4次挥手
+
+
+
+
+***
+
+
+### HTTP 协议中 ， header信息里面，怎么控制页面失效时间（last-modified,cache-control,Expires 分别代表什么）
+
+
+**答案:**
+
+`Expires`、`Cache-Control`、`Last-Modified`、`ETag`都是在http response的返回header中用来控制浏览器客户端缓存行为的。
+
+
+1. 当某一个web资源被访问后，会被浏览器缓存，在以后对相同资源再次访问的时候浏览器会检查缓存是否过期。
+
+	- `Expires`在HTTP/1.0中已经定义，`Cache-Control:max-age=xxx`在HTTP/1.1中才有定义，为了向下兼容，仅使用max-age不够。
+	
+		- `Expires`指定的值为日期，在指定的日期到达之前再次访问则认为缓存有效。
+		- `max-age`指定的值为多少秒，距第一次访问多少秒后再次访问则认为缓存有效。
+		- 这些时候是不会发生网络请求的。
+	
+	- `Last-Modified` 的值为一个日期，是资源最近一次修改的时间。
+
+	- `ETag` 的值为服务器对请求的资源的内容按照hash算法计算的一个值，当内容发生改变的时候，这个值会相应的改变。
+
+
+2. `Expires`和`Cache-Control`控制浏览器是否做缓存，如果缓存，缓存的有效期为多久。
+
+	- `Expires`值为-1和0不缓存。
+	
+	- `Cache-Control`的值为`no-cache`时不缓存。
+	
+	- `Last-Modified`和`ETag`是**在缓存过期后到服务器做验证的时候的比较值**。`Last-Modified`只能精确到秒级别，如果要到毫秒级别，就要用`ETag`。
+
+
+3. 当缓存过期后，浏览器会向服务器发送请求。
+
+	这时候request header会带上`If-Modified-Since`和`If-None-Match`参数。
+	
+	- `If-Modified-Since`的值为缓存中最初收到的`Last-Modified`的值。
+	- `If-None-Match`的值为缓存中最初收到的`ETag`的值。
+	
+	如果最初的返回中没有`Last-Modified`和`ETag`的值则不会带上这个请求参数。
+
+	服务器收到后会“验证”，如果相同则返回一个`304 Not Modified`响应，不会将内容再传一次，节省了带宽。
+
+	场景：
+	- 访问的时间在`Expires`日期之后或者`max-age`指定的时间之后
+	- 用户按F5刷新
+
+
+还有一种情况是用户按`CTRL+F5`, 这时候浏览器会在请求头中带上
+`Pragma`参数，值为`no-cache`,同时在request header中去掉`If-Modified-Since`和`If-None-Match`。
+服务器收到请求后会将内容重新传给浏览器，不管内容是否变化，就像是浏览器第一次请求一样。
+响应码是`200 ok`。
+
+
+
+***
+
+
+
+
+
+<a name="38">
+
+
+
 ## 
+
+
+
+
+
+
+
+
+
+
+
 
 
 

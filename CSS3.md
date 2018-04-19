@@ -162,7 +162,7 @@ div {
 语法: `border-image: source slice width outset repeat`
 
 
-**不兼容IE！**
+**不兼容IE！目前使用得并不广泛**
 
 
 **border-image-source**: 指定要使用的图像，而不是由`border-style`属性设置的边框样式。
@@ -188,6 +188,11 @@ div {
 **border-image-repeat**: 用于图像边界是否应重复(repeated)、拉伸(stretched)、或铺满(rounded)。
 
 语法: `border-image-repeat: stretch|repeat|round|initial|inherit;`
+
+
+
+
+***
 
 
 
