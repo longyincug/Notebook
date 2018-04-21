@@ -39,6 +39,7 @@
 35. [每天一道面试题: 35](#35)
 36. [每天一道面试题: 36](#36)
 37. [每天一道面试题: 37](#37)
+38. [每天一道面试题: 38](#38)
 
 
 
@@ -4371,15 +4372,96 @@ img:target {
 
 
 
+## 每天一道面试题: 38
+
+
+### 实现一个函数clone，可以对JS中的5种主要的数据类型(包括Number、String、Object、Array、Boolean)进行值复制
+
+
+**答案:**
+
+```
+Object.prototype.clone = function(){
+	var o = this.constructor === Array ? []:{};
+	for(var i in this){
+		o[i] = typeof this[i] === "object" ? this[i].clone() : this[i];
+	}
+	return o;
+};
+```
+
+
+**实现对象深拷贝的函数:**
+
+```
+function deepCopy(p, o){
+	var o = o || {};
+	for(var i in p){
+		if(p.hasOwnProperty(i)){
+			if(typeof p[i] == "object"){
+				o[i] = Array.isArray(p[i]) ? [] : {};
+				deepCopy(p[i], o[i]);
+			} else {
+				o[i] = p[i];
+			}
+		}
+	}
+	return o;
+}
+```
+
+
+***
+
+
+### 小贤是一条可爱的小狗(Dog)，它的叫声很好听(wow)，每次看到主人的时候就会乖乖叫一声(yelp)。从这段描述可以得到以下对象：
+
+```
+function Dog() {
+	this.wow = function() {
+		alert('Wow');
+	}
+	this.yelp = function() {
+		this.wow();
+	}
+}
+```
+小芒和小贤一样，原来也是一条可爱的小狗，可是突然有一天疯了(MadDog)，一看到人就会
+每隔半秒叫一声(wow)地不停叫唤(yelp)。请根据描述，按示例的形式用代码来实现。（继承，
+原型，setInterval）
+
+
+**答案:**
+
+```
+function MadDog(){
+	this.yelp = function(){
+		var self = this;
+		setInterval(function(){
+			self.wow();
+		}, 500);
+	};
+}
+
+MadDog.prototype = new Dog();
+
+// for test
+var dog = new Dog();
+dog.yelp();
+var madDog = new MadDog();
+madDog.yelp();
+```
+
+
+***
+
+
+
+<a name="39">
+
+
+
 ## 
-
-
-
-
-
-
-
-
 
 
 
