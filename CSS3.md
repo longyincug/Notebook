@@ -36,6 +36,13 @@
 
 5. [CSS3过渡](#5)
 
+	- [transition-property](#5a)
+	- [transition-duration](#5b)
+	- [transition-timing-function](#5c)
+	- [transition-delay](#5d)
+	- [简写属性](#5e)
+
+
 6. [CSS3动画](#6)
 
 7. [CSS3图片切换特效](#7)
@@ -642,6 +649,29 @@ background-image:         repeating-radial-gradient(red 0%, orange 5%, yellow 10
 兼容性: IE12+，较低版本浏览器需要加前缀
 
 
+总览:
+
+2D转换属性:
+
+[转换属性](./images/转换属性.png)
+
+2D Transform 方法:
+
+[Transform](./images/Transform.png)
+
+
+3D转换属性:
+
+[转换属性1](./images/转换属性1.png)
+[转换属性2](./images/转换属性2.png)
+
+
+3D Transform 方法:
+
+[3dTransform](./images/3dTransform.png)
+
+
+
 ***
 
 <a name="4b">
@@ -781,6 +811,7 @@ x、y表示转换元素的坐标，那么目标矩阵:
 
 
 
+
 ***
 
 
@@ -791,17 +822,77 @@ x、y表示转换元素的坐标，那么目标矩阵:
 ## CSS3过渡
 
 
+过渡属性: 
+
+[transition](./images/过渡属性.png)
+
+允许css的属性值在一定的时间区间内平滑地过渡，在鼠标单击、获得焦点、被点击或对元素任何改变中触发，并圆滑地以动画效果改变CSS的属性值。
+
+兼容性: IE10+，为了兼容性，加上前缀。
 
 
 
+<a name="5a">
+
+### `transition-property`
+
+`transition-property: none | all | property;`
+
+- none, 没有属性值改变
+- all, 所有属性改变（默认为all值）
+- property, 指定某个属性改变
 
 
 
+<a name="5b">
+
+### `transition-duration`
+
+`transition-duration: time;`
+
+规定完成过渡效果需要花费的时间(以秒或毫秒计)，默认值为0
 
 
 
+<a name="5c">
+
+### `transition-timing-function`
+
+检索或设置对象中过渡的动画类型，`ease | linear | ease-in | ease-out...`
+
+只能使用一个属性值。
+
+- `linear`: 线性过渡
+- `ease`: 平滑过渡
+- `ease-in`: 由慢到快
+- `ease-out`: 由快到慢
+- `ease-in-out`: 由慢到快再到慢，推荐使用该属性，最平滑的过渡效果。
 
 
+
+<a name="5d">
+
+### `transition-delay`
+
+检索或设置对象延迟过渡的时间。
+
+`transition-delay: time;`
+
+指定秒或毫秒数，默认值为0
+
+
+
+<a name="5e">
+
+### 简写属性
+
+`transition: property duration timing-function delay;`
+
+顺序不能乱。
+
+如 设置顺时针旋转180度，1秒延迟，2秒平滑过渡:
+
+`transform: rotate(180deg); transition: transform 2s ease-in-out 1s;`
 
 
 
