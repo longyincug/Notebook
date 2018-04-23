@@ -40,6 +40,7 @@
 36. [每天一道面试题: 36](#36)
 37. [每天一道面试题: 37](#37)
 38. [每天一道面试题: 38](#38)
+39. [每天一道面试题: 39](#39)
 
 
 
@@ -4216,7 +4217,7 @@ div:hover {opacity: 0;}
     }
  
     input {
-      position: absolute;
+      position: absolute; // 当然也可以display:none
       left: -9999px;
     }
  
@@ -4461,7 +4462,82 @@ madDog.yelp();
 
 
 
+## 每天一道面试题: 39
+
+
+### 如何用原生js实现jq的ready方法？
+
+
+**答案:**
+
+```
+function ready(fn){
+	if(document.addEventListener) {
+		document.addEventListener("DOMContentLoaded", function(){
+			document.removeEventListener("DOMContentLoaded", arguments.callee, false); // 注销事件，避免反复触发
+			fn(); // 执行函数
+		}, false);
+	} else if(document.attachEvent) {
+		document.attachEvent('onreadystatechange', function(){
+			if(document.readyState == "complete") {
+				document.detachEvent('onreadystatechange', arguments.callee);
+				fn(); // 函数执行
+			}
+		});
+	}
+}
+```
+
+
+***
+
+
+### 说出以下函数的作用是？空白区域应该填写什么？
+
+```
+//define
+(function(window){
+	function fn(str){
+		this.str=str;
+	}
+	fn.prototype.format = function(){
+		var arg = ____;
+		return this.str.replace(____,function(a,b){
+			return arg[b]||"";
+		});
+	}
+	window.fn = fn;
+	})(window);
+
+//use
+(function(){
+	var t = new fn('<p><a href="{0}">{1}</a><span>{2}</span></p>');
+	console.log(t.format('http://www.alibaba.com','Alibaba','Welcome'));
+})();
+```
+
+
+**答案:**
+
+该函数的作用是使用format函数，用函数的参数替换掉{0}这样的内容，返回一个格式化后的结果。
+
+第一个空是arguments，第二个空是`/\{(\d+)\}/ig`
+
+
+***
+
+
+
+<a name="40">
+
+
+
 ## 
+
+
+
+
+
 
 
 

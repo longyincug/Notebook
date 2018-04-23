@@ -27,6 +27,13 @@
 
 4. [CSS3转换](#4)
 
+	- [Transform](#4a)
+	- [2D转换](#4b)
+	- [3D转换](#4c)
+	- [Transform与坐标系统](#4d)
+	- [矩阵](#4e)
+	- [扩展属性](#4f)
+
 5. [CSS3过渡](#5)
 
 6. [CSS3动画](#6)
@@ -93,6 +100,8 @@ IE8基本支持所有CSS2选择器。
 
 
 语法: `border-radius: 1-4 length|% / 1-4 length|%`
+
+`border-radius: 100px/50px` : 一个椭圆
 
 **兼容IE9+。**
 
@@ -616,7 +625,174 @@ background-image:         repeating-radial-gradient(red 0%, orange 5%, yellow 10
 <a name="4">
 
 
-##
+## CSS3转换
+
+
+<a name="4a">
+
+
+### Transform 
+
+让元素在一个坐标系统中变形。这个属性包含一系列变形函数，可以移动、旋转和缩放元素。
+
+语法: `transform: none | <transform-function> [<transform-function>]*;`
+
+默认值: `transform: none;`
+
+兼容性: IE12+，较低版本浏览器需要加前缀
+
+
+***
+
+<a name="4b">
+
+
+### 2D转换
+
+- `rotate()` 旋转
+	- `transform: rotate(<angle>);`
+	- angle指旋转角度，正数顺时针旋转，负数逆时针旋转。
+
+- `translate()`平移
+	- `translateX(x)` 仅水平方向移动
+	- `translateY(y)` 仅垂直方向移动
+	- `translate(x, y)` 水平方向和垂直方向同时移动，第二个参数可以省略，默认为0。
+	- 单位可以是px/em/rem/%... 单位为%时，是相对于自身的宽高来计算的。
+
+- `scale()` 缩放
+	- 不需要单位
+	- `scaleX()` 水平方向矢量缩放，坐标原点在中心处
+	- `scaleY()` 垂直方向矢量缩放，坐标原点在中心处
+	- `scale()` 同时缩放，`scale(0.5)`，如果第二个参数省略，默认和第一个参数一致，保证等比例缩放，不变形。
+
+- `skew()` 扭曲或斜切
+	- `skewX()` 元素在水平方向扭曲变形，比如长方形变成平行四边形。注意`skewX`和`rotate`的参数deg相反，**当deg为正数时逆时针，负数时顺时针**
+	- `skewY()` 垂直方向扭曲变形，而在Y轴上，deg为**正数时顺时针，负数时逆时针**。
+	- `skew()` 同时扭曲，`skew(45deg)`如果第二个参数省略，默认为0。
+	- 单位是角度`deg`，有效范围是-90deg~90deg，0deg和180deg一样。
+
+
+- `matrix()` 矩阵或混合
+
+	- 以一个含六值的(a,b,c,d,e,f)变换矩阵的形式指定一个2D变换。
+	- 相当于直接应用一个[a,b,c,d,e,f]变换矩阵。
+
+	语法: `transform: matrix(a,c,b,d,tx,ty)` tx、ty就是基于X和Y坐标重新定位元素。
+
+
+***
+
+
+<a name="4c">
+
+
+### 3D转换
+
+- `rotate3d()`
+	- `rotateX()`在X轴上的旋转角度
+	- `rotateY()`在Y轴上的旋转角度
+	- `rotateZ()`在Z轴上的旋转角度
+	- `rotate3d(x, y, z, angle);` 参数不允许省略 
+
+- `translate3d()`
+	- `transform: translate3d(x,y,z);`
+	- 指定对象的3d位移
+
+- `scale3d()`
+	- `transform: scale3d(x,y,z);`
+	- 指定对象的3d缩放
+
+
+- `matrix3d()`
+	- 以一个4x4矩阵的形式指定一个3d变换
+
+
+
+***
+
+
+<a name="4d">
+
+
+### Transform与坐标系统
+
+`transform-origin`属性，允许更改转换元素的位置。
+
+`transform-origin: x-axis y-axis z-axis;`
+
+默认50%
+
+
+***
+
+
+<a name="4e">
+
+
+### 矩阵
+
+
+`transform: matrix(a, c, b, d, tx, ty);`
+
+x、y表示转换元素的坐标，那么目标矩阵:
+- `ax+cy+e`为变换后的水平坐标。
+- `bx+dy+f`为变换后的垂直坐标。
+
+例如: `transform: matrix(1,0,0,1,30,30)`
+
+根据这个矩阵偏移元素的中心点，假设是(0,0)，即x=0，y=0，变换后, 
+`x=ax+cy+e=1*0+0*0+30=30`、`y=bx+dy+f=0*0+0*1+30=30`，于是，整个元素的中心点从(0,0)变成了(30,30)，
+整个元素发生了平移，等同于`transform: translate(x,y);`
+
+注意: matrix在FF浏览器下需要添加单位，webkit内核默认px，translate等方法需要加单位。
+
+矩阵缩放:
+- `matrix(sx, 0, 0, sy, 0, 0)`——`scale(sx, sy)`
+
+矩阵旋转:
+- `matrix(cosα, sinα, -sinα, cosα, 0, 0)`——`rotate(αdeg)`
+
+矩阵拉伸:
+- `matrix(1, tanαy, tanαx, 1, 0, 0)`——`skew(αxdeg, αydeg)`
+
+
+
+***
+
+
+<a name="4f">
+
+
+### 扩展属性
+
+- `transform-style: flat|preserve-3d;`
+	- 指定嵌套元素怎样在三维空间中呈现
+
+- `perspective: number|none;` 
+	- 指定观察者与z=0平面的距离，使元素产生透视效果
+	
+
+- `perspective-origin: x-axis y-axis`
+	- 指定透视点的位置
+	- 默认为50%
+
+- `backface-visibility: visible|hidden;`
+	- 指定元素背向用户时是否可见
+
+
+
+***
+
+
+
+<a name="5">
+
+
+## CSS3过渡
+
+
+
+
 
 
 
