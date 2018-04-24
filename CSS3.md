@@ -45,6 +45,11 @@
 
 6. [CSS3动画](#6)
 
+	- [animation](#6a)
+	- [@keyframes](#6b)
+	- [will-change](#6c)
+
+
 7. [CSS3图片切换特效](#7)
 
 
@@ -796,7 +801,7 @@ x、y表示转换元素的坐标，那么目标矩阵:
 ### 扩展属性
 
 - `transform-style: flat|preserve-3d;`
-	- 指定嵌套元素怎样在三维空间中呈现
+	- 指定嵌套的子元素怎样在三维空间中呈现，默认值为flat，子元素将不保留其 3D 位置。
 
 - `perspective: number|none;` 
 	- 指定观察者与z=0平面的距离，使元素产生透视效果
@@ -892,7 +897,58 @@ x、y表示转换元素的坐标，那么目标矩阵:
 
 如 设置顺时针旋转180度，1秒延迟，2秒平滑过渡:
 
-`transform: rotate(180deg); transition: transform 2s ease-in-out 1s;`
+```
+transform: rotate(180deg);
+transition: transform 2s ease-in-out 1s;
+```
+
+
+
+***
+
+
+
+<a name="6">
+
+
+## CSS3动画
+
+
+
+<a name="6a">
+
+### animation
+
+检索或设置对象所应用的动画特效。
+
+`animation: name duration timing-function delay iteration-count direction fill-mode play-state;`
+
+
+<a name="6b">
+
+
+### `@keyframes`
+
+
+
+<a name="6c">
+
+
+### `will-change`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
