@@ -50,9 +50,6 @@
 	- [will-change](#6c)
 
 
-7. [CSS3图片切换特效](#7)
-
-
 
 
 ***
@@ -923,12 +920,67 @@ transition: transform 2s ease-in-out 1s;
 
 `animation: name duration timing-function delay iteration-count direction fill-mode play-state;`
 
+如果写了两个时间的值，位置即使不对应，第一个值会被设为`duration`，第二个值被设为`delay`。
+
+兼容性: IE10+、Android(-webkit-)
+
+
+***
+
 
 <a name="6b">
 
 
 ### `@keyframes`
 
+关键帧，可以指定任何顺序排列来决定animation动画变化的关键位置。
+
+通过`@keyframes`规则创建动画，通过逐步改变从一个CSS样式设定到另一个。
+
+在动画过程中可以通过`@keyframes`规则多次更改CSS样式的设定。
+
+语法:
+```
+@keyframes animationname {
+	keyframes-selector {
+		css-styles;
+	}
+}
+```
+
+参数说明:
+
+`animationname`: 必写项，定义animation的名称。
+`keyframes-selector`: 必写项，动画持续时间的百分比，0-100%、from(0%)、to(100%)。
+`css-styles`: 必写项，一个或多个合法的css样式属性。
+
+如: 给`div`设置`circle_inner`的动画效果:
+```
+div {
+	background-image: url(image.png);
+	-webkit-animation: circle_inner linear 10s infinite;
+			animation: circle_inner linear 10s infinite;
+}
+
+// 创建指定规则的动画
+@-webkit-keyframes circle_inner {
+	0%   {transform: rotateX(0deg);}
+	25%  {transform: rotateX(45deg);}
+	75%  {transform: rotateX(315deg);}
+	100% {transform: rotateX(360deg);}
+}
+
+@keyframes circle_inner {
+	0%   {transform: rotateX(0deg);}
+	25%  {transform: rotateX(45deg);}
+	75%  {transform: rotateX(315deg);}
+	100% {transform: rotateX(360deg);}
+}
+```
+
+
+
+***
 
 
 <a name="6c">
@@ -937,14 +989,26 @@ transition: transform 2s ease-in-out 1s;
 ### `will-change`
 
 
+目标: 增强页面渲染功能。
+
+
+提前通知浏览器元素将要做什么动画，让浏览器提前准备合适的优化设置。
+
+
+`will-change: auto | scroll-position | contents | <custom-ident> | <animateable-feature>;`
+
+`scroll-position: 表示将要改变元素的滚动位置`
+`contents: 表示将要改变元素的内容`
+`<custom-ident>: 明确指定将要改变的属性与给定的名称`（较常用）
+`<animateable-feature>: 可动画的一些特征值，比如left、top、margin等`
+
+兼容性: IE13+、IOS9.3+、Android52+、为了兼容需要加上前缀-webkit-、-moz-
+
+使用注意: 不要滥用、提前声明、remove
 
 
 
-
-
-
-
-
+***
 
 
 
