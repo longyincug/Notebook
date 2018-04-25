@@ -41,6 +41,7 @@
 37. [每天一道面试题: 37](#37)
 38. [每天一道面试题: 38](#38)
 39. [每天一道面试题: 39](#39)
+40. [每天一道面试题: 40](#40)
 
 
 
@@ -4171,12 +4172,10 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 **答案:**
 
 1. 实现了圆角(border-radius)、阴影(box-shadow)
-2. 文字特效(text-shadow)、渐变(gradient)、动画(transition)
-3. 变形(transform)
+2. 文字特效(text-shadow)、渐变(gradient)
+3. 变形(transform)、过渡(transition)和动画(animation)
 4. 增加了更多的CSS选择器，以及多背景、rgba
-5. 引入了伪元素 `::selection`
-6. 媒体查询、多栏布局
-7. border-image
+5. 媒体查询、多栏布局
 
 
 ***
@@ -4269,6 +4268,28 @@ img:target {
 
 方法三: 还可以利用CSS3的动画效果实现
 
+```
+.items {
+	-webkit-animation: slider 15s linear infinite alternate;
+	animation: slider 15s linear infinite alternate;
+}
+
+@-webkit-keyframes slider {
+	0% {background-image: url(1.jpg);}
+	25% {background-image: url(2.jpg);}
+	50% {background-image: url(3.jpg);}
+	75% {background-image: url(4.jpg);}
+	100% {background-image: url(5.jpg);}
+}
+
+@keyframes slider {
+	0% {background-image: url(1.jpg);}
+	25% {background-image: url(2.jpg);}
+	50% {background-image: url(3.jpg);}
+	75% {background-image: url(4.jpg);}
+	100% {background-image: url(5.jpg);}
+}
+```
 
 
 
@@ -4532,7 +4553,77 @@ function ready(fn){
 
 
 
-## 
+## 每天一道面试题: 40
+
+
+### AMD和CMD规范区别？
+
+
+**答案:**
+
+
+理解这两种规范的差异，主要通过`requirejs`与`seajs`两个模块加载器的对比，理解模块的定义与引用方式的差异及这两种规范的设计原则。
+
+AMD 是 RequireJS 在推广过程中对模块定义的规范化产出。
+
+CMD 是 SeaJS 在推广过程中对模块定义的规范化产出。
+
+类似的还有 CommonJS Modules/2.0 规范，是 BravoJS 在推广过程中对模块定义的规范化产出。还有不少⋯⋯
+
+这些规范的目的都是为了 JavaScript 的模块化开发，特别是在浏览器端的。目前这些规范的实现都能达成**浏览器端模块化开发**的目的。
+
+
+区别：
+1. 对于依赖的模块，AMD 是**提前执行**，CMD 是**延迟执行**。
+	不过 RequireJS 从 2.0 开始，也改成可以延迟执行（根据写法不同，处理方式不同）。CMD 推崇 as lazy as possible.
+
+2. CMD 推崇**依赖就近**，AMD 推崇**依赖前置**。
+
+	看代码：
+	
+	```
+	// CMD
+	define(function(require, exports, module) {  
+		var a = require('./a')   
+		a.doSomething()   
+		// 此处略去 100 行   
+		var b = require('./b') // 依赖可以就近书写
+		b.doSomething()   
+		// ... 
+	})
+	
+	// AMD 默认推荐的是
+	
+	define(['./a', './b'], function(a, b) {  
+		// 依赖必须一开始就写好    
+		a.doSomething()    
+		// 此处略去 100 行
+		b.doSomething()
+	    ...
+	})
+	```
+
+	但AMD也支持CMD的写法，还支持将require作为依赖项传递。
+
+
+使用模块载入框架（require.js/sea.js）带来的好处:
+1. 通过exports暴露接口，这意味着不需要命名空间了，也不需要全局变量，这是一种彻底的命名冲突解决方案。
+2. 通过require引入依赖，这可以让依赖内置，开发者只需关心当前模块的依赖，其他事情在框架内部都会自动处理好。
+
+
+关于模块化，详细请看: [前端模块化和AMD、CMD](https://blog.csdn.net/jackwen110200/article/details/52105493)
+
+
+
+***
+
+
+<a name="41">
+
+
+
+
+
 
 
 
