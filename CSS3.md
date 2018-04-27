@@ -950,9 +950,11 @@ transition: transform 2s ease-in-out 1s;
 
 参数说明:
 
-`animationname`: 必写项，定义animation的名称。
-`keyframes-selector`: 必写项，动画持续时间的百分比，0-100%、from(0%)、to(100%)。
-`css-styles`: 必写项，一个或多个合法的css样式属性。
+- `animationname`: 必写项，定义animation的名称。
+
+- `keyframes-selector`: 必写项，动画持续时间的百分比，0-100%、from(0%)、to(100%)。
+
+- `css-styles`: 必写项，一个或多个合法的css样式属性。
 
 如: 给`div`设置`circle_inner`的动画效果:
 ```
@@ -998,10 +1000,13 @@ div {
 
 `will-change: auto | scroll-position | contents | <custom-ident> | <animateable-feature>;`
 
-`scroll-position: 表示将要改变元素的滚动位置`
-`contents: 表示将要改变元素的内容`
-`<custom-ident>: 明确指定将要改变的属性与给定的名称`（较常用）
-`<animateable-feature>: 可动画的一些特征值，比如left、top、margin等`
+- `scroll-position: 表示将要改变元素的滚动位置`
+
+- `contents: 表示将要改变元素的内容`
+
+- `<custom-ident>: 明确指定将要改变的属性与给定的名称`（较常用）
+
+- `<animateable-feature>: 可动画的一些特征值，比如left、top、margin等`
 
 兼容性: IE13+、IOS9.3+、Android52+、为了兼容需要加上前缀-webkit-、-moz-
 
