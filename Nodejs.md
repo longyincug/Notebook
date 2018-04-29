@@ -392,10 +392,10 @@ window.onload = function(){
 
 ![reg1](./nodejs/images/reg1.png)
 
-因为初始时用户数据表为空，所以注册成功。
+因为初始时用户数据表为空，所以注册成功。而当再次点击时:
 
-当再次点击时:
 ![reg2](./nodejs/images/reg2.png)
+
 
 测试登录也运行正常:
 
@@ -406,7 +406,7 @@ window.onload = function(){
 ![log3](./nodejs/images/log3.png)
 
 
-因为是ajax交互，所以整个过程url不会变化。
+由于是ajax交互，所以整个过程url不会变化。
 
 
 
