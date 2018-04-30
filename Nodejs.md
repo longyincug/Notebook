@@ -33,6 +33,7 @@
 	- [jade](#5a)
 		- [jade语法](#5aa)
 		- [jade添加内容](#5ab)
+		- [demo](#5ac)
 	- [ejs](#5b)
 
 
@@ -996,10 +997,75 @@ html
 	```
 
 
+***
+
+
+<a name="5ac">
+
+
+#### demo
+
+通过一个demo来了解jade的用法:
+
+**demo.jade:**
+
+```
+doctype
+html
+    head
+        meta(charset='utf-8')
+        title jade测试页面
+        style.
+            div {
+                width:100px;
+                height: 100px;
+                background: red;
+                float: left;
+                margin: 10px;
+                text-align: center;
+                line-height: 100px;
+            }
+            div.last {clear:both}
+    body
+        - var a=0
+        while a < 12
+            if a%4===0 && a!==0
+                div.last #{a++}
+            else
+                div=a++
+```
+
+
+**jade.js:**
+
+```
+const jade = require('jade');
+const fs = require('fs');
+
+var str = jade.renderFile('./www/demo.jade', {pretty: true});
+
+fs.writeFile('./build/jade_demo.html', str, function (err) {
+    if (err){
+        console.log("写入失败");
+    } else {
+        console.log("写入成功");
+    }
+});
+```
+
+
+**jade_demo.html:**
+
+![jade](./nodejs/images/jade.png)
+
+
+**html网页效果:**
+
+![jade_html](./nodejs/images/jade_html.png)
 
 
 
-
+***
 
 
 
