@@ -36,9 +36,12 @@
 		- [demo](#5ac)
 	- [ejs](#5b)
 
-6. [Express结合模板](#6)
+6. [Express构建项目前置](#6)
 
-
+	- [文件上传](#6a)
+	- [模板引擎整合](#6b)
+	- [路由](#6c)
+	- [Nodejs连接MySQL](#6d)
 
 
 ***
@@ -563,7 +566,7 @@ server.use(static('./www'));
 
 这样我们就不要操心静态资源的路径匹配问题，只需要传入静态资源目录名，`express-static`中间件会自动进行处理，并响应给浏览器。
 
-注意中间件对象需要传递给`use()`作为参数，而不能是`get()`或`post()`。
+注意中间件对象需要传递给`use()`作为参数，而不能是`get()`或`post()`，并且也只有use才能接收路由对象作为参数。
 
 
 
@@ -1167,10 +1170,15 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 
 前面已经初步学习了Express和模板引擎的使用，下面将它们结合一起进行应用。
 
-1. 主体
-2. cookie、session
-3. 数据
-4. 模板引擎
+1.主体
+2.cookie、session
+3.数据
+4.模板引擎
+5...
+
+
+<a name="6a">
+
 
 
 ### 文件上传
@@ -1223,8 +1231,6 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const ejs = require('ejs');
-const jade = require('jade');
 
 
 var server = express();
@@ -1255,9 +1261,146 @@ server.use(expressStatic('./www'));
 ```
 
 
+***
+
+
+<a name="6b">
+
+
+
 ### 模板引擎整合
 
+接下来处理模板问题。
+
 通过一个中间件`consolidate`来整合所有的模板引擎，以便和Express进行交互。
+
+```
+// 配置模板引擎
+// 输出何种格式
+server.set('view engine', 'html');
+// 模板文件放在哪里
+server.set('views', '/views');
+// 使用哪种模板引擎
+server.engine('html', consolidate.ejs);
+
+// 渲染模板文件
+server.use(function(req, res){
+	res.render(模板文件, {数据});
+});
+```
+
+**使用示例:** [consolidate](./nodejs/consolidate_demo.js)
+
+
+
+***
+
+
+<a name="6c">
+
+
+### 路由
+
+router——路由
+
+把不同的目录对应到不同的模块。
+
+比如:
+```
+xxx.com/user —— mod_users
+xxx.com/news —— mod_news
+...
+```
+
+Router可以看做一个迷你的server，它也可以get、post、use。
+
+**操作流程:**
+
+1. 创建router
+
+	`var router = express.Router();`
+
+2. 把router添加到server
+
+	`server.use('/user', router);`
+
+3. router内部
+
+	`router.get('/1.html', function(){});`
+
+
+**使用示例:** [server_router](./nodejs/server_router.js)
+
+
+**注意: Router中还可以嵌套Router**
+
+```
+var router = express.Router();
+server.use('/user', router);
+
+var r = express.Router();
+router.use('/user_mod', r);
+```
+
+
+
+***
+
+
+<a name="6d">
+
+
+### Node.js连接MySQL
+
+
+**操作流程:**
+
+1. 电脑安装mysql(server)
+
+2. npm下载mysql模块(client)
+
+3. 连接mysql: 
+
+	`var db = mysql.createConnection(host, port, user, password, database);`
+
+4. SQL语句: 增删改查
+
+
+**使用示例:**
+
+```
+// 使用MySQL，安装后，下载Navicat来进行数据库操作
+
+// NodeJS默认不支持mysql，所以需要安装第三方模块: mysql
+
+// SQL标准写法:
+// 1. 关键字大写
+// 2. 库、表、字段都需要加上``
+
+const mysql = require('mysql');
+
+//创建连接
+var db = mysql.createConnection({host:'localhost', user:'root', password:'mysql', database:'demo01'});
+
+//查询: query(SQL, callback)
+db.query("SELECT * FROM `user_table`;", function (err, data) {
+    if(err){
+        console.log('出错了', err);
+    } else {
+        console.log('成功了', data);
+        // 可以将查询数据转成JSON传输给前台
+        console.log(JSON.stringify(data));
+    }
+});
+```
+
+
+***
+
+
+
+
+
 
 
 

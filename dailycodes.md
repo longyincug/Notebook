@@ -179,7 +179,7 @@ js内部为了保证赋值语句的正确, 会在一条赋值语句执行前, �
 
 所以这段代码  `a.x=a={n:2}; `的逻辑是：
 
-1. 在执行前, 会先将a和a.x中的a的引用地址都取出来, 此值他们都指向{n:1}
+1. 在执行前, 会先将a和a.x中的a的引用地址都取出来, 此时他们都指向{n:1}
 
 2. 在内存中创建一个新对象{n:2}
 
@@ -598,6 +598,7 @@ for (var i = 0; i < 5; i++) {
 2、参考 **IIFE**
 
 #### IIFE
+
 为什么要用立即执行函数表达式（Immediately-Invoked Function Expression）？
 
 IIFE 有两个比较经典的使用场景，一是类似于在循环中定时输出数据项，二是类似于 JQuery/Node 的插件和模块开发。
@@ -631,14 +632,16 @@ for(var i=0; i<5; i++){
 ```
 
 **另一种解法，使用bind:**
+
 ```
 for(var i = 0; i < 5; i++) {
   setTimeout(console.log.bind(console, i), i * 1000);
 }
 ```
+
 bind是和apply、call一样，是Function的扩展方法，所以应用场景是`func.bind()`，而传的参数形式和call一样，第一个参数是this指向，之后的参数是func的实参，`fun.bind(thisArg[, arg1[, arg2[, ...]]])`
 
-ps:`bind(obj, *args)`方法返回的是一个柯里化的函数，所以可以接受后面的参数作为func的实参
+ps:`bind(obj, *args)`方法返回的是一个柯里化的函数，所以可以接受后面的参数作为func的实参。
 
 关于bind详情看:[bind的用法](#9a)
 
@@ -1228,7 +1231,6 @@ console.log(ans);
 
 所以在这一题中，为了保证后面没有参数时，返回`temp`能直接打印出数值，就把`toString`和`valueOf`方法都重写了。
 
-详细解答，请参考上面：[valueOf和toString](http://www.cnblogs.com/zichi/p/4106711.html)
 
 
 ***
