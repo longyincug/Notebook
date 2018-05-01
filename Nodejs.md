@@ -36,6 +36,8 @@
 		- [demo](#5ac)
 	- [ejs](#5b)
 
+6. [Express结合模板](#6)
+
 
 
 
@@ -105,6 +107,8 @@ http.createServer(function (req, res) {
 - `fs.readFile(文件名，回调函数);`
 
 - `fs.writeFile(文件名，内容，回调函数);`
+
+- `fs.rename(旧名字, 新名字, function(err){});`
 
 ```
 fs.readFile('aaa.txt', function (err, data) {
@@ -1066,6 +1070,198 @@ fs.writeFile('./build/jade_demo.html', str, function (err) {
 
 
 ***
+
+
+
+<a name="5b">
+
+
+
+### ejs
+
+
+demo.js:
+
+```
+const ejs = require('ejs');
+
+ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
+	console.log(data);
+});
+```
+
+
+
+#### ejs语法
+
+- 传入变量
+
+	- `<%= name %>`
+	
+	- `<%= json.arr[0].user %>`
+	
+	- `<%= 12+5 %>`
+	
+
+- ejs中插入js代码
+
+	```
+	<!doctype html>
+	<html>
+	<head>
+	    <meta charset="UTF-8">
+	    <title>ejs插入js代码</title>
+	</head>
+	<body>
+	    <%
+	    var str = '<div></div>';
+	    %>
+	    <%= str %> //会将str标签转义输出
+	    <%- str %> // 不会转义，将str原样输出
+	
+		// if/else语句
+		<% if(type == 'admin'){ %>
+		<% include ./style/admin.css %> //出现了include，并不是js中的语法，所以要单独的<%%>
+		<% } else { %>
+		<% include ./style/user.css %>
+		<% } %>
+		
+	</body>
+	</html>
+	```
+
+- ejs中引入外部文件
+
+	```
+	<!doctype html>
+	<html>
+	<head>
+	    <meta charset="UTF-8">
+	    <title>ejs插入js代码</title>
+	</head>
+	<body>
+	
+	    <% for(var i=0; i<5; i++){ %>
+	    
+	    <% include a.txt %> //会循环输出5次a.txt中的内容
+	    
+	    // 注意不能往include中传入变量， 如 include css_path，否则无法找到。
+	    
+	    <% } %>
+	
+	</body>
+	</html>
+	```
+
+
+***
+
+
+
+<a name="6">
+
+
+
+## Express结合模板
+
+
+前面已经初步学习了Express和模板引擎的使用，下面将它们结合一起进行应用。
+
+1. 主体
+2. cookie、session
+3. 数据
+4. 模板引擎
+
+
+### 文件上传
+
+先填补之前留下的一个坑，`body-parser`为什么不是很好的解析post数据的模块？
+
+因为它只能解析`application/x-www-form-urlencoded`类型的数据，对于包含上传文件的`multipart/form-data`表单，
+则需要使用`multer`中间件。
+
+- `body-parser` ——解析post数据
+	- `server.use(bodyParser.urlencoded());`
+	- `req.body`获取数据
+
+- `multer` ——解析post文件
+	- `var obj = multer({dest:'upload/'});`
+	- `server.use(obj.any());`
+	- `req.files`获取文件
+
+下面通过一个例子来展现如何使用`multer`处理上传文件，如何用`path`解析出文件扩展名，如何用`fs`来重命名上传的文件。
+
+
+**upload_form.html:**
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>upload</title>
+</head>
+<body>
+<form action="http://localhost:7788/" method="post" enctype="multipart/form-data">
+    <input type="file" name="f1"><br>
+    <input type="submit" value="上传">
+</form>
+</body>
+</html>
+```
+
+**file_upload.js:**
+
+[file_upload](./nodejs/file_upload.js)
+
+
+解决了数据的处理问题后，我们可以简单的把之前学过的整合到一起:
+
+```
+const express = require('express');
+const expressStatic = require('express-static');
+const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const ejs = require('ejs');
+const jade = require('jade');
+
+
+var server = express();
+server.listen(7788);
+
+//解析cookie
+server.use(cookieParser('adasdasfadqw'));
+
+//使用session
+var arr=[];
+for(var i=0; i<10000; i++){
+    arr.push('keys_' + Math.random());
+}
+server.use(cookieSession({name: 'sess_id', keys:arr, maxAge: 20*3600*1000}));
+
+//post数据
+server.use(bodyParser.urlencoded({extended: false}));
+server.use(multer({dest:'./www/upload'}).any());
+
+//用户请求
+server.use('/', function (req, res, next) {
+    console.log(req.query, req.body, req.files, req.cookies, req.session);
+    next();
+});
+
+//static数据
+server.use(expressStatic('./www'));
+```
+
+
+### 模板引擎整合
+
+通过一个中间件`consolidate`来整合所有的模板引擎，以便和Express进行交互。
+
+
+
+
 
 
 
