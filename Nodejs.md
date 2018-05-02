@@ -8,41 +8,41 @@
 
 1. [Node.js实现第一个HTTPServer](#1)
 
-	- [http模块](#1a)
-	- [fs模块](#1b)
-	- [querystring模块](#1c)
-	- [url模块](#1d)
-	- [POST请求](#1e)
-	- [实现了用户验证的HTTPServer](#1f)
+    - [http模块](#1a)
+    - [fs模块](#1b)
+    - [querystring模块](#1c)
+    - [url模块](#1d)
+    - [POST请求](#1e)
+    - [实现了用户验证的HTTPServer](#1f)
 
 2. [Node.js模块化、包的制作发布](#2)
 
 3. [Express框架初识](#3)
-	
-	- [请求处理](#3a)
-	- [中间件](#3b)
-	- [中间件及链式操作](#3c)
+    
+    - [请求处理](#3a)
+    - [中间件](#3b)
+    - [中间件及链式操作](#3c)
 
 4. [cookie和session](#4)
-	
-	- [cookie-parser](#4a)
-	- [cookie-session](#4b)
+    
+    - [cookie-parser](#4a)
+    - [cookie-session](#4b)
 
 5. [模板引擎](#5)
 
-	- [jade](#5a)
-		- [jade语法](#5aa)
-		- [jade添加内容](#5ab)
-		- [demo](#5ac)
-	- [ejs](#5b)
+    - [jade](#5a)
+        - [jade语法](#5aa)
+        - [jade添加内容](#5ab)
+        - [demo](#5ac)
+    - [ejs](#5b)
 
 6. [Express构建项目](#6)
 
-	- [文件上传](#6a)
-	- [模板引擎整合](#6b)
-	- [路由](#6c)
-	- [Nodejs连接MySQL](#6d)
-	- [Express结合模板引擎](#6e)
+    - [文件上传](#6a)
+    - [模板引擎整合](#6b)
+    - [路由](#6c)
+    - [Nodejs连接MySQL](#6d)
+    - [Express结合模板引擎](#6e)
 
 
 ***
@@ -67,7 +67,7 @@
 const http = require('http');
 
 var server = http.createServer(function(req, res){
-	// req.url——请求的url资源地址，比如 '/index?abc=123'
+    // req.url——请求的url资源地址，比如 '/index?abc=123'
     switch (req.url){
         case '/1.html':
             res.write("11111");
@@ -90,8 +90,8 @@ server.listen(7788);
 ```
 var http = require('http');
 http.createServer(function (req, res) {
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end('Hello World\n');
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Hello World\n');
 }).listen(1337, '127.0.0.1');
 ```
 
@@ -155,8 +155,8 @@ http.createServer(function (req, res) {
     } else {
         url = req.url;
     }
-	
-	// 这样得到了资源地址url和查询参数GET
+    
+    // 这样得到了资源地址url和查询参数GET
     console.log(url, GET); 
     res.write('OK');
     res.end();
@@ -234,7 +234,7 @@ http.createServer(function (req, res) {
 
     var str = '';//接收的数据
 
-	// 可能触发两个事件: data和end
+    // 可能触发两个事件: data和end
 
     //data——有一段数据到达（很多次）
     var i = 1;
@@ -271,62 +271,62 @@ const urlLib = require('url');
 var users = {};
 
 var server = http.createServer(function(req, res){
-	// GET数据
-	var obj = urlLib.parse(req.url, true)
-	var url = obj.pathname;
-	var GET = obj.query;
-	
-	// 存储POST过来的数据
-	var str = '';
+    // GET数据
+    var obj = urlLib.parse(req.url, true)
+    var url = obj.pathname;
+    var GET = obj.query;
+    
+    // 存储POST过来的数据
+    var str = '';
 
-	req.on('data', function(data){
-		str += data;
-	});
+    req.on('data', function(data){
+        str += data;
+    });
 
-	// 数据传输完毕
-	req.on('end', function(){
-		var POST = querystring.parse(str);
-	
-		// 分别处理接口、资源文件
-		if(url === '/user'){
-			// 自定义一个处理用户身份的接口
-			switch (GET.act){
-				case 'reg':
-					// 注册
-					if(users[GET.user]){
-						res.write('{"ok":false, "msg":"用户名已存在!"}');
-					} else {
-						users[GET.user] = GET.pass;
-						res.write('{"ok":true, "msg":"注册成功!"}');
-					}
-					break;
-				case 'login':
-					//登录
-					if(!users[GET.user]){
-						res.write('{"ok":false, "msg":"该用户不存在!"}');
-					} else if(users[GET.user] != GET.pass){
-						res.write('{"ok":false, "msg":"用户名或密码错误!"}');
-					} else {
-						res.write('{"ok":true, "msg":"登录成功"}');
-					}
-					break;
-				default:
-					res.write('{"ok":false, "msg":"未知的act"}')
-			}
-			res.end();
-		} else {
-			// 读取静态资源文件
-			var file_name = './www' + url;
-			fs.readFile(file_name, function(err, data){
-				if(err){
-					res.write('404');
-				} else {
-					res.write(data);
-				}
-				res.end();
-			});
-		}
-	});
+    // 数据传输完毕
+    req.on('end', function(){
+        var POST = querystring.parse(str);
+    
+        // 分别处理接口、资源文件
+        if(url === '/user'){
+            // 自定义一个处理用户身份的接口
+            switch (GET.act){
+                case 'reg':
+                    // 注册
+                    if(users[GET.user]){
+                        res.write('{"ok":false, "msg":"用户名已存在!"}');
+                    } else {
+                        users[GET.user] = GET.pass;
+                        res.write('{"ok":true, "msg":"注册成功!"}');
+                    }
+                    break;
+                case 'login':
+                    //登录
+                    if(!users[GET.user]){
+                        res.write('{"ok":false, "msg":"该用户不存在!"}');
+                    } else if(users[GET.user] != GET.pass){
+                        res.write('{"ok":false, "msg":"用户名或密码错误!"}');
+                    } else {
+                        res.write('{"ok":true, "msg":"登录成功"}');
+                    }
+                    break;
+                default:
+                    res.write('{"ok":false, "msg":"未知的act"}')
+            }
+            res.end();
+        } else {
+            // 读取静态资源文件
+            var file_name = './www' + url;
+            fs.readFile(file_name, function(err, data){
+                if(err){
+                    res.write('404');
+                } else {
+                    res.write(data);
+                }
+                res.end();
+            });
+        }
+    });
 });
 
 server.listen(7788);
@@ -340,65 +340,65 @@ server.listen(7788);
 // user.html
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>用户注册登录</title>	
-		<script src='ajax.js'></script>
-		<script src='getAjax.js'></script>
-	</head>
-	<body>
-		用户: <input type="text" id="user"/><br/>
-		密码: <input type="password" id="pass"/><br/>
-			<input type="button" value="注册" id="reg_btn">
-			<input type="button" value="登录" id="log_btn">
-	</body>
+    <head>
+        <meta charset="utf-8">
+        <title>用户注册登录</title>    
+        <script src='ajax.js'></script>
+        <script src='getAjax.js'></script>
+    </head>
+    <body>
+        用户: <input type="text" id="user"/><br/>
+        密码: <input type="password" id="pass"/><br/>
+            <input type="button" value="注册" id="reg_btn">
+            <input type="button" value="登录" id="log_btn">
+    </body>
 </html>
 
 // getAjax.js。调用ajax.js并获取响应数据
 window.onload = function(){
-	var oTxtUser = document.getElementById('user');
-	var oTxtPass = document.getElementById('pass');
-	var oBtnReg = document.getElementById('reg_btn');
-	var oBtnLog = document.getElementById('log_btn');
-	
-	oBtnReg.onclick = function(){
-		ajax({
-			url: '/user',
-			type: 'get',
-			data: {act: "reg", user: oTxtUser.value, pass: oTxtPass.value},
-			success: function(str){
-				// 解析从后台传输过来的json响应信息
-				var json = eval('(' + str + ')');
-				if(json.ok){
-					alert("注册成功");
-				} else {
-					alert("注册失败:" + json.msg);
-				}
-			},
-			error: function(status) {
-				alert("通信错误! 错误代码:" + status);
-			}
-		});
-	};
-	
-	oBtnLog.onclick = function(){
-		ajax({
-			url: '/user',
-			type: 'get',
-			data: {act: "login", user: oTxtUser.value, pass: oTxtPass.value},
-			success: function(str){
-				var json = eval('(' + str + ')');
-				if(json.ok){
-					alert('登录成功');
-				} else {
-					alert('登录失败:' +  json.msg);
-				}
-			},
-			error: function(status){
-				alert('通信错误! 错误代码:' + status);
-			}
-		});
-	};
+    var oTxtUser = document.getElementById('user');
+    var oTxtPass = document.getElementById('pass');
+    var oBtnReg = document.getElementById('reg_btn');
+    var oBtnLog = document.getElementById('log_btn');
+    
+    oBtnReg.onclick = function(){
+        ajax({
+            url: '/user',
+            type: 'get',
+            data: {act: "reg", user: oTxtUser.value, pass: oTxtPass.value},
+            success: function(str){
+                // 解析从后台传输过来的json响应信息
+                var json = eval('(' + str + ')');
+                if(json.ok){
+                    alert("注册成功");
+                } else {
+                    alert("注册失败:" + json.msg);
+                }
+            },
+            error: function(status) {
+                alert("通信错误! 错误代码:" + status);
+            }
+        });
+    };
+    
+    oBtnLog.onclick = function(){
+        ajax({
+            url: '/user',
+            type: 'get',
+            data: {act: "login", user: oTxtUser.value, pass: oTxtPass.value},
+            success: function(str){
+                var json = eval('(' + str + ')');
+                if(json.ok){
+                    alert('登录成功');
+                } else {
+                    alert('登录失败:' +  json.msg);
+                }
+            },
+            error: function(status){
+                alert('通信错误! 错误代码:' + status);
+            }
+        });
+    };
 };
 ```
 
@@ -598,13 +598,13 @@ var server = express();
 server.listen(7788);
 
 server.use(bodyParser.urlencoded({
-	// 可以设置两个参数
-	extended: true, //扩展模式，false为普通模式
-	limit: 2*1024*1024 //对数据的大小限制，单位为1Byte
+    // 可以设置两个参数
+    extended: true, //扩展模式，false为普通模式
+    limit: 2*1024*1024 //对数据的大小限制，单位为1Byte
 })); //内部进行了链式操作，可以通过req.body来获取中间件处理后的数据
 
 server.use('/', function(req, res){
-	console.log(req.body); //POST
+    console.log(req.body); //POST
 });
 ```
 
@@ -618,14 +618,14 @@ server.use('/', function(req, res){
 ```
 // 其实每个方法还有一个next参数，这是一个函数，可以执行它来进行下一步链式操作。
 server.use(function(req, res, next){
-	var str = '';
-	req.on('data', function(data){
-		str += data;
-	});
-	req.on('end', function(){
-		req.body = querystring.parse(str);
-		next(); // 因为接收数据是异步操作，next要写在这里。
-	});
+    var str = '';
+    req.on('data', function(data){
+        str += data;
+    });
+    req.on('end', function(){
+        req.body = querystring.parse(str);
+        next(); // 因为接收数据是异步操作，next要写在这里。
+    });
 });
 ```
 
@@ -680,24 +680,24 @@ server.listen(7788);
 server.use(cookieParser()); //可以通过req.cookies访问cookie属性
 
 server.use('/', function(req, res){
-	// 给cookie添加签名，虽然不能加密，但是可以防止篡改(可以decodeURIComponent看出只是后面加了一串字符而已)
-	// 设置密钥，如果在cookieParser中传入了密钥，这里就会自动设置，并且可以用signedCookies读取去除签名后的cookie
-	//req.secret = 'abcdefg';
+    // 给cookie添加签名，虽然不能加密，但是可以防止篡改(可以decodeURIComponent看出只是后面加了一串字符而已)
+    // 设置密钥，如果在cookieParser中传入了密钥，这里就会自动设置，并且可以用signedCookies读取去除签名后的cookie
+    //req.secret = 'abcdefg';
 
-	// 设置签名
-	res.cookie('user', 'Tom', {signed:true});
-	
-	// 添加cookie的同时可以设置路径、过期时间
-	// res.cookie('user', 'Tom', {path:'/aaa', maxAge:30*24*3600*1000});
-	
-	console.log(req.cookies);
-	/*{user: 's:Tom.JdV+YMqRTlDDUg7VsmfMBbf5xGIrFuyTy58SCi0qjys',
-  	 *session: 'eyJjb3VudCI6M30=',
-  	 *'session.sig': '3jqK3jKkcSkWMWc-AQ00oFW3FY4' }
-  	 */
-  	console.log(req.signedCookies);
-  	// {} 因为没有往cookieParser中传入密钥，所以不会去除签名，signedCookies为空。
-	res.send('OK');
+    // 设置签名
+    res.cookie('user', 'Tom', {signed:true});
+    
+    // 添加cookie的同时可以设置路径、过期时间
+    // res.cookie('user', 'Tom', {path:'/aaa', maxAge:30*24*3600*1000});
+    
+    console.log(req.cookies);
+    /*{user: 's:Tom.JdV+YMqRTlDDUg7VsmfMBbf5xGIrFuyTy58SCi0qjys',
+       *session: 'eyJjb3VudCI6M30=',
+       *'session.sig': '3jqK3jKkcSkWMWc-AQ00oFW3FY4' }
+       */
+      console.log(req.signedCookies);
+      // {} 因为没有往cookieParser中传入密钥，所以不会去除签名，signedCookies为空。
+    res.send('OK');
 });
 ```
 
@@ -846,33 +846,33 @@ fs.writeFile('./build/jade1.html', str, function (err) {
 一个jade文件:
 ```
 html
-	head
-		style
-		script(src='ajax.js')
-		link(href='a.css', rel='stylesheet')
-	body
-		ul
-			li
-				input(type='text', id='txt1')
-			li
-			li
-		div
+    head
+        style
+        script(src='ajax.js')
+        link(href='a.css', rel='stylesheet')
+    body
+        ul
+            li
+                input(type='text', id='txt1')
+            li
+            li
+        div
 ```
 
 
 **对于style属性，有两种写法:**
 
 1. 普通属性写法:
-	- `div(style='width:200px; height:200px; background:red;')`
+    - `div(style='width:200px; height:200px; background:red;')`
 2. json形式
-	- `div(style={width: '200px', height:'200px', background:'red'})`
+    - `div(style={width: '200px', height:'200px', background:'red'})`
 
 **对于class属性，也有两种写法:**
 
 1. 普通写法
-	- `div(class='fl left-wrap active')`
+    - `div(class='fl left-wrap active')`
 2. 数组形式
-	- `div(class=['fl', 'left-wrap', 'active'])`
+    - `div(class=['fl', 'left-wrap', 'active'])`
 
 
 **一些简写属性写法:**
@@ -896,113 +896,113 @@ html
 
 - 如果要在标签内加入多行内容，可以使用 `|`:
 
-	```
-	html
-		head
-			script
-				|window.onload = function(){
-				| var oBtn = document.getElementById('id');
-				|};
-		body
-	```
+    ```
+    html
+        head
+            script
+                |window.onload = function(){
+                | var oBtn = document.getElementById('id');
+                |};
+        body
+    ```
 
 - 也可以使用`.`，代表该标签内所有下一级内容都原样输出:
 
-	```
-	html
-		head
-			script.
-				window.onload = function(){
-					var oBtn = document.getElementById('id');
-				};
-		body
-	```
+    ```
+    html
+        head
+            script.
+                window.onload = function(){
+                    var oBtn = document.getElementById('id');
+                };
+        body
+    ```
 
 - 可以使用`include`来引入外部js，增加复用性:
 
-	```
-	html
-		head
-			script
-				include a.js
-		body
-			|abc
-			|123
-	```
+    ```
+    html
+        head
+            script
+                include a.js
+        body
+            |abc
+            |123
+    ```
 
 - 如果需要在模板内容中引入变量，在渲染时传入参数:
 
-	```
-	// demo.jade
-	html
-		head
-		body
-			div 我的名字: #{name}
-			div(style=json)
-			div(class=arr)
-			div(class=arr class='active') // 会自动融合属性
-	
-	// demo.js
-	const jade = require('jade');
-	console.log(jade.renderFile('demo.jade', {pretty: true, 
-		name: 'Tom',
-		json: {width:'200px', height:'200px', background:'red'},
-		arr: ['aaa', 'left-wrap']
-	}));
-	```
+    ```
+    // demo.jade
+    html
+        head
+        body
+            div 我的名字: #{name}
+            div(style=json)
+            div(class=arr)
+            div(class=arr class='active') // 会自动融合属性
+    
+    // demo.js
+    const jade = require('jade');
+    console.log(jade.renderFile('demo.jade', {pretty: true, 
+        name: 'Tom',
+        json: {width:'200px', height:'200px', background:'red'},
+        arr: ['aaa', 'left-wrap']
+    }));
+    ```
 
 
 - 在jade模板中编写js代码:
 
-	```
-	// demo.jade
-	html
-		head
-		body
-			// 前面加-，会让这行代码执行，而不会显示出来
-			-var a = 1;
-			-var b = 2;
-			div 结果是: #{a+b} // 会输出3
+    ```
+    // demo.jade
+    html
+        head
+        body
+            // 前面加-，会让这行代码执行，而不会显示出来
+            -var a = 1;
+            -var b = 2;
+            div 结果是: #{a+b} // 会输出3
 
-			span #{a}
-			span=a // 简写，效果和 span #{a}一样
+            span #{a}
+            span=a // 简写，效果和 span #{a}一样
 
-			// 使用for循环
-			-for(var i=0;i<arr.length;i++)
-				div=arr[i]
+            // 使用for循环
+            -for(var i=0;i<arr.length;i++)
+                div=arr[i]
 
-			// if/else语句
-			-if(a%2==0)
-				div(style={background:'red'})
-			-else
-				div(style={background:'green'})
-			
-			// switch语句
-			case a
-				when 0
-					div aaa
-				when 1
-					div bbb
-				default
-					|匹配失败
-	
-	// demo.js
-	jade.renderFile('demo.jade', {pretty:true, arr:['hello', '123', 'abc']})
-	```
+            // if/else语句
+            -if(a%2==0)
+                div(style={background:'red'})
+            -else
+                div(style={background:'green'})
+            
+            // switch语句
+            case a
+                when 0
+                    div aaa
+                when 1
+                    div bbb
+                default
+                    |匹配失败
+    
+    // demo.js
+    jade.renderFile('demo.jade', {pretty:true, arr:['hello', '123', 'abc']})
+    ```
 
 
 - 向模板中输出不转义的html标签:
 
-	```
-	// demo.jade
-	html
-		head
-		body
-			div!=content
-	
-	// demo.js
-	jade.renderFile('demo.jade', {pretty:true, content:'<h2>hello world<h2>'})
-	```
+    ```
+    // demo.jade
+    html
+        head
+        body
+            div!=content
+    
+    // demo.js
+    jade.renderFile('demo.jade', {pretty:true, content:'<h2>hello world<h2>'})
+    ```
 
 
 ***
@@ -1090,7 +1090,7 @@ demo.js:
 const ejs = require('ejs');
 
 ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
-	console.log(data);
+    console.log(data);
 });
 ```
 
@@ -1100,62 +1100,62 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 
 - 传入变量
 
-	- `<%= name %>`
-	
-	- `<%= json.arr[0].user %>`
-	
-	- `<%= 12+5 %>`
-	
+    - `<%= name %>`
+    
+    - `<%= json.arr[0].user %>`
+    
+    - `<%= 12+5 %>`
+    
 
 - ejs中插入js代码
 
-	```
-	<!doctype html>
-	<html>
-	<head>
-	    <meta charset="UTF-8">
-	    <title>ejs插入js代码</title>
-	</head>
-	<body>
-	    <%
-	    var str = '<div></div>';
-	    %>
-	    <%= str %> //会将str标签转义输出
-	    <%- str %> // 不会转义，将str原样输出
-	
-		// if/else语句
-		<% if(type == 'admin'){ %>
-		<% include ./style/admin.css %> //出现了include，并不是js中的语法，所以要单独的<%%>
-		<% } else { %>
-		<% include ./style/user.css %>
-		<% } %>
-		
-	</body>
-	</html>
-	```
+    ```
+    <!doctype html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>ejs插入js代码</title>
+    </head>
+    <body>
+        <%
+        var str = '<div></div>';
+        %>
+        <%= str %> //会将str标签转义输出
+        <%- str %> // 不会转义，将str原样输出
+    
+        // if/else语句
+        <% if(type == 'admin'){ %>
+        <% include ./style/admin.css %> //出现了include，并不是js中的语法，所以要单独的<%%>
+        <% } else { %>
+        <% include ./style/user.css %>
+        <% } %>
+        
+    </body>
+    </html>
+    ```
 
 - ejs中引入外部文件
 
-	```
-	<!doctype html>
-	<html>
-	<head>
-	    <meta charset="UTF-8">
-	    <title>ejs插入js代码</title>
-	</head>
-	<body>
-	
-	    <% for(var i=0; i<5; i++){ %>
-	    
-	    <% include a.txt %> //会循环输出5次a.txt中的内容
-	    
-	    // 注意不能往include中传入变量， 如 include css_path，否则无法找到。
-	    
-	    <% } %>
-	
-	</body>
-	</html>
-	```
+    ```
+    <!doctype html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>ejs插入js代码</title>
+    </head>
+    <body>
+    
+        <% for(var i=0; i<5; i++){ %>
+        
+        <% include a.txt %> //会循环输出5次a.txt中的内容
+        
+        // 注意不能往include中传入变量， 如 include css_path，否则无法找到。
+        
+        <% } %>
+    
+    </body>
+    </html>
+    ```
 
 
 ***
@@ -1190,13 +1190,13 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 则需要使用`multer`中间件。
 
 - `body-parser` ——解析post数据
-	- `server.use(bodyParser.urlencoded());`
-	- `req.body`获取数据
+    - `server.use(bodyParser.urlencoded());`
+    - `req.body`获取数据
 
 - `multer` ——解析post文件
-	- `var obj = multer({dest:'upload/'});`
-	- `server.use(obj.any());`
-	- `req.files`获取文件
+    - `var obj = multer({dest:'upload/'});`
+    - `server.use(obj.any());`
+    - `req.files`获取文件
 
 下面通过一个例子来展现如何使用`multer`处理上传文件，如何用`path`解析出文件扩展名，如何用`fs`来重命名上传的文件。
 
@@ -1286,7 +1286,7 @@ server.engine('html', consolidate.ejs);
 
 // 渲染模板文件
 server.use(function(req, res){
-	res.render(模板文件, {数据});
+    res.render(模板文件, {数据});
 });
 ```
 
@@ -1319,15 +1319,15 @@ Router可以看做一个迷你的server，它也可以get、post、use。
 
 1. 创建router
 
-	`var router = express.Router();`
+    `var router = express.Router();`
 
 2. 把router添加到server
 
-	`server.use('/user', router);`
+    `server.use('/user', router);`
 
 3. router内部
 
-	`router.get('/1.html', function(){});`
+    `router.get('/1.html', function(){});`
 
 
 **使用示例:** [server_router](./nodejs/server_router.js)
@@ -1362,7 +1362,7 @@ router.use('/user_mod', r);
 
 3. 连接mysql: 
 
-	`var db = mysql.createConnection(host, port, user, password, database);`
+    `var db = mysql.createConnection(host, port, user, password, database);`
 
 4. SQL语句: 增删改查
 
@@ -1396,7 +1396,7 @@ db.query("SELECT * FROM `user_table`;", function (err, data) {
 ```
 
 
-**注意: 一般为了避免频繁地建立连接，会创建一个数据库连接池，让连接保持，提高效率。**
+**注意: 一般为了避免频繁地建立连接，会创建一个数据库连接池，让连接缓存并可重新利用，提高效率。**
 
 ```
 const db = mysql.createPool({});
@@ -1420,95 +1420,95 @@ const db = mysql.createPool({});
 
 1. 确定数据字典，根据数据字典来设计数据表，将数据导入MySQL。
 
-	- 比如上面的新闻首页，可以看出需要创建至少两个表: banner和article.
-	- banner数据表需要字段: id、img_src、title、sub_title.
-	- article数据表需要字段: id、title、summary、content、author、author_img、post_time.
+    - 比如上面的新闻首页，可以看出需要创建至少两个表: banner和article.
+    - banner数据表需要字段: id、img_src、title、sub_title.
+    - article数据表需要字段: id、title、summary、content、author、author_img、post_time.
 
 2. nodejs连接数据库。
 
-	`const db = mysql.createPool({host:'localhost', user:'root', password:'mysql', database:'app'});`
+    `const db = mysql.createPool({host:'localhost', user:'root', password:'mysql', database:'app'});`
 
 3. Express创建服务器、监听端口并配置模板引擎。
 
-	- 当然还可以加入中间件来设置解析cookie和session、解析post数据，这些前面都已经学过，此处不是必要。
+    - 当然还可以加入中间件来设置解析cookie和session、解析post数据，这些前面都已经学过，此处不是必要。
 
-	- 配置模板引擎:
+    - 配置模板引擎:
 
-		```
-		server.set('view engine', 'html');
-		server.set('views', './templates');
-		server.engine('html', consolidate.ejs);
-		```
+        ```
+        server.set('view engine', 'html');
+        server.set('views', './templates');
+        server.engine('html', consolidate.ejs);
+        ```
 
 4. 处理URL，返回不同的页面。
 
-	- 用户进入首页时: 先查询banner数据、再查询article数据、最后渲染，需要设置成链式操作。
+    - 用户进入首页时: 先查询banner数据、再查询article数据、最后渲染，需要设置成链式操作。
 
-		```
-		// 查询banner
-		server.get('/', (req,res,next)=>{
-			db.query('SELECT * FROM banner', (err,data)=>{
-				if(err){
-					res.status(500).send('database error').end();
-				} else {
-					res.banners = data;
-					// banner查询正常才进行下一步article的查询
-					next();
-				}
-			});
-		});
-		// 查询articles数据
-		server.get('/', (req,res,next)=>{
-			db.query('SELECT ID,title,summary FROM article',(err,data)=>{
-				if(err){
-					res.status(500).send('database error').end();
-				} else {
-					res.news = data;
-					// banner和article数据都正常，接下来进行渲染
-					next();
-				}
-			});
-		});
-		// 渲染index
-		server.get('/',(req,res)=>{
-			res.render('index.ejs', {banners:res.banners, news:res.news});
-		});
-		```
+        ```
+        // 查询banner
+        server.get('/', (req,res,next)=>{
+            db.query('SELECT * FROM banner', (err,data)=>{
+                if(err){
+                    res.status(500).send('database error').end();
+                } else {
+                    res.banners = data;
+                    // banner查询正常才进行下一步article的查询
+                    next();
+                }
+            });
+        });
+        // 查询articles数据
+        server.get('/', (req,res,next)=>{
+            db.query('SELECT ID,title,summary FROM article',(err,data)=>{
+                if(err){
+                    res.status(500).send('database error').end();
+                } else {
+                    res.news = data;
+                    // banner和article数据都正常，接下来进行渲染
+                    next();
+                }
+            });
+        });
+        // 渲染index
+        server.get('/',(req,res)=>{
+            res.render('index.ejs', {banners:res.banners, news:res.news});
+        });
+        ```
 
-	- 首页点击，进入文章详情页面
+    - 首页点击，进入文章详情页面
 
-		```
-		//文章详情页面，考虑将url请求设置为 /article?id=1 这种
-		server.get('/article', function(req, res){
-			//检查url是否带有id
-			if(req.query.id){
-				//去数据库查询对应id的文章是否存在
-				db.query(`SELECT * FROM article WHERE ID=${req.query.id}`, (err,data)=>{
-					if(err){
-						//数据查询出错
-						res.status(500).send('database error').end();
-					} else {
-						//数据不存在
-						if(data.length === 0){
-							res.status(404).send('文章找不到').end()
-						} else {
-							var artData = data[0];
-							// 自己写一个common.js，引入用来将时间戳格式化为日期，将内容分段
-							artData.pDate = common.time2date(artData.post_time);
-							artData.pCon = common.con2p(artData.content);
-							res.render('context.ejs', {article:artData});
-						}
-					}
-				});
-			} else {
-				res.status(404).send('请求的文章找不到').end();
-			}
-		});
-		```
+        ```
+        //文章详情页面，考虑将url请求设置为 /article?id=1 这种
+        server.get('/article', function(req, res){
+            //检查url是否带有id
+            if(req.query.id){
+                //去数据库查询对应id的文章是否存在
+                db.query(`SELECT * FROM article WHERE ID=${req.query.id}`, (err,data)=>{
+                    if(err){
+                        //数据查询出错
+                        res.status(500).send('database error').end();
+                    } else {
+                        //数据不存在
+                        if(data.length === 0){
+                            res.status(404).send('文章找不到').end()
+                        } else {
+                            var artData = data[0];
+                            // 自己写一个common.js，引入用来将时间戳格式化为日期，将内容分段
+                            artData.pDate = common.time2date(artData.post_time);
+                            artData.pCon = common.con2p(artData.content);
+                            res.render('context.ejs', {article:artData});
+                        }
+                    }
+                });
+            } else {
+                res.status(404).send('请求的文章找不到').end();
+            }
+        });
+        ```
 
 5. 静态资源处理。
 
-	`server.use(expressStatic('./www'));`
+    `server.use(expressStatic('./www'));`
 
 
 
