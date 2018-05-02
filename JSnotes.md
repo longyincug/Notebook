@@ -125,6 +125,13 @@ console.log("time="+time/1000/60/60/24/365);
  
 //获取当前的时间戳
 var start = Date.now();	
+
+//将时间戳转换为日期
+var d = new Date();
+d.setTime(1332403882588);
+console.log(d);
+//输出结果
+//Thu Mar 22 2012 16:11:22 GMT+0800 (中国标准时间)
 ```
 
 ***

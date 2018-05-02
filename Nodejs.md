@@ -36,12 +36,13 @@
 		- [demo](#5ac)
 	- [ejs](#5b)
 
-6. [Express构建项目前置](#6)
+6. [Express构建项目](#6)
 
 	- [文件上传](#6a)
 	- [模板引擎整合](#6b)
 	- [路由](#6c)
 	- [Nodejs连接MySQL](#6d)
+	- [Express结合模板引擎](#6e)
 
 
 ***
@@ -1165,7 +1166,7 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 
 
 
-## Express结合模板
+## Express构建项目
 
 
 前面已经初步学习了Express和模板引擎的使用，下面将它们结合一起进行应用。
@@ -1382,7 +1383,7 @@ const mysql = require('mysql');
 //创建连接
 var db = mysql.createConnection({host:'localhost', user:'root', password:'mysql', database:'demo01'});
 
-//查询: query(SQL, callback)
+//数据库操作: query(SQL, callback)
 db.query("SELECT * FROM `user_table`;", function (err, data) {
     if(err){
         console.log('出错了', err);
@@ -1395,12 +1396,119 @@ db.query("SELECT * FROM `user_table`;", function (err, data) {
 ```
 
 
+**注意: 一般为了避免频繁地建立连接，会创建一个数据库连接池，让连接保持，提高效率。**
+
+```
+const db = mysql.createPool({});
+```
+
+
 ***
 
 
+<a name="6e">
 
 
+### Express结合模板引擎
 
+
+简单归纳一下Express构建一个项目的大致流程:
+
+![news_app](./nodejs/images/news_app.png)
+
+以一个新闻app首页为例:
+
+1. 确定数据字典，根据数据字典来设计数据表，将数据导入MySQL。
+
+	- 比如上面的新闻首页，可以看出需要创建至少两个表: banner和article.
+	- banner数据表需要字段: id、img_src、title、sub_title.
+	- article数据表需要字段: id、title、summary、content、author、author_img、post_time.
+
+2. nodejs连接数据库。
+
+	`const db = mysql.createPool({host:'localhost', user:'root', password:'mysql', database:'app'});`
+
+3. Express创建服务器、监听端口并配置模板引擎。
+
+	- 当然还可以加入中间件来设置解析cookie和session、解析post数据，这些前面都已经学过，此处不是必要。
+
+	- 配置模板引擎:
+
+		```
+		server.set('view engine', 'html');
+		server.set('views', './templates');
+		server.engine('html', consolidate.ejs);
+		```
+
+4. 处理URL，返回不同的页面。
+
+	- 用户进入首页时: 先查询banner数据、再查询article数据、最后渲染，需要设置成链式操作。
+
+		```
+		// 查询banner
+		server.get('/', (req,res,next)=>{
+			db.query('SELECT * FROM banner', (err,data)=>{
+				if(err){
+					res.status(500).send('database error').end();
+				} else {
+					res.banners = data;
+					// banner查询正常才进行下一步article的查询
+					next();
+				}
+			});
+		});
+		// 查询articles数据
+		server.get('/', (req,res,next)=>{
+			db.query('SELECT ID,title,summary FROM article',(err,data)=>{
+				if(err){
+					res.status(500).send('database error').end();
+				} else {
+					res.news = data;
+					// banner和article数据都正常，接下来进行渲染
+					next();
+				}
+			});
+		});
+		// 渲染index
+		server.get('/',(req,res)=>{
+			res.render('index.ejs', {banners:res.banners, news:res.news});
+		});
+		```
+
+	- 首页点击，进入文章详情页面
+
+		```
+		//文章详情页面，考虑将url请求设置为 /article?id=1 这种
+		server.get('/article', function(req, res){
+			//检查url是否带有id
+			if(req.query.id){
+				//去数据库查询对应id的文章是否存在
+				db.query(`SELECT * FROM article WHERE ID=${req.query.id}`, (err,data)=>{
+					if(err){
+						//数据查询出错
+						res.status(500).send('database error').end();
+					} else {
+						//数据不存在
+						if(data.length === 0){
+							res.status(404).send('文章找不到').end()
+						} else {
+							var artData = data[0];
+							// 自己写一个common.js，引入用来将时间戳格式化为日期，将内容分段
+							artData.pDate = common.time2date(artData.post_time);
+							artData.pCon = common.con2p(artData.content);
+							res.render('context.ejs', {article:artData});
+						}
+					}
+				});
+			} else {
+				res.status(404).send('请求的文章找不到').end();
+			}
+		});
+		```
+
+5. 静态资源处理。
+
+	`server.use(expressStatic('./www'));`
 
 
 
