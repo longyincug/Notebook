@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>简易留言板</title>
+		<link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
+		<script src="jquery-1.7.2.js"></script>
+		<script src="bootstrap.js"></script>
+		<script src="vue.js"></script>
+		<script type="text/javascript">
+		    window.onload = function(){
+		        new Vue({
+                    el:'#box',
+                    data: {
+                        myData:[
+//                          {'name':'xx', 'age':'xxx'}
+                        ],
+                        username:'',
+                        age:'',
+                        nowIndex:-100,
+                        msg:""
+                    },
+                    methods: {
+                        add:function(){
+                            this.myData.push({'name':this.username, 'age':this.age});
+                            this.username='';
+                            this.age='';
+                        },
+                        delMsg: function(n){
+                            if(this.nowIndex=='all'){
+                                this.myData = [];
+                            } else {
+                                this.myData.splice(n,1);
+                            }
+                        }
+                    }
+                });
+		    };
+			
+		</script>
+	</head>
+	<body>
+	    <div class="container" id="box">
+	        <form role='form'>
+	            <div class="form-group">
+	                <label for="username">用户名:</label>
+	                <input type="text" id="username" class="form-control" v-model="username" placeholder="输入用户名"/>
+	            </div>
+	            <div class="form-group">
+	                <label for="age">年     龄:</label>
+	                <input type="text" id="age" class="form-control" v-model="age" placeholder="输入年龄"/>
+	            </div>
+	            <div class="form-group">
+	                <input type="button" value="添加" v-on:click="add()" class="btn btn-primary" />
+	                <input type="reset" value="重置" class="btn btn-danger"/>
+	            </div>
+	        </form>
+	        <hr />
+	        
+	        <table class="table table-bordered table-hover">
+	            <caption class="h3 text-info">用户信息表</caption>
+	            <tr class="text-danger">
+	                <th class="text-center">序号</th>
+	                <th class="text-center">名字</th>
+	                <th class="text-center">年龄</th>
+	                <th class="text-center">操作</th>
+	            </tr>
+	            <tr class="text-center" v-for="item in myData">
+	                <td>{{$index+1}}</td>
+	                <td>{{item.name}}</td>
+	                <td>{{item.age}}</td>
+	                <td><input type="button" value="删除" v-on:click="nowIndex=$index,msg='确认删除吗？'" data-toggle='modal' data-target='#layer' class="btn btn-sm btn-primary"/></td>
+	            </tr>
+	            <tr class="text-right" v-show="myData.length!=0">
+	                <td colspan="4"><input type="button" value="全部删除" v-on:click="nowIndex='all',msg='确认全部删除吗！'" data-toggle='modal' data-target="#layer" class="btn btn-sm btn-danger" /></td>
+	            </tr>
+	            <tr v-show="myData.length==0">
+	                <td colspan="4" class="text-center text-muted">暂无数据...</td>
+	            </tr>
+	        </table>
+	        
+	        <!--bootstrap模态框modal-->
+	        <div role='dialog' class="modal fade" id="layer">
+	            <div class="modal-dialog">
+	                <div class="modal-content">
+	                    <div class="modal-header">
+	                        <button type="button" class="close" data-dismiss='modal'>&times;</button>
+	                        <h4 class='modal-title'>{{msg}}</h4>
+	                    </div>
+	                    <div class="modal-body text-right">
+	                        <button class="btn btn-primary btn-sm" data-dismiss="modal">取消</button>
+	                        <button class="btn btn-danger btn-sm" v-on:click="delMsg(nowIndex)" data-dismiss="modal">确认</button>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</body>
+</html>

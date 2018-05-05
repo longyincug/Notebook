@@ -5,7 +5,8 @@
 
 1. [Vue基本雏形及常用指令](#1)
 
-
+    - [简单指令](#1a)
+    - [bootstrap + Vue实现简易留言](#1b)
 
 
 
@@ -39,11 +40,14 @@ var app = new Vue({
 数据和DOM都是关联的、双向绑定的，所有东西都是响应式的，在控制台修改`app.msg`的值，可以看到上例会相应地更新。
 
 
+<a name="1a">
+
 
 ### 常用指令
 
 
 v-model 一般表单元素(input)   双向数据绑定
+
 
 **循环:**
 
@@ -79,14 +83,30 @@ new Vue({
 });
 ```
 
-
 **显示隐藏:**
 
-`v-show=“true/false”`
+`v-show='true/false'`
+
+
+***
+
+
+<a name="1b">
+
+
+### bootstrap + Vue实现简易留言
+
+
+[todolist](./Vuejs/todolist.html)
+
+
+***
 
 
 
 
 
 
- 
+
+
+
