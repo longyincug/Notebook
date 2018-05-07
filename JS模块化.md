@@ -180,8 +180,8 @@
 		let fs = require('fs'); // fs是nodejs中内置的文件系统模块
 		let uniq = require('uniq'); // 下载的第三方模块，功能是数组排序去重
 		let module1 = require('./modules/module1'); // 自定义的module
-		let module1 = require('./modules/module1');
-		let module1 = require('./modules/module1');
+		let module2 = require('./modules/module2');
+		let module3 = require('./modules/module3');
 		
 		// 使用模块
 		module1.foo();

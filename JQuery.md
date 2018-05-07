@@ -1415,7 +1415,9 @@ $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?tags=cat&tagmo
 ```
 
 
+关于JSONP的使用:
 
+![JSONP](./images/jsonp.png)
 
 
 
