@@ -13,6 +13,7 @@
 8. [链式编程](#8)
 9. [元素的获取、创建、添加、删除](#9)
 10. [动画相关的方法](#10)
+11. [Ajax](#11)
 
 ***
 
@@ -1309,6 +1310,120 @@ $("p").animate({
    opacity: 'show'
  }, "slow", "easein");
 ``` 
+
+
+
+***
+
+
+
+<a name="11">
+
+
+## Ajax
+
+
+使用原生js实现Ajax异步操作非常麻烦，详情请看：[原生JS实现Ajax异步请求](http://www.cnblogs.com/longyincug/p/8849045.html)
+
+而jQuery封装好了底层的细节，调用ajax请求非常简单。
+
+
+### get/post( url [, data ] [, success ] [, dataType ])
+
+如下，异步请求一个Server.php页面，将id为namevalue的值传递过去，并接受返回数据data，设置成id为result的文本框的值。
+
+```
+$.get('Server.php', {name:$('#namevalue').val()},function(data,textStatus,jqXHR){
+    $("#result").text(data);
+});
+```
+
+post请求也同理，只需要把get改成post即可。
+
+
+对于错误的处理:
+
+```
+$.get('Server.php', {name:$('#namevalue').val()},function(data){
+    $("#result").text("请求数据中，请稍后...");//当网络堵塞时，可以改善用户体验
+    $("#result").text(data);
+}).error(function(){
+    console.log("通讯错误");
+});
+```
+
+
+### `load(url,[data,[callback]])`
+
+载入远程 HTML 文件代码并插入至 DOM 中，默认使用GET方式，传递附加参数时自动转换为POST方式。
+
+使用示例:
+
+```
+$('body').load('box.html', function(responseText, status, jqXHR){
+    console.log(status); // success或者error
+    if(status=='error'){
+        $('body').text('加载失败')
+    }
+});
+```
+
+
+### `getScript(url,[callback])`
+
+通过 HTTP GET 请求载入并执行一个 JavaScript 文件。
+
+```
+$.getScript('test.js',function(){alert("Script loaded and executed.");});
+```
+
+可以用来载入一些插件，然后调用回调函数，调用其内的方法。
+
+```
+$.getScript('hello.js', function(data, textStatus, jqXHR){
+  console.log( data ); // Data returned
+  console.log( textStatus ); // Success
+  console.log( jqXHR.status ); // 200
+  console.log( "Load was performed." );
+});
+```
+
+
+### `getJSON(url,[data],[callback])`
+
+通过 HTTP GET 请求载入 JSON 数据。
+
+可以通过使用JSONP形式的回调函数来加载其他网域的JSON数据，如 "myurl?callback=?"。jQuery 将自动替换 ? 为正确的函数名，以执行回调函数。
+
+**注意：此行以后的代码将在这个回调函数执行前执行。**
+
+使用示例:
+
+```
+//从 Flickr JSONP API 载入 4 张最新的关于猫的图片。
+
+//HTML代码
+<div id="images"></div>
+
+//jQuery代码
+$.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?tags=cat&tagmode=any&format=json&jsoncallback=?", function(data){
+    $.each(data.items, function(i, item){
+        $('<img/>').attr('src', item.media.m).appendTo($('#images'));
+        if(i==3) return false;
+    });
+});
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
