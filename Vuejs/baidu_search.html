@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>百度搜索下拉框</title>
+		<script src="libs/vue.js"></script>
+		<script src="libs/vue-resource.js"></script>
+		<script type="text/javascript">
+			window.onload=function(){
+			    new Vue({
+			        el:'body',
+			        data:{
+			            kd:'',
+			            nowIndex:-1,
+			            search_data:[]
+			        },
+			        methods:{
+			            get:function(ev){
+			                //当用户按上下方向键选择选项时，停止获取内容
+			                if(ev.keyCode==38 || ev.keyCode==40){
+			                    return false;
+			                }
+			                
+			                // 当用户回车键，新开一个窗口，进行百度搜索
+			                if(ev.keyCode==13){
+			                    window.open('https://www.baidu.com/s?wd='+this.kd);
+			                    this.kd = '';
+			                }
+			                
+			                //当用户输入内容，实时获取联想搜索数据
+			                this.$http.jsonp("https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su",{
+			                    wd:this.kd
+			                }, {
+			                    jsonp:'cb'
+			                }).then(function(res){
+			                    this.search_data=res.data.s;
+			                    this.nowIndex = -1;
+			                }, function(res){
+			                    console.log("通信错误: " + res.status);
+			                })
+			            },
+			            
+			            changeUp:function(){
+			                this.nowIndex--;
+                            if(this.nowIndex < -1){
+                                this.nowIndex = this.search_data.length-1;
+                            }
+                            this.kd = this.search_data[this.nowIndex];
+                            
+			            },
+			            
+			            changeDown:function(){
+			                this.nowIndex++;
+                            if(this.nowIndex > this.search_data.length-1){
+                                this.nowIndex = -1;
+                            }
+                            this.kd = this.search_data[this.nowIndex];
+                            
+			            }
+			        }
+			    });
+			};
+		</script>
+		<style type="text/css">
+			.gray{
+			    background-color: darkgray;
+			}
+		</style>
+	</head>
+	<body>
+	    <input type="text" id="search" v-model="kd" @keyup="get($event)" @keydown.up.prevent="changeUp()" @keydown.down.prevent="changeDown()" />
+	    <ul v-show="search_data.length!=0">
+	    	<li v-for="item in search_data" :class="{gray:nowIndex==$index}">
+	    	    {{item}}
+	    	</li>
+	    </ul>
+	    <div id="msg" v-show="search_data.length==0">
+	        <br /><br />
+	        暂无数据...
+	    </div>
+	</body>
+</html>
