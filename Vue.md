@@ -18,6 +18,13 @@
     - [计算属性computed](#2c)
     - [Vue实例属性及方法](#2d)
     - [循环数据排序处理及自定义过滤器](#2e)
+    - [自定义指令](#2f)
+    - [自定义键盘事件](#2g)
+
+3. [Vue组件及数据传递与更新](#3)
+
+    - [监听数据变化](#3a)
+
 
 
 ***
@@ -56,7 +63,7 @@ var app = new Vue({
 ### 常用指令、属性绑定及事件绑定
 
 
-`v-model`: 一般表单元素(input)，双向数据绑定
+`v-model`: 一般表单元素(input)，双向数据绑定。
 
 
 **循环:**
@@ -461,6 +468,7 @@ var vm = new Vue({
     },
     computed: {
         //这里面放的是b属性，而不是方法
+        //仅读取
         b:function(){
             //业务逻辑代码
             return this.a + 1;
@@ -476,9 +484,11 @@ var vm = new Vue({
 computed: {
     // 计算属性实际上是一个对象
     b:{
+        //读取
         get:function(){
             return this.a + 1;
         },
+        //设置
         set: function(val){
             this.a = val;
         }
@@ -560,6 +570,8 @@ data:{
 加入track-by属性：数据修改时，不变数据所在的dom不被重新渲染，已改变的数据所在dom才被重新渲染。
 
 
+***
+
 
 #### vue过滤器及自定义过滤器
 
@@ -567,9 +579,14 @@ data:{
 除了之前介绍的capitalize、lowercase、uppercase、currency过滤器，还有一些强大的过滤器。
 
 
-`debounce` —— 配合事件、延迟执行。
+- `debounce` —— 配合事件、延迟执行。
 
-如:`@keyup="showMsg | debounce 2000"` 将事件触发的函数延迟2秒执行。
+    如:`@keyup="showMsg() | debounce 2000"` 将事件触发的函数延迟2秒执行。
+
+- `json` —— 将js对象转换为json数据输出。
+    
+    相当于`JSON.stringify()`方法。
+
 
 
 **配合数据使用的过滤器:**
@@ -639,6 +656,196 @@ Vue.filter('date', function(time){
     model -> view
 
     view -> model
+
+
+
+
+***
+
+
+<a name="2f">
+
+
+### 自定义指令
+
+
+Vue中的指令是用来扩展html语法的，类似一种Decorator模式，用来往某个组件上添加或增强功能。
+
+在自定义指令时，注意名称的写法: v-red -> red，使用时必须加v，定义时不需要加。
+
+**自定义拖拽指令:**
+
+```
+Vue.directive('drag', function(){
+    //通过this.el获取指令所在的原生DOM元素
+    var oDiv = this.el;
+    oDiv.onmousedown = function(ev){
+        var locX = ev.clientX - oDiv.offsetLeft;
+        var locY = ev.clientY - oDiv.offsetTop;
+        
+        document.onmousemove = function(ev){
+            oDiv.style.left = ev.clientX - locX + "px";
+            oDiv.style.top = ev.clientY - locY + "px";
+        };
+        
+        document.onmouseup = function(ev){
+            document.onmousemove = null;
+            document.onmouseup = null;
+        };
+    };
+})
+
+window.onload=function(){
+    var vm=new Vue({
+        el:'#box',
+        data:{
+        }
+    });
+};
+
+<div id="box">
+    <div v-drag :style="{width:'100px', height:'100px', background:'blue', position:'absolute', right:0, top:0}"></div>
+    <div v-drag :style="{width:'100px', height:'100px', background:'red', position:'absolute', left:0, top:0}"></div>
+</div>
+```
+
+如上，用`directive`定义完拖拽指令`drag`后，在元素中添加`v-drag`属性即可实现拖拽功能。
+
+**注意，在Vue中给元素的属性指令赋值要用引号，即使该值为变量**，也要引起来:
+
+`:style="json"`，
+
+而如果是数据，则要给数据中除纯数字以外的属性值再加上引号。
+
+`:style="{width:'100px'}"`
+
+
+***
+
+
+**自定义带参数的指令:**
+
+
+```
+Vue.directive('red',function(color){
+    this.el.style.background=color;
+});
+
+<div v-red="参数">这是一行添加了指令效果的文字</div>
+```
+
+- 如果是直接传入color的话，一定要再加一层引号！
+
+    `<div v-red="'red'">这是一行添加了指令效果的文字</div>`
+
+
+- 如果是传入一个变量的话，需要在data中定义:
+
+    ```
+    data:{
+       a:'blue'
+    }
+    
+    <div v-red="a">这是一行添加了指令效果的文字</div>
+    ```
+
+
+***
+
+
+<a name="2g">
+
+### 自定义键盘事件
+
+可以给键盘上的一些键添加一个简单的名称，然后通过类似`@keydown.enter`的方法来使用。
+
+可以通过`@keydown.a/b/c/d...`来使用字母按键，但是ctrl和alt等按键默认只能通过keyCode来使用。
+
+下面自定义一个别名，用来绑定ctrl按键的事件:
+
+```
+Vue.directive('on').keyCodes.myctrl = 17;
+```
+
+接下来就可以通过`@keydown.myctrl=""`来操作该事件了。
+
+还可以加上过滤器: `@keydown.myctrl="show | debounce 2000"`。
+
+
+
+
+***
+
+
+<a name="3">
+
+
+## Vue组件及数据传递与更新
+
+
+
+<a name="3a">
+
+
+### 监听数据变化
+
+之前我们通过计算属性`computed`实现了数据的同步变化。
+
+现在我们用更好的方法来实现**监听数据变化**，进而同步变化其他数据。
+
+Vue实例方法:`vm.$watch(name, callback, [options])`
+
+使用示例:
+
+```
+data:{
+    a:1,
+    b:2
+}
+
+vm.$watch('a', function(newVal, oldVal){
+    //会在数据a变化时执行该函数
+    alert('发生变化了');//此时页面中没有效果变化
+    this.b = 23333;
+    //数据a变化的效果会和该函数的效果在函数执行完毕后一同展现
+})
+
+document.onclick = function(){vm.a=1;};
+```
+
+
+**取消监听**
+
+`vm.$watch()`返回一个取消观察函数，取消监听可以执行它来实现:
+
+    ```
+    var unwatch = vm.$watch('a',cb); 
+    unwatch();
+    ```
+
+
+**传入可选参数**
+
+当监听的数据是一个对象时，如果还是像上面进行设置，则里面的元素变化并不会触发回调函数。
+
+需要传入一个可选的参数: `deep`，来深度监听。
+
+```
+vm.$watch(name, callback, {deep:true});
+```
+
+
+
+关于`vm.$watch()`详情请看官方文档: [watch](https://cn.vuejs.org/v2/api/#vm-watch)
+
+
+
+
+***
+
+
+
+
 
 
 
