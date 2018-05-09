@@ -29,6 +29,14 @@
     - [组件的创建和使用](#3b)
     - [组件配合模板及动态组件](#3c)
     - [组件数据传递](#3d)
+    - [插槽slot](#3e)
+
+4. [vue-router](#4)
+
+    - [vue-router使用流程](#4a)
+    - [路由嵌套](#4b)
+    - [vue-router构建一个简单的SPA](#4c)
+
 
 
 ***
@@ -320,7 +328,7 @@ echo $a - $b; //php通过echo来返回ajax请求的数据
 this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
         wd:'a'
     },{
-        jsonp:'cb'  //回调函数的名字(key)，默认key就是"callback"，百度的接口key为cb
+        jsonp:'cb'  //回调函数的名字(key)，默认key就是"callback"，而百度的接口key为cb
     }).then(function(res){
         alert(res.data.s);
     },function(res){
@@ -1203,10 +1211,255 @@ new Vue({
     ```
 
 
+***
+
+
+<a name="3e">
+
+
+### 插槽slot
+
+slot: 位置、槽口，用来占位。
+
+Vue实现了一套内容分发的api，并将slot元素作为承载分发内容的出口。
+
+
+之前我们定义完组件后，是这样使用的:
+
+```
+<div id="box">
+    <aaa></aaa>
+</div>
+```
+
+而如果我们在aaa标签中间插入内容，是不会显示出来的。
+若有这么一个需求，要能够在使用组件时自由地往组件模板中插入内容，这时可以使用`slot`。
+
+
+#### 使用`slot`:默认插槽
+
+定义组件时，用slot占位:
+
+```
+<template id="aaa">
+    <h1>XXX</h1>
+    <slot>当没有往aaa标签间插入内容时，会默认显示这行字</slot>
+    <p>Welcome Vue</p>
+</template>
+```
+
+若使用组件时，在标签中间插入内容，则会将slot元素替换为插入的内容。
+
+**可以同时使用多个slot元素**，这样插入的内容会重复多次。
+
+
+
+#### 多个`slot`:具名插槽
+
+
+若需要有选择的插入不同内容并替换slot元素，该如何做呢？
+
+使用具名插槽:
+
+```
+//定义模板:
+<template id="aaa">
+    <h1>XXX</h1>
+    <slot name='ol-slot'>当没有往aaa标签间插入内容时，会默认显示这行字1</slot>
+    <p>Welcome Vue</p>
+    <slot name='ul-slot'>当没有往aaa标签间插入内容时，会默认显示这行字2</slot>
+</template>
+
+//使用组件:
+<aaa>
+    //将会替换name为ul-slot的插槽
+    <ul slot="ul-slot">
+        <li>111<li>
+        <li>222<li>
+        <li>333<li>
+    </ul>
+    //将会替换name为ol-slot的插槽
+    <ol slot="ol-slot">
+        <li>111<li>
+        <li>222<li>
+        <li>333<li>
+    </ol>
+</aaa>
+```
+
+
+***
+
+
+
+<a name="4">
+
+
+
+## Vue-router
+
+
+在使用之前，需要下载安装:`bower install vue-router@0`。
+
+因为目前学的是Vue1.0，所以使用的Vue-router是0.x版本的。而Vue2.0对应的vue-router是2.x版本。
+
+
+之前用`vue-resource`实现交互，现在可以用`vue-router`实现路由功能。
+
+
+<a name="4a">
+
+
+### router使用流程
+
+html:
+
+```
+//vue中不再使用a中的href，而是使用指令v-link，并设置路径
+<a v-link="{path:'/home'}">主页</a>   //跳转链接
+<a v-link="{path:'/news'}">新闻</a>   //跳转链接
+
+//展示内容:
+<router-view></router-view>
+
+//定义组件模板
+<template id="home">
+    <h3>我是主页</h3>
+</template>
+
+<template id="news">
+    <h3>我是新闻页</h3>
+</template>
+
+```
+
+js:
+
+```
+//1. 准备一个根组件
+var App=Vue.extend();
+
+//2. Home、News组件也需要准备
+var Home=Vue.extend({
+    template:'#home'
+});
+
+var News=Vue.extend({
+    template:'#news'
+});
+
+//3. 准备路由
+var router=new VueRouter();
+
+//4. 路由关联组件
+router.map({
+    'home':{
+        component:Home
+    },
+    'news':{
+        component:News
+    }
+});
+
+//5. 启动路由
+router.start(App,'#box');
+
+//还可以设置重定向:
+router.redirect({
+    '/':'/home'
+});
+```
+
+还可以给所在的页面链接添加样式:
+
+`.v-link-active {color:red;}`
+
+这样当点击跳转主页或新闻时，相应的链接文字样式会发生变化。
 
 
 
 
+<a name="4b">
+
+
+### 路由嵌套
+
+如果在上面的流程中，主页需要再进行路由嵌套:
+
+```
+主页:home
+  - 登录 home/login
+  - 注册 home/reg
+```
+
+则需使用`subRoutes`:
+
+```
+router.map({
+    '/home':{
+        component:Home,
+        subRoutes:{
+            '/login':{
+                component:{
+                    template:'<strong>这是登录信息</strong>'
+                }
+            },
+            '/reg':{
+                component:{
+                    template:'<strong>这是注册信息</strong>'
+                }
+            }
+        }
+    }
+});
+```
+
+**如何提取URL中的参数和查询字符？**
+
+如: 访问url`/home/login/Tom?a=1`
+
+可以向路由中设置变量来接收参数:
+
+```
+subRoutes:{
+    //设置变量name来接收参数Tom
+    '/login/:name':{
+        component:{
+            template:'<strong>我是登录信息 {{$route.params.name}}</strong>'
+            //会打印: 我是登录信息 Tom
+        }
+    }
+}
+```
+
+- 可以通过`$route.params`来接收参数对象:`{{$route.params | json}}`——>`{"name":"Tom"}`
+
+- 可以通过`$route.path`来接收当前路径: `{{$route.path}}`——>`/home/login/Tom?a=1`
+
+- 可以通过`$route.query`来接收查询参数对象:`{{$route.query | json}}`——> `{"a":"1"}`
+
+**注意是$route而不是$router!**
+
+
+***
+
+
+<a name="4c">
+
+
+### vue-router构建一个简单的SPA
+
+
+[myFirstSPA](./Vuejs/mySPA.html)
+
+
+效果图:
+
+![SPA页面效果图](./Vuejs/images/mySPA.png)
+
+
+
+***
 
 
 

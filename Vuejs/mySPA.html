@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src='libs/vue-1.0.js'></script>
+		<script src='libs/vue-router.js'></script>
+		<style type="text/css">
+			.v-link-active{
+			    color: orange;
+			    font-size: 30px;
+			}
+		</style>
+	</head>
+	<body>
+	    
+	    <div id='box'>
+	        <ul>
+	        	<li>
+	               <a v-link="{path:'/home'}">主页</a>
+	        	</li>
+	        	<li>
+	               <a v-link="{path:'/news'}">新闻</a>
+	        	</li>
+	        </ul>
+            <!--下方的router-view留给嵌套内容填补-->
+            <br />
+            <small>下方为嵌套内容</small>
+            <hr>
+            <br />
+	        <router-view></router-view>  
+	    </div>
+	    
+	    <template id="home">
+            <strong>这是主页的内容</strong>
+            <div>
+                <a v-link="{path:'/home/login'}">登录</a>
+                <a v-link="{path:'/home/reg'}">注册</a>
+            </div>
+            <!--下方的router-view留给嵌套内容填补-->
+            <br />
+            <small>下方为嵌套内容</small>
+            <hr>
+            <br />
+            <router-view></router-view>
+	    </template>
+	    
+	    <template id="news">
+	        <strong>这是新闻页内容</strong>
+	        <div>
+	            <a v-link="{path:'/news/detail/1'}">新闻1</a>
+	            <a v-link="{path:'/news/detail/2'}">新闻2</a>
+	        </div>
+            <!--下方的router-view留给嵌套内容填补-->
+            <br />
+            <small>下方为嵌套内容</small>
+            <hr>
+            <br />
+	        <router-view></router-view>
+	    </template>
+	    
+	    <template id="detail">
+	        <strong>用户您好，您在新闻页第{{$route.params.index}}页</strong>
+	        <h3>下面展示一些route信息</h3>
+	        <p>$route.params——>{{$route.params | json}}</p>
+	        <p>$route.path——>{{$route.path}}</p>
+	        <p>$route.query——>{{$route.query | json}}</p>
+	    </template>
+	    
+	    
+	    <script type="text/javascript">
+
+	    	
+	    	var App = Vue.extend();
+	    	var Home = Vue.extend({
+	    	    template:'#home'
+	    	});
+	    	var News = Vue.extend({
+    	        template:'#news'
+	    	});
+	    	var Detail = Vue.extend({
+	    	    template:'#detail'
+	    	});
+	    	var router = new VueRouter();
+	    	
+	    	router.map({
+	    	    '/home':{
+	    	        component:Home,
+	    	        subRoutes:{
+	    	            '/login':{
+	    	                component:{
+	    	                    template:'<strong>亲爱的用户你在登录</strong>'
+	    	                }
+	    	            },
+	    	            '/reg':{
+	    	                component:{
+	    	                    template:'<strong>亲爱的用户你在注册</strong>'
+	    	                }
+	    	            }
+	    	        }
+	    	    },
+	    	    '/news':{
+	    	        component:News,
+	    	        subRoutes:{
+	    	            '/detail/:index':{
+	    	                component:Detail
+	    	            }
+	    	        }
+	    	    }
+	    	})
+	    	
+	    	//别忘了启动路由
+	    	router.start(App, '#box');
+	    </script>
+	</body>
+</html>
