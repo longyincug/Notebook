@@ -20,11 +20,15 @@
     - [循环数据排序处理及自定义过滤器](#2e)
     - [自定义指令](#2f)
     - [自定义键盘事件](#2g)
+    - [bower的使用](#2h)
+    - [Vue中的过渡和动画](#2i)
 
 3. [Vue组件及数据传递与更新](#3)
 
     - [监听数据变化](#3a)
-
+    - [组件的创建和使用](#3b)
+    - [组件配合模板及动态组件](#3c)
+    - [组件数据传递](#3d)
 
 
 ***
@@ -773,6 +777,111 @@ Vue.directive('on').keyCodes.myctrl = 17;
 
 
 
+***
+
+
+<a name="2h">
+
+
+### bower的使用
+
+bower是前端的一个包管理器，类似于npm，但npm主要用于后端node。
+
+安装:
+
+`npm install bower -g`
+
+验证: `bower --version`
+
+使用:
+
+```
+bower install <包名>
+bower uninstall <包名>
+bower info <包名>     查看包版本信息
+```
+
+可以用bower来安装vue.js、animate.css等各种库。
+
+如果要安装vue1.0的最新版，`bower install vue@1`即可。
+
+使用刚安装的vue:
+
+`<script src="bower_components/vue/dist/vue.js"></script>`
+
+
+
+***
+
+
+<a name="2i">
+
+
+### Vue中的过渡和动画
+
+在Vue中使用过渡(动画)transition，本质上也是使用CSS3的`transition`和`animation`。
+
+基本使用方法:
+
+```
+<button @click='bSign=false'>按钮</button>
+<div v-show="bSign" transition="fade"></div>
+
+data:{bSign:true}
+
+//动画：在style中定义
+.fade-transition {
+    transition: 1s all ease;
+}
+
+//设置进入效果:
+.fade-enter {
+}
+//设置离开效果
+.fade-leave {
+    opacity:0;
+    transform:translateX(200px);
+}
+```
+
+当点击按钮后，这个div将会在1秒内右移200px同时渐渐消失。
+
+
+**高级动画用法:**
+
+下载animate.css并引入: `bower install animate.css`。
+
+```
+<link rel="stylesheet" href="bower_components/animate.css/animate.css">
+
+//给元素加上类名animated，相当于引入了animate.css中的各种动画
+//后面只需给enterClass和leaveClass赋予效果即可
+<div class="animated" v-show="bSign" transition="myBounce"></div>
+```
+
+使用动画:
+
+在Vue中使用，写在transitions属性中。
+
+`enterClass`和`leaveClass`必写。
+
+```
+new Vue({
+    el:'body',
+    data:{bSign:true},
+    methods:{},
+    transitions:{
+        //这里面定义所有动画，直接使用animate.css中的效果
+        myBounce:{
+            enterClass:'zoomInLeft',
+            leaveClass:'zoomOutRight'
+        }
+    }
+});
+```
+
+
+
 
 ***
 
@@ -844,6 +953,254 @@ vm.$watch(name, callback, {deep:true});
 ***
 
 
+<a name="3b">
+
+
+### 组件的定义和使用
+
+
+#### 创建组件
+
+- **全局组件**:
+
+    ```
+    // 定义一个名为 button-counter 的新组件
+    Vue.component('button-counter', {
+      data: function () { //注意data必须是一个返回数据对象的函数
+        return {
+          count: 0
+        }
+      },
+      template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+    })
+    ```
+
+
+- **局部组件**:
+
+    ```
+    //一般局部组件是放在某个组件的内部
+    var vm = new Vue({
+        el:'#box',
+        data:{},
+        components:{
+            //可以放置多个局部组件
+            'my-Com':{
+                template:'<h2>标题2</h2>'
+            }
+        }
+    });
+    ```
+
+
+
+组件是可复用的 Vue 实例，且带有一个名字。
+
+它们与 new Vue 接收相同的选项，例如 data、computed、watch、methods 以及生命周期钩子等。仅有的例外是像 el 这样根实例特有的选项。
+
+
+
+#### 组件复用
+
+
+```
+//同时多次使用一个组件
+<div id="components-demo">
+  <button-counter></button-counter>
+  <button-counter></button-counter>
+  <button-counter></button-counter>
+</div>
+```
+
+注意当点击按钮时，每个组件都会各自独立维护它的 count。
+因为你每用一次组件，就会有一个它的新实例被创建，又由于data是以函数的形式存在，所以每个组件实例内部的数据独立。
+
+
+
+***
+
+
+<a name="3c">
+
+
+### 组件配合模板及动态组件
+
+
+**配合模板:**
+
+- 方式一:
+
+    如之前展示的，紧接着template属性后写上语句。
+
+    `template:'<h2 @click="change">标题2->{{msg}}</h2>'`
+
+- 方式二:
+
+    将模板代码单独放到某个地方，然后给template指定id号:`template:'#id'`
+    
+    ```
+    <script type='x-template' id="myCom">
+        <h2 @click="change">标题2->{{msg}}</h2>
+    </script>
+    ```
+
+    或者:
+    
+    ```
+    //放到body中:
+    <template id="myCom">
+        <h1>标题1</h1>
+        <ul>
+            <li v-for="val in arr">
+                {{val}}
+            </li>
+        </ul>
+    </template>
+    ```
+
+
+**动态组件:**
+
+
+Vue中可以设置一个动态组件，随时调整。
+
+`<component :is="组件名称"></component>`
+
+给组件名称赋一个变量，然后就可以动态的调整切换组件了。
+
+```
+<div id="box">
+<component :is="myCom"></component>
+</div>
+
+new Vue({
+    el:'#box',
+    data:{
+        myCom:'a'; //在这里修改组件名即可切换组件。
+    },
+    components:{
+        'a':{
+            template:'<h2>我是a组件</h2>'
+        },
+        'b':{
+            template:'<h2>我是b组件</h2>'
+        }
+    }
+});
+```
+
+
+
+***
+
+
+
+<a name="3d">
+
+
+### 组件数据传递
+
+
+> 可以给Chrome安装一个工具`vue-devtools`，利用它来调试Vue组件。
+
+
+默认情况下，子组件无法访问父组件的数据。
+
+
+如何在父子组件间进行数据传递？
+
+- **子组件要获取父组件的数据:**
+
+    ```
+    //父组件模板中嵌套调用子组件
+    <template id="aaa">
+        //子组件中接收父组件的数据msg，并绑定为属性
+        <bbb :p="msg"></bbb> //给子组件中的属性p绑定数据msg(已经在props中定义)
+    </template>
+    
+    new Vue({
+        el:'#box',
+        data:{},
+        components:{
+            'aaa':{
+                data:function(){
+                    return {
+                        msg: '我是父组件中的数据'
+                    }
+                },
+                template:'#aaa',
+                // 这是父组件里的子组件
+                components:{
+                    'bbb':{
+                        //在子组件中注册一些自定义的属性
+                        props:['p'],
+                        // 将从父组件接收来的数据使用在自己的模板里
+                        template:'<h3>我是bbb组件>{{p}}</h3>'
+                    }
+                }
+            }
+        }
+    });  
+    ```
+
+- **父组件获取子组件数据:**
+
+    需要子组件把自己的数据发送到父组件: `vm.$emit(事件名, 数据);`，然后父组件给事件绑定函数，函数的参数就是传过来的数据。
+    
+    **在子组件中发送数据:**
+
+    ```
+    'bbb':{
+        data:function(){
+            return {
+                bMsg:'我是子组件中的数据'
+            }
+        },
+        template:'#bbb',
+        methods:{
+            //定义一个方法send，在其中发送数据
+            send:function(){
+                //在这里以事件的形式发送自己的数据
+                this.$emit('child-msg', this.bMsg);
+            }
+        }
+    }
+    
+    //子组件模板
+    <template id="bbb">
+        <h2>子组件</h2>
+        <input type='button' value='发送' @click="send">
+    </template>
+    //当点击发送后，就会把数据以child-msg事件形式传递给父组件，作为该事件绑定函数的参数存在
+    ```
+
+    **在父组件中接收数据:**
+
+    ```
+    //使用父组件
+    <div id="box">
+        <aaa></aaa>
+    </div>
+    
+    //定义父组件模板
+    <template id="aaa">
+        //父组件中嵌套使用子组件，同时给child-msg绑定函数
+        <bbb @child-msg='get'></bbb>
+    </template>
+    
+    //在父组件中定义方法
+    'aaa':{
+        data:function(){return {}},
+        template:'#aaa';
+        methods:{
+            //这个函数的参数就是子组件传递过来的数据！
+            get:function(msg){
+                alert(msg);
+            }
+        }
+    }
+    
+    ```
 
 
 
