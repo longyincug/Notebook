@@ -37,6 +37,13 @@
     - [路由嵌套](#4b)
     - [vue-router构建一个简单的SPA](#4c)
 
+5. [vue-loader](#5)
+
+    - [App.vue](#5a)
+    - [main.js](#5b)
+    - [index.html](#5c)
+    - [package.json和webpack.config.js](#5d)
+    - [一些注意点](#5e)
 
 
 ***
@@ -1460,6 +1467,359 @@ subRoutes:{
 
 
 ***
+
+
+
+<a name="5">
+
+
+## vue-loader
+
+
+官方文档: [https://vue-loader.vuejs.org/guide/](https://vue-loader.vuejs.org/guide/)
+
+一个vue中模块化加载的工具，用来加载解析模块化组件:`.vue`文件。
+
+类似其他loader ——> css-loader、url-loader、html-loader...
+
+
+前端的模块化打包之前学过有`browserify`来实现，但是它只能实现js文件的模块化。
+
+- `webpack`: 模块打包器，一切文件都是模块。可以识别代码使用的模块化规范，然后获取依赖，进行转换、编译、打包。因为webpack本身是一个node模块，所以`webpack.config.js`是以`commonjs`形式书写的。
+
+- `vue-loader`是基于`webpack`的。
+
+
+使用了`vue-loader`的项目目录:
+
+![vue-loader](./Vuejs/images/vueloader.png)
+
+
+简单目录结构:
+
+    |-index.html        主页
+    |-main.js           入口文件
+    |-App.vue           主应用组件
+    |-package.json      工程文件（项目依赖、名称、配置），可以npm init --yes生成
+    |-webpack.config.js  webpack的配置文件
+
+
+***
+
+
+<a name='5a'>
+
+
+### `.vue`文件
+
+
+`.vue`文件放置的是特定格式的vue组件代码，`vue-loader`可以将其转换为正常的模块代码。
+又因为`.vue`文件中或外部有template代码、有js代码、有css代码，因此还需要一些加载器:
+`vue-html-loader`、`babel-loader`、`css-loader`、`vue-style-loader`、`vue-template-compiler`、`vue-hot-reload-api`，
+有vue前缀的加载器都是`vue-loader`的扩展，用来处理`.vue`文件中的各种代码。
+
+`.vue`中代码一般有三块:`template、script、style`:
+
+```
+<template>
+<!--放置的是该组件的模板-->
+<h1 @click="change">{{msg}}<h1>
+</template>
+
+<script>
+//放置的是该组件的定义代码，虽然用的是ES6的模块语法，但是其内部写法还是component。
+export default{
+    data(){
+        return {
+            msg: 'welcome Vue ^_^'
+        }
+    },
+    methods:{
+        change(){
+            this.msg = 'hello world';
+        }
+    }
+}
+</script>
+
+<style>
+/*放置样式代码*/
+body{
+    background: #ccc;
+}
+</style>
+```
+
+
+`App.vue`是主应用组件，可以往里面加入其它小组件:
+
+新建一个目录: components，用来放置各种小组件。
+
+components中的Menu.vue:
+
+    ```
+    <template>
+        <ul>
+            <li>111<li>
+            <li>222<li>
+            <li>333<li>
+        </ul>
+    </template>
+    <script>
+    </script>
+    ```
+
+在主组件App.vue中引入:
+
+```
+<script>
+    //所有的文件都是模块，vue组件当然也是，因此可以import导入
+    import Menu from './components/Menu.vue'
+    export default{
+        data(){
+            return {
+                msg:'welcome Vue ^_^'
+            }
+        },
+        methods:{
+            change(){
+            this.msg = 'hello world';
+            }
+        },
+        //注册子组件
+        components:{
+            'my-menu':Menu
+        }
+    }
+</script>
+
+<template>
+    <h1 @click="change">{{msg}}<h1>
+    <!--使用子组件Menu.vue-->
+    <my-menu></my-menu>
+</template>
+```
+
+
+***
+
+
+<a name="5b">
+
+
+### `main.js`
+
+`main.js`是入口文件，在这里面创建一个Vue实例，可以进行一系列操作，并注册`App.vue`组件。
+
+```
+import Vue from 'vue'
+import App from './App.vue'
+
+new Vue({
+    el:'body',
+    components:{
+        'app':App
+    }
+});
+```
+
+***
+
+
+<a name="5c">
+
+
+### `index.html`
+
+这是整个项目的主页，在这里需要的只是引入主应用组件和经过打包过后的模块入口文件。
+
+```
+// 经过webpack打包后的模块文件入口
+<script src="bundle.js"></script>
+
+//使用App.vue组件
+<body>
+    <app></app>
+</body>
+```
+
+`bundle.js`文件需要webpack运行并编译打包之后才能获取。
+
+
+***
+
+
+<a name="5d">
+
+
+### `package.json`和`webpack.config.js`
+
+
+`package.json`直接通过`npm init --yes`即可生成雏形，接下来我们还需要下载很多包，会在里面写入依赖。
+
+- `npm install <包名> -D` 相当于`--save-dev`，写入`devDependencies`.
+
+- `npm install <包名> -S` 相当于`--save`，写入`Dependencies`.
+
+此处除了vue.js是生产环境依赖，其余的都在开发环境下安装。
+
+为了便于相关文档的查找与学习，此处用的是vue2.x，其他相关依赖包也是较新版本。
+
+**依赖包清单:**
+
+```
+"dependencies": {
+    "vue": "^2.5.16"
+  },
+"devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "css-loader": "^0.28.11",
+    "vue-hot-reload-api": "^2.3.0",
+    "vue-html-loader": "^1.2.4",
+    "vue-loader": "^15.0.9",
+    "vue-style-loader": "^4.1.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.8.1",
+    "webpack-cli": "^2.1.3",
+    "webpack-dev-server": "^3.1.4"
+  }
+```
+
+- `babel-core`、`babel-loader`用来编译加载js文件及`.vue`文件中的`script`片段。
+
+- `css-loader`、`vue-style-loader`用来编译加载css文件及`.vue`文件中的`style`片段。
+
+- `vue-html-loader`、`vue-template-compiler`用来编译加载`.vue`文件中的模板片段。
+
+- `vue-loader`用来编译加载`.vue`文件，前缀名为vue的加载器都是`vue-loader`的扩展。
+
+- `vue-hot-reload-api`能够帮助我们运行调试，它会热加载，实时地对我们修改的内容部分渲染并显示。
+
+- `webpack`相关的不用多说，模块化打包必需的。
+
+
+`package.json`相关包安装完毕，接下来需要配置`webpack`。
+
+
+**webpack.config.js**:
+
+```
+//从vue-loader包中引入插件，以便在webpack中使用vue-loader
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
+module.exports = {
+    //设置为开发环境
+    mode:'development',
+    //模块文件入口
+    entry:'./main.js',
+    //模块化编译打包输出
+    output:{
+        path:__dirname,
+        filename:'bundle.js'
+    },
+    module:{
+        //对于不同的模块采用不同的加载器
+        rules:[
+           {
+               test:/\.vue$/,
+               loader:'vue-loader'
+           },
+           {
+               test:/\.js$/,
+               loader:'babel-loader',
+               //用来排除掉一些不需要编译解析的js文件
+               exclude:file=>(/node_modules/.test(file) && !/\.vue\.js/.test(file))
+           },
+           {
+               test:/\.css$/,
+               use:['vue-style-loader','css-loader']
+           }
+        
+        ]
+    },
+    //这里必须给webpack注册vue-loader的插件，否则无法运行
+    plugins:[
+        //make sure to include the plugin for the magic
+        new VueLoaderPlugin()
+    ]
+}
+```
+
+
+为了方便的运行webpack指令进行打包，可以在`package.json`的`scripts`中加入:
+
+```
+"scripts": {
+    "dev": "webpack-dev-server --inline --hot --port 7788"
+}
+//指定了webpack服务器端口为7788
+//--inline --hot就是利用了vue-hot-reload-api包的热加载
+```
+
+然后就可以通过指令`npm run dev`来启动服务了。
+
+在地址栏中输入:`localhost:7788`即可访问主页。
+
+效果图:
+
+![vue-loader-demo](./Vuejs/images/vue-loader-demo.png)
+
+
+附上项目文件目录:[vue-loader-demo](./Vuejs/vue-loader-demo)
+
+
+
+
+<a name="5e">
+
+
+***
+
+### 一些注意点
+
+- 组件component的模板中必须有一个根节点，否则会报错:
+
+    ```
+    //报错
+    <template>
+        <h2></h2>
+        <p></p>
+    </template>
+    
+    //不报错
+    <template>
+        <div>
+            <h2></h2>
+            <p></p>
+        </div>
+    </template>
+    ```
+
+- 在新版的`vue-loader`中，如果要基于`webpack`使用，需要在`webpack.config.js`设置:
+
+    ```
+    const VueLoaderPlugin = require('vue-loader/lib/plugin')
+    
+    //必须要在plugins选项中添加一个实例化的VueLoaderPlugin，否则报错
+    plugins:[
+        new VueLoaderPlugin()
+    ]
+    ```
+
+- 在`App.vue`中引入vue时:`import Vue from 'vue'`，这样默认导入的vue是`runtime`版本，没有编译器功能。
+
+    - 正确的引入方法是: `import Vue from 'vue/dist/vue.js'`
+    - 详细请看文档:[不同构建版本的解释说明](https://vuefe.cn/v2/guide/installation.html#不同构建版本的解释说明)
+
+
+- 在`index.html`中引入`bundle.js`时，注意要把`script`元素放在`body`的最后，不然`main.js`中的`Vue`实例会找不到`el`元素。
+
+
+
+
+
+
 
 
 
