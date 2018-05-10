@@ -1612,7 +1612,7 @@ components中的Menu.vue:
 `main.js`是入口文件，在这里面创建一个Vue实例，可以进行一系列操作，并注册`App.vue`组件。
 
 ```
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.js'
 import App from './App.vue'
 
 new Vue({
@@ -1634,16 +1634,16 @@ new Vue({
 这是整个项目的主页，在这里需要的只是引入主应用组件和经过打包过后的模块入口文件。
 
 ```
-// 经过webpack打包后的模块文件入口
-<script src="bundle.js"></script>
-
-//使用App.vue组件
 <body>
+    //使用App.vue组件
     <app></app>
+    
+    // 经过webpack打包后的模块文件入口
+    <script src="bundle.js"></script>
 </body>
 ```
 
-`bundle.js`文件需要webpack运行并编译打包之后才能获取。
+`bundle.js`文件需要webpack运行并编译打包之后才能得到引入。
 
 
 ***
@@ -1699,10 +1699,10 @@ new Vue({
 - `webpack`相关的不用多说，模块化打包必需的。
 
 
-`package.json`相关包安装完毕，接下来需要配置`webpack`。
+**`package.json`相关包安装完毕，接下来需要配置`webpack`。**
 
 
-**webpack.config.js**:
+**webpack.config.js:**
 
 ```
 //从vue-loader包中引入插件，以便在webpack中使用vue-loader
@@ -1747,17 +1747,40 @@ module.exports = {
 ```
 
 
-为了方便的运行webpack指令进行打包，可以在`package.json`的`scripts`中加入:
+至此webpack基本配置完毕，执行webpack指令打包:
+
+`./node_modules/.bin/webpack`
+
+然后在项目目录下会生成一个打包完毕的`bundle.js`文件，由于`index.html`事先写了引入的代码，所以可以直接点击`index.html`看到效果。
+
+
+***
+
+
+#### `webpack-dev-server`
+
+上面已经利用webpack打包生成文件`bundle.js`，但如果我们修改了代码则需要重新打包，调试代码比较麻烦。
+
+之前我们安装了`webpack-dev-server`，这是一个小型的`Nodejs Express`服务器，可以利用它来调试自己的代码而不必反复打包。
+
+**注意:**
+
+使用`webpack-dev-server`生成的包并没有放在真实目录中，也就是说在当前目录中不会生成`bundle.js`，而是放在了内存中。
+
+
+为了方便的执行webpack指令进行编译加载运行，可以在`package.json`的`scripts`中加入:
 
 ```
 "scripts": {
     "dev": "webpack-dev-server --inline --hot --port 7788"
 }
-//指定了webpack服务器端口为7788
-//--inline --hot就是利用了vue-hot-reload-api包的热加载
+//指定了webpack-dev-server服务器端口为7788
+//--inline --hot就是利用了vue-hot-reload-api包的热替换，修改代码后不必刷新即可看到效果
+// 如果是其他的server，要实现热替换，就需要在webpack.config.js中增加HotModuleReplacementPlugin了
 ```
 
-然后就可以通过指令`npm run dev`来启动服务了。
+
+然后可以通过指令`npm run dev`来启动服务器了。
 
 在地址栏中输入:`localhost:7788`即可访问主页。
 
@@ -1769,12 +1792,11 @@ module.exports = {
 附上项目文件目录:[vue-loader-demo](./Vuejs/vue-loader-demo)
 
 
+***
 
 
 <a name="5e">
 
-
-***
 
 ### 一些注意点
 
