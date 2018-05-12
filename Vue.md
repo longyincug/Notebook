@@ -390,7 +390,7 @@ this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
 
 - `compiled` ——> 编译之后
 
-- `ready` ——> $el第一次插入到文档中(此时模板数据还没有渲染)
+- `ready` ——> $el插入到文档中
 
 - `beforeDestroy` ——> 销毁之前
 
