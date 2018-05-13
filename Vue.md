@@ -13,7 +13,7 @@
     
 2. [Vue实例、钩子函数、自定义过滤器及指令](#2)
 
-    - [Vue钩子函数](#2a)
+    - [Vue生命周期钩子函数](#2a)
     - [v-text、v-html、v-cloak](#2b)
     - [计算属性computed](#2c)
     - [Vue实例属性及方法](#2d)
@@ -46,6 +46,10 @@
     - [一些注意点](#5e)
 
 6. [vue2.0语法、指令、组件变化](#6)
+
+    - [Vue2.x和Vue1.x的区别](#6a)
+    - [Vue2.x组件通信]($6b)
+
 
 
 
@@ -1857,8 +1861,17 @@ module.exports = {
 
 ## vue2.0语法、指令、组件变化
 
+不同于 Vue 1.x，所有的挂载元素会被 Vue 生成的 DOM 替换。
+因此不推荐挂载 root 实例到 `<html>` 或者 `<body>` 上。
 
-1. 组件模板中不再支持片段代码:
+
+<a name="6a">
+
+
+### Vue2.x和Vue1.x的区别
+
+
+1. **组件模板中不再支持片段代码:**
 
     ```
     //vue1.0支持，vue2.0不支持
@@ -1869,7 +1882,7 @@ module.exports = {
     //在vue2.0中必须有一个根元素，包裹住所有的子元素
     ```
 
-2. 关于组件的定义:
+2. **关于组件的定义:**
 
     - 在vue1.0中用`Com = Vue.extend({...})`来定义组件，然后`Vue.component('组件名',Com)`实现组件的创建。
     - vue2.0中Vue.extend()不再用来创建组件，而是用作生成扩展实例构造器。但`Vue.component()`依旧可用。
@@ -1886,15 +1899,186 @@ module.exports = {
         components:{'home':Home}
         ```   
 
-3. 生命周期的变化
+3. **生命周期的变化**
     
+    - 在Vue1.x中，生命周期对应的钩子函数有这么几种:
+        
+        - `init`
+        - `created`
+        - `beforeCompile`
+        - `compiled`
+        - `ready` (相当于2.x的`mounted`)
+        - `beforeDestroy`
+        - `destroyed`
     
+    - 在Vue2.x中，发生了一些变化:
     
+        - `beforeCreate`: 实例已经初始化，但还没有data和event。
+        - `created`: 数据、属性、方法、事件回调都已经配置完毕，但还没有模板编译、挂载，$el不可见。
+        - `beforeMount`: 在挂载开始之前被调用，此时模板编译已经完成。
+        - `mounted`: `el`被新创建的`vm.$el`替换，并且实例已经挂载上去之后调用该钩子。注意不一定所有的子组件也一起被挂载。
+        - `beforeUpdate`: 数据更新时调用，适合在更新之前访问现有的DOM。
+        - `updated`: 数据发生更改重新渲染DOM之后调用。注意不一定保证所有的子组件也一起被重绘。
+        - `beforeDestroy`: 实例销毁之前调用。
+        - `destroyed`: 实例销毁之后调用。
+
+    ![生命周期图示](./Vuejs/images/vue-lifecycle.png)
+
+
+4. **循环**
+
+    - Vue1.x中`v-for`默认是不能添加重复数据的，只能通过`track-by`来实现添加。
+    - Vue2.x中可以添加重复数据，并且没有了`track-by`，替换成了`:key`。
+    - Vue2.x中去掉了循环中的一些隐式变量:`$index`、`$key`...并且将当前遍历元素的可选属性调换了位置。
+    - Vue1.x: `<div v-for="(index, val) in array" track-by="$index"></div>`
+    - Vue2.x: 
+        - `<div v-for="(val, index) in array" :key="index"></div>`
+        - `<div v-for="(val, key) in object"></div>`
+        - `<div v-for="(val, key, index) in object"></div>`
+
+
+5. **自定义键盘事件**
+
+    - Vue1.x: `Vue.directive('on').keyCodes.myCtrl = 17;`
+    - Vue2.x: `Vue.config.keyCodes.myCtrl = 17;`
+
+
+6. **过滤器**
+
+    - 之前系统自带许多过滤器: currency/json/limitBy/filterBy...
+    - Vue2.x删除了内置过滤器。
+    - 现在只能通过`Vue.filter(id,fn)`自定义过滤器，或者引入一些工具库如`lodash`来使用过滤器。
+
+    - 过滤器传参形式也发生了变化:
+        - Vue1.x: `{{msg | toDou '5' '12'}}`
+        - Vue2.x: `{{msg | toDou('12','5')}}`
+
+
+***
+
+
+<a name='6b'>
+
+
+### Vue2.x组件通信
+
+
+Vue2.x中，组件的通信发生了一些变化。
+
+- 原1.x中的`$broadcast`、`$dispatch`方法都已经废弃。
+
+- 原1.x中子组件允许修改父组件的数据，并且可以通过`:msg.sync`同步修改，这样会让组件紧密耦合！在Vue2.x中，数据是单向传递的，不允许改变父组件的数据。
+
+
+**父组件和子组件的通信:**
+
+
+1. 父组件传递数据给子组件，子组件依旧可以通过`props`来接收，然后使用。
+
+    - Vue2.x虽然不允许直接将父组件数据进行赋值，但是可以间接实现对传递过来的数据的修改。
     
+        - **同步修改**:父组件每次传递一个数据对象给子组件，由于对象的引用是共享的，所以子组件对数据的修改会同步到父组件。
+    
+        - **不同步修改**:父组件传递过来一个数据，子组件在`mounted`函数中设置自己的一个数据来等于父组件数据的值，这样修改自己的属性，不影响父组件。
+
+        ```
+        components:{
+            'child-com':{
+                data(){
+                    return {
+                        b:''
+                    }
+                },
+                props:['msg'],
+                template:'#child',
+                mounted(){
+                    this.b = this.msg;
+                    //子组件使用自己的数据b而不是父组件传过来的msg
+                }
+            }
+        }
+        ```
+
+2. 子组件传递数据给父组件，依旧可以通过`$emit`来发送，父组件监听事件并接收数据。
+
+    ```
+    //子组件
+    <template>
+        <div @click="up"></div>
+    </template>
+    
+    methods:{
+        up(){
+            //以事件的形式发送数据到父组件
+            this.$emit('事件名称','数据');
+        }
+    }
+    
+    //父组件
+    <div>
+        <child @'事件名称'="change" :msg='msg'></child>
+    </div>
+    
+    methods:{
+        change(数据){
+            //接收到了从子组件传过来的'数据'
+            //还可以修改自己的msg，依照子组件的意愿，然后父子组件的msg都会同步变化。
+            this.msg = '数据';
+        }
+    }
+    ```
+
+    还可以用这个方法来实现子组件修改父组件的数据，并同步修改。
 
 
 
-### 
+
+**非父子组件的通信:**
+
+
+可以通过`eventBus`来实现:
+
+在组件间引入一个新的实例，专门用来管理组件之间的数据通信，相当于一个中转站，可以用它来传递事件和接收事件。
+
+1. 创建一个事件中心:`eventBus`
+
+    `let Bus = new Vue();`
+
+2. 组件1触发:
+
+    ```
+    <div @click='eve'></div>
+    
+    methods:{
+        eve(){
+            Bus.$emit('change','数据');//Bus触发事件
+        }
+    }
+    ```
+
+3. 组件2接收:
+
+    ```
+    <div></div>
+    
+    mounted(){
+        //Bus接收事件
+        Bus.$on('change',function(数据){
+            this.msg = 数据;
+        }).bind(this);//注意！需要绑定组件2的作用域！否则找不到属性！
+    }
+    ```
+
+
+代码示例:[eventBus管理组件通信](./Vuejs/demos/eventBus管理组件通信.html)
+
+
+
+
+
+
+
+
 
 
 

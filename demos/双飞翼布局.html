@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>双飞翼布局</title>
+		<!--
+		    类似圣杯布局，多了一个div，但是少了几个CSS属性
+		-->
+		<style type="text/css">
+			.main,.left,.right{
+			    float: left;
+			    min-height: 130px;
+			    text-align: center;
+			}
+			.left{
+			    height: 600px;
+			    width: 300px;
+			    margin-left: -100%;
+			    background-color: red;
+			}
+			.right{
+			    height: 600px;
+			    width: 200px;
+			    margin-left: -200px;
+			    background-color: blue;
+			}
+			.main{
+			    width: 100%;
+			}
+			.content{
+                margin: 0 200px 0 300px;
+			    height: 700px;
+                background-color: green;
+			}
+		</style>
+	</head>
+	<body>
+	    <div class="container">
+	        <div class="main">
+	            <div class="content"></div>
+	        </div>
+	        <div class="left"></div>
+	        <div class="right"></div>
+	    </div>
+	</body>
+</html>

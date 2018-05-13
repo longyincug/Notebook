@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task3-圣杯布局</title>
+    <!--
+        三列布局，中间宽度自适应，两边定宽；
+    
+        中间栏要在浏览器中优先展示渲染；
+    
+        允许任意列的高度最高；
+    -->
+    
+    <!--
+      -->
+    <style>
+    * {margin: 0;padding: 0;}
+    body {
+        padding: 20px;
+    }
+    
+    .container {
+        padding: 0 200px 0 300px;
+    }
+    
+    #left,#right,#main{
+        position: relative;
+        min-height: 130px;
+        float: left;
+    }
+    
+    #left {
+        width: 300px;
+        height: 500px;
+        margin-left:-100%;
+        background-color: red;
+        margin-right:20px;
+        left: -300px;
+        
+    }
+    #main { 
+        width:100%;
+        background-color: green;
+        height: 400px;
+    }
+    #right {
+        margin-left: -200px;
+        background-color: blue;
+        width:200px;
+        height: 500px;
+        right: -200px;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="main"></div>
+        <div id="left"></div>
+        <div id="right"></div>
+    </div>
+    
+</body>
+</html>
