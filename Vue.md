@@ -53,7 +53,8 @@
 7. [Vue2.0过渡及其钩子函数](#7)
 
     - [Vue2.x过渡(动画)](#7a)
-    - [transition的钩子函数](#7b)
+    - [transition事件的钩子函数](#7b)
+    - [与animate.css配合、多元素过渡](#7c)
 
 
 
@@ -2114,7 +2115,7 @@ data:{show:true}
 给`transition`指定`name`为`fade`后，将会自动生成几个过渡状态的`class`:
 
 - `.fade-enter{}` —— 出现的初始状态
-- `.fade-enter-active{}` —— 当元素出现，变化过渡的趋向状态
+- `.fade-enter-active{}` —— 当元素进入，变化过渡的趋向状态
 - `.fade-leave{}` —— 离开的初始状态（通常不使用）
 - `.fade-leave-active{}` —— 当元素离开，变化过渡的趋向状态
 
@@ -2140,7 +2141,119 @@ data:{show:true}
 <a name="7b">
 
 
-### transition的钩子函数
+### transition事件的钩子函数
+
+
+在过渡的过程中有几个标志状态的**事件**:
+
+- `before-enter` —— 动画开始进入之前
+
+- `enter` —— 动画开始进入
+
+- `after-enter` —— 动画进入之后
+
+- `before-leave` —— 动画开始离开之前
+
+- `leave` —— 动画开始离开
+
+- `after-leave` —— 动画离开之后
+
+
+可以在属性中声明JS钩子:
+
+```
+<transition
+  v-on:before-enter="beforeEnter"
+  v-on:enter="enter"
+  v-on:after-enter="afterEnter"
+
+  v-on:before-leave="beforeLeave"
+  v-on:leave="leave"
+  v-on:after-leave="afterLeave"
+>
+  <!-- ... -->
+</transition>
+```
+
+在methods中定义钩子函数，注意函数的参数是该过渡所在的**DOM元素**:
+
+```
+methods:{
+    beforeEnter(el){
+        //操作DOM
+        el.style.opacity = 0
+    },
+
+    // 此回调函数done是可选的，与CSS结合时使用
+    enter(el,done){
+    },
+    
+    // 此回调函数done是可选的，与CSS结合时使用
+    leave(el,done){
+    }
+}
+```
+
+
+***
+
+
+
+<a name="7c">
+
+
+### 与`animate.css`配合、多元素过渡
+
+
+引入`animate.css`，然后只需给`enter-active-class`和`leave-active-class`指定效果即可。
+
+```
+<transition enter-active-class="animated zoomInLeft" leave-active-class="animated zoomOutRight">
+    <!-- animated也可以加到p元素上，表示使用animate.css -->
+    <p v-show="show"></p>
+</transition>
+```
+
+`transition`默认只能给内部**唯一**的一个元素的**最顶层**设置过渡效果。
+
+如果要给多个元素设置过渡？使用`transition-group`，并且给每个元素加上`:key`:
+
+```
+data:{
+    show:'',
+    olist:['apple','orange']
+},
+//可以设置展现的元素的数组随输入的关键字而变化
+computed:{
+    list:function(){
+        var arr=[];
+        this.olist.forEach(function(val){
+            if(val.indexOf(this.show)!=-1){
+                arr.push(val);
+            }
+        }.bind(this));
+    return arr;
+}
+
+//此处输入关键字
+<input type='text' v-model="show">
+//根据关键字展示元素
+<transition-group enter-active-class="" leave-active-class="">
+    <!-- 注意要给每个元素都加上:key，一般是用v-for来添加的 -->
+    
+    <p v-show='show' class='animated' v-for="(val,index) in list" :key="index"></p>
+</transition-group>
+```
+
+
+***
+
+
+<a name="8">
+
+
+##
+
 
 
 
