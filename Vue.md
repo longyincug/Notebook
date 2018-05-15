@@ -56,7 +56,11 @@
     - [transition事件的钩子函数](#7b)
     - [与animate.css配合、多元素过渡](#7c)
 
+8. [Vue2.0中vue-router的使用](#8)
 
+    - [基本使用](#8a)
+    - [路由嵌套](#8b)
+    - [Vue脚手架vue-cli](#8c)
 
 
 
@@ -1329,7 +1333,7 @@ Vue实现了一套内容分发的api，并将slot元素作为承载分发内容�
 
 之前用`vue-resource`实现交互，现在可以用`vue-router`实现路由功能。
 
-将组件映射到路由，然后告诉vue-router在哪里渲染它们。
+将组件映射到路由，然后告诉`vue-router`在哪里渲染它们。
 
 
 <a name="4a">
@@ -2252,11 +2256,211 @@ computed:{
 <a name="8">
 
 
-##
+## Vue2.x中`vue-router`的使用
 
 
 
+<a name="8a">
 
+
+### 基本使用
+
+1. 布局
+    
+    ```
+    //链接不再是v-link
+    <router-link to="/home">主页</router-link>
+
+    <router-view></router-view>
+    ```
+
+2. 路由具体写法
+
+    ```
+    //组件
+    var Home={
+        template:'<h3>我是主页</h3>'
+    };
+    var News={
+        template:'<h3>我是新闻</h3>'
+    };
+
+    //配置路由
+    const routes=[
+        {path:'/home', componet:Home},
+        {path:'/news', componet:News},
+    ];
+
+    //生成路由实例
+    const router=new VueRouter({
+        routes
+    });
+
+    //最后挂到vue上
+    new Vue({
+        router,
+        el:'#box'
+    });
+    ```
+
+3. 重定向
+
+    ```
+    //之前的 router.rediect  废弃了
+    {path:'*', redirect:'/home'}
+    ```
+
+
+***
+
+
+<a name="8b">
+
+
+### 路由嵌套
+
+```
+/user/username
+
+const routes=[
+    {path:'/home', component:Home},
+    {
+        path:'/user',
+        component:User,
+        children:[  //核心
+            {path:'username', component:UserDetail}
+        ]
+    },
+    {path:'*', redirect:'/home'}
+];
+```
+
+
+**路由实例方法:**
+
+直接添加一个路由,表现切换路由，本质是往历史记录里面添加:
+
+`router.push({path:'home'});`
+
+替换路由，不会往历史记录里面添加:
+
+`router.replace({path:'news'});`
+
+
+
+**路由结合过渡:**
+
+```
+<transition enter-active-class="animated bounceInLeft" leave-active-class="animated bounceOutRight">
+    <router-view></router-view>
+</transition>
+```
+
+
+***
+
+
+<a name="8c">
+
+
+### Vue脚手架vue-cli
+
+
+之前用`vue-loader`实现了模块化组件的打包和管理:[Vue2.0中vue-loader的使用](https://github.com/longyincug/Notebook/blob/master/Vue.md#5)
+
+手动创建`webpack`配置文件，安装了`vue-loader`、`css-loader`等等一大堆模块，完成了整个项目的构建。
+
+每次搭建项目，都要整这么一大堆模块，比较麻烦，有没有一种比较方便的构建方法呢？
+
+
+**利用vue提供的脚手架:`vue-cli`**
+
+可以提供基本的项目结构，自然也包括了vue-loader等加载器。
+
+- 安装:`npm install vue-cli`
+
+- 用脚手架初始化项目: `vue init webpack-simple vue-cli-demo`
+
+`vue-cli`本身集成了很多项目模板:
+
+- `webpack`: 可以使用(大型项目)
+
+    - Eslint 检查代码规范，比较严格
+    - 具有单元测试功能
+
+- `webpack-simple`: 简单使用，没有代码检查
+
+- `browserify`、`browserify-simple`等等
+
+
+当执行`vue init webpack-simple vue-cli-demo`后，生成的项目目录:
+
+![vue-cli项目目录](./Vuejs/images/vue-cli-demo.png)
+
+还需要安装模块及依赖: `npm install`
+
+在`npm run dev`时，为了防止端口号重复，可以在`package.json-->scripts-->dev`中加上`--port 7788`。
+
+
+**注意Vue2.x中，脚手架中向Vue实例添加组件的写法有改变:**
+
+```
+new Vue({
+  el: '#app',
+  render: h => h(App) //h是一个形参
+  //之前是components:{App}
+})
+```
+
+
+**结合`vue-router`使用:**
+
+需要安装:`npm install vue-router --save`
+
+**main.js:**
+
+```
+import Vue from 'vue/dist/vue.js'
+import VueRouter from 'vue-router'
+import App from './App.vue'
+import Home from './components/Home.vue'
+import News from './components/News.vue'
+
+//如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
+Vue.use(VueRouter);
+
+//定义路由，一般单独设置一个文件router.config.js放置routes
+// 用export default {routes:[]}导出，用import routerConfig from './router.config.js'导入
+//注意:以 / 开头的嵌套路径会被当作根路径
+const routes = [
+    {path:'/home',component:Home,children:[]},
+    {path:'/news',component:News}
+];
+
+//创建router实例
+const router = new VueRouter({routes});
+
+//创建和挂载根实例
+new Vue({
+    //通过router配置参数注入路由
+    router,
+//  components:{
+//      //引入主组件App.vue
+//      'app':App
+//  }
+    //使用新的组件渲染写法
+    render: h => h(App)
+}).$mount('#app');
+```
+
+**index.html:**
+
+```
+<body>
+    <div id="app"></div>
+    <script src="/dist/build.js"></script>
+</body>
+```
 
 
 
