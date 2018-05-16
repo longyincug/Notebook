@@ -2425,6 +2425,8 @@ import VueRouter from 'vue-router'
 import App from './App.vue'
 import Home from './components/Home.vue'
 import News from './components/News.vue'
+//可以导入css库，是全局的，然后在App.vue中使用transition嵌套router-view
+import './assets/css/animate.css'
 
 //如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
 Vue.use(VueRouter);
@@ -2448,7 +2450,7 @@ new Vue({
 //      //引入主组件App.vue
 //      'app':App
 //  }
-    //使用新的组件渲染写法
+    //使用新的组件渲染写法，就不必插入app元素了，只需设置id
     render: h => h(App)
 }).$mount('#app');
 ```
@@ -2461,6 +2463,10 @@ new Vue({
     <script src="/dist/build.js"></script>
 </body>
 ```
+
+
+***
+
 
 
 

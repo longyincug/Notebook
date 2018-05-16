@@ -1768,7 +1768,7 @@ CSS3中的Media Query(媒介查询):
 
 <style>
 	// 窗口宽度在960px以上采用这种样式
-	@media screen and (min-width:640px){
+	@media screen and (min-width:960px){
 		body {
 			background-color: green;
 		}
