@@ -62,6 +62,7 @@
     - [路由嵌套](#8b)
     - [Vue脚手架vue-cli](#8c)
 
+9. [Vue2.0的UI组件使用及axios](#9)
 
 
 ***
@@ -2466,6 +2467,114 @@ new Vue({
 
 
 ***
+
+
+<a name="9">
+
+
+## Vue2.0的UI组件使用及axios
+
+
+以`element-ui`为例，饿了么团队开源的一个基于vue的UI组件库。
+
+官网: [http://element.eleme.io/](http://element.eleme.io/)
+
+
+1. 安装:`npm install element-ui -S`
+
+2. 在main.js中引入: 
+
+    ```
+    import ElementUI from 'element-ui'
+    import 'element-ui/lib/theme-default/index.css'
+    ```
+    
+    这样就全部引入了ElementUI，需要注意的是，样式文件需要单独引入。
+
+3. 使用组件
+
+    ```
+    Vue.use(ElementUI)
+    
+    new Vue({
+      el: '#app',
+      render: h => h(App)
+    });
+    ```
+
+4. 也可以按需加载相应的组件，需要借助`babel-plugin-component`
+
+
+    `npm install babel-plugin-component -D`
+
+    将`.babelrc` 修改为：
+    
+    ```
+    {
+      "presets": [["es2015", { "modules": false }]],
+      "plugins": [
+        [
+          "component",
+          {
+            "libraryName": "element-ui",
+            "styleLibraryName": "theme-chalk"
+          }
+        ]
+      ]
+    }
+    ```
+
+    如果你只希望引入部分组件，比如 Button 和 Select，那么需要在 main.js 中写入以下内容:
+    
+    ```
+    import Vue from 'vue';
+    import { Button, Select } from 'element-ui';
+    import App from './App.vue';
+    
+    Vue.component(Button.name, Button);
+    Vue.component(Select.name, Select);
+    /* 或写为
+     * Vue.use(Button)
+     * Vue.use(Select)
+     */
+    
+    new Vue({
+      el: '#app',
+      render: h => h(App)
+    });
+    ```
+
+
+详情请查阅官方文档。
+
+
+
+
+### axios
+
+
+在Vue2.0出来时，`vue-resource`已经停止了更新，更推荐使用`axios`，一个依赖于ES6的Promise的HTTP库。
+
+
+官方文档: [https://github.com/axios/axios](https://github.com/axios/axios)
+
+
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
