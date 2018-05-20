@@ -2285,7 +2285,9 @@ computed:{
     var News={
         template:'<h3>我是新闻</h3>'
     };
-
+    
+    Vue.use(VueRouter);
+    
     //配置路由
     const routes=[
         {path:'/home', componet:Home},
@@ -2557,6 +2559,42 @@ new Vue({
 
 
 官方文档: [https://github.com/axios/axios](https://github.com/axios/axios)
+
+
+
+***
+
+
+### 自定义全局组件
+
+
+我们之前使用`Vue.use()`来注册组件，如`vue-router`等，如果我们需要自定义这种全局组件，要实现`install`方法:
+
+**目录结构:**
+
+```
+|-myCom
+    |-index.js
+    |-MyCom.vue
+```
+
+**index.js:**
+
+```
+import MyCom from './MyCom.vue'
+
+const Loading = {
+    install: function(Vue){
+        Vue.component('MyCom', MyCom);
+    }
+};
+
+export default Loading
+```
+
+`import MyCom from 'MyCom'`
+
+然后就可以`Vue.use(MyCom)`来使用该组件了。
 
 
 
