@@ -64,6 +64,13 @@
 
 9. [Vue2.0的UI组件使用及axios](#9)
 
+10. [Vuex](#10)
+    
+    - [Getter](#10a)
+    - [Mutation](#10b)
+    - [Action](#10c)
+    - [Module](#10d)
+
 
 ***
 
@@ -2602,12 +2609,327 @@ export default Loading
 
 
 
+<a name="10">
+
+
+## Vuex
+
+
+官方文档: [https://vuex.vuejs.org/zh/getting-started.html](https://vuex.vuejs.org/zh/getting-started.html)
+
+详细的介绍请查阅官方文档。
+
+**Vuex是什么?**
+
+
+> Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+
+
+**什么情况下使用Vuex?**
+
+
+> 如果您不打算开发大型单页应用，使用 Vuex 可能是繁琐冗余的。确实是如此——如果您的应用够简单，您最好不要使用 Vuex。一个简单的 global event bus 就足够您所需了。但是，如果您需要构建一个中大型单页应用，您很可能会考虑如何更好地在组件外部管理状态，Vuex 将会成为自然而然的选择。
+
+
+每一个 Vuex 应用的核心就是 store（仓库），包含着你的应用中大部分的状态 (state)。
+
+- 响应式的状态存储。若store中的状态变化，相应组件中也会得到更新。
+
+- 不能直接改变store中的状态，改变的唯一途径是**commit mutation**。
 
 
 
+**最简单的store:**
+
+```
+// 如果在模块化构建系统中，请确保在开头调用了 Vue.use(Vuex)
+
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  }
+})
+
+//通过 store.state 来获取状态对象，以及通过 store.commit 方法触发状态变更
+store.commit('increment')
+console.log(store.state.count) // -> 1
+```
+
+
+**在 Vue 组件中获得 Vuex 状态**
+
+```
+//Vuex 通过 store 选项，提供了一种机制将状态从根组件“注入”到每一个子组件中
+const app = new Vue({
+  el: '#app',
+  // 把 store 对象提供给 “store” 选项，这可以把 store 的实例注入所有的子组件
+  store,
+  components: { Counter },
+  template: `
+    <div class="app">
+      <counter></counter>
+    </div>
+  `
+})
+
+// 创建一个 Counter 组件
+// store 实例会注入到根组件下的所有子组件中，且子组件能通过 this.$store 访问到
+const Counter = {
+  template: `<div>{{ count }}</div>`,
+  computed: {
+    count () {
+      return this.$store.state.count
+    }
+  }
+}
+```
+
+
+***
+
+
+<a name="10a">
+
+
+### Getter
+
+使用computed计算属性会带来一些问题:如果多个组件需要用到这个属性，要么复制这个函数，或者抽取到一个共享函数然后在多处导入它——无论哪种方式都不是很理想。
+
+
+> Vuex 允许我们在 store 中定义“getter”（可以认为是 store 的计算属性）。就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来，且只有当它的依赖值发生了改变才会被重新计算。
+
+
+```
+//Getter 接受 state 作为其第一个参数：
+
+const store = new Vuex.Store({
+  state: {
+    todos: [
+      { id: 1, text: '...', done: true },
+      { id: 2, text: '...', done: false }
+    ]
+  },
+  getters: {
+    doneTodos: state => {
+      return state.todos.filter(todo => todo.done)
+    }
+  }
+})
+```
+
+
+**通过属性访问Getter**
+
+Getter 会暴露为 store.getters 对象，你可以以属性的形式访问这些值:
+
+`store.getters.doneTodos // -> [{ id: 1, text: '...', done: true }]`
+
+在任何组件中使用:
+
+```
+computed: {
+  doneTodosCount () {
+    return this.$store.getters.doneTodos
+  }
+}
+```
+
+`getter`在通过属性访问时是作为 Vue 的响应式系统的一部分缓存其中的。
+
+
+**通过方法访问Getter**
+
+```
+// 让 getter 返回一个函数，来实现给 getter 传参
+getters: {
+  // ...
+  getTodoById: (state) => (id) => {
+    return state.todos.find(todo => todo.id === id)
+  }
+}
+```
+
+`getter`在通过方法访问时，每次都会去进行调用，而不会缓存结果。
+
+
+***
+
+
+<a name="10b">
+
+
+### Mutation
+
+
+> 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation。Vuex 中的 mutation 非常类似于事件：每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。这个回调函数就是我们实际进行状态更改的地方，并且它会接受 state 作为第一个参数：
+
+
+```
+const store = new Vuex.Store({
+  state: {
+    count: 1
+  },
+  mutations: {
+  //像是事件注册：当触发一个类型为 increment 的 mutation 时，调用此函数
+    increment (state) {
+      // 变更状态
+      state.count++
+    }
+  }
+})
+
+//激活mutation handler
+store.commit('increment')
+```
+
+
+**提交载荷(Payload)**
+
+向 store.commit 传入额外的参数，即 mutation 的 载荷（payload）。
+
+
+```
+store.commit({
+  type: 'increment',
+  amount: 10
+})
+```
+
+整个对象都作为载荷传给 mutation 函数:
+```
+mutations: {
+  increment (state, payload) {
+    state.count += payload.amount
+  }
+}
+```
+
+
+**注意:** mutation 必须是同步函数，否则状态不可追踪。
+
+
+在组件中使用 `this.$store.commit('xxx')` 提交 mutation。
+
+
+***
+
+
+<a name="10c">
+
+
+### Action
+
+在 Vuex 中，mutation 都是同步事务，为了处理异步操作，需要使用Action。
+
+Action类似于mutation，不同在于:
+
+- Action 提交的是 mutation，而不是直接变更状态。
+- Action 可以包含任意异步操作。
+
+```
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  },
+  actions: {
+    increment (context) {
+      context.commit('increment')
+    }
+  }
+})
+```
+
+
+> Action 函数接受一个与 store 实例具有相同方法和属性的 context 对象，因此你可以调用 context.commit 提交一个 mutation，或者通过 context.state 和 context.getters 来获取 state 和 getters。当我们在之后介绍到 Modules 时，你就知道 context 对象为什么不是 store 实例本身了。
+
+
+我们会经常用到 ES2015 的 参数解构 来简化代码（特别是我们需要调用 commit 很多次的时候）
+
+```
+actions: {
+  increment ({ commit }) {
+    commit('increment')
+  }
+}
+```
+
+
+**分发Action**
+
+Action 通过 `store.dispatch('increment')` 方式触发。
+
+我们可以在 action 内部执行异步操作：
+
+```
+actions: {
+  incrementAsync ({ commit }) {
+    setTimeout(() => {
+      commit('increment')
+    }, 1000)
+  }
+}
+```
+
+
+Actions同样也支持载荷分发。
+
+在组件中使用 `this.$store.dispatch('xxx')` 分发 action。
+
+
+***
+
+
+<a name="10d">
+
+
+### Module
+
+当应用变得非常复杂时，store 对象就有可能变得相当臃肿。
+
+Vuex 允许我们将 store 分割成模块（module）。每个模块拥有自己的 state、mutation、action、getter、甚至是嵌套子模块——从上至下进行同样方式的分割：
+
+
+```
+const moduleA = {
+  state: { ... },
+  mutations: { ... },
+  actions: { ... },
+  getters: { ... }
+}
+
+const moduleB = {
+  state: { ... },
+  mutations: { ... },
+  actions: { ... }
+}
+
+const store = new Vuex.Store({
+  modules: {
+    a: moduleA,
+    b: moduleB
+  }
+})
+
+store.state.a // -> moduleA 的状态
+store.state.b // -> moduleB 的状态
+```
+
+
+详情请查阅[官方文档](https://vuex.vuejs.org/zh/modules.html)。
 
 
 
+***
 
 
 
