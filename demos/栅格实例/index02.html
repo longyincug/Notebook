@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>自适应示例页面（从第一个开始往下落）</title>
+        <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+	    <div class="jumbotron">
+          <h1 class="text-center">Hello, world!</h1>
+        </div>
+
+	    <div class='container'>
+	        <div class="row">
+	            <!--首先在结构上将四块区域颠倒，再通过列排序使其恢复原样-->
+              <div class="col-lg-3 col-lg-push-9 col-md-4 col-md-push-8 col-sm-6 col-sm-push-6 col-xs-12">
+                <div class="thumbnail">
+                  <img src="img/react.png" alt="...">
+                  <div class="caption text-center">
+                    <h3>React</h3>
+                    <p>React 起源于 Facebook 的内部项目，是一个用于构建用户界面的 JavaScript 库。<br /><br /></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-lg-push-3 col-md-4 col-md-pull-0 col-sm-6 col-sm-pull-6 col-xs-12">
+                <div class="thumbnail">
+                  <img src="img/python.jpg" alt="...">
+                  <div class="caption text-center">
+                    <h3>Python全栈开发教程</h3>
+                    <p>使用Python +bootstrap快速构建各种Web项目，快速掌握进入人工智能、数据分析、爬虫、云计算、自动化运维等领域的必备语言。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-lg-pull-3 col-md-4 col-md-pull-8 col-sm-6 col-xs-12">
+                <div class="thumbnail">
+                  <img src="img/typescript.png" alt="...">
+                  <div class="caption text-center">
+                    <h3>TypeScript </h3>
+                    <p>TypeScript 是由微软开源的编程语言。它是 JavaScript 的一个超集，而且本质上向这个语言添加了可选的静态类型和基于类的面向对象编程。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-lg-pull-9 col-md-4 col-sm-6 col-xs-12">
+                <div class="thumbnail">
+                  <img src="img/bootstrap.png" alt="...">
+                  <div class="caption text-center">
+                    <h3>Bootstrap 编码规范</h3>
+                    <p>Bootstrap 编码规范：编写灵活、稳定、高质量的 HTML 和 CSS 代码的规范。<br /><br /></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+	    </div>
+	    
+        <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	</body>
+</html>
