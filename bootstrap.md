@@ -230,7 +230,7 @@
     @grid-gutter-width: 50px;
     ```
 
-
+对于后台管理界面，还可以使用一些现成的基于bootstrap的ui组件模板。如:[17素材网](http://www.17sucai.com/search/bootstrap?)
 
 
 

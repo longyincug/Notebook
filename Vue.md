@@ -59,7 +59,7 @@
 8. [Vue2.0中vue-router的使用](#8)
 
     - [基本使用](#8a)
-    - [路由嵌套](#8b)
+    - [路由嵌套、编程式路由、命名路由](#8b)
     - [Vue脚手架vue-cli](#8c)
 
 9. [Vue2.0的UI组件使用及axios](#9)
@@ -70,6 +70,9 @@
     - [Mutation](#10b)
     - [Action](#10c)
     - [Module](#10d)
+
+11. [Vue的总结及核心概括](#11)
+
 
 
 ***
@@ -295,10 +298,32 @@ Vue2.0以后可以将过滤器用在v-bind表达式中:
 `$http({
     url:URL,
     data:{},
-    method:'get/post/jsonp',
-    jsonp:'cb'//cbName
-});`
+    params:{},
+    method:'GET/POST/JSONP',
+    jsonp:'cb'//cbName,
+    timeout:50,
+    before:function(){console.log("before init")}
+}).then();`
 ```
+
+可以通过在Vue实例中设置http选项来调整资源查找的根目录:
+
+```
+new Vue({
+  el: '#app',
+  data:{},
+  mounted:function(){},
+  http:{
+    root:'http://localhost:7788/Project/'
+  },
+  methods:{
+    myGet:function(){
+      this.$http.get('a.txt',{}).then();
+    }
+  }
+});
+```
+
 
 
 #### GET
@@ -316,11 +341,17 @@ this.$http.get("a.txt").then(function(res){
 ```
 this.$http.get('get.php', {
     a:1,
-    b:2
+    b:2,
+    params:{
+      userId:'123'
+    },
+    headers:{
+      token:'abcd'
+    }
 }).then(function(res){
     alert(res.data);
-}, function(res){
-    alert(res.status);
+}, function(err){
+    alert(err.status);
 });
 ```
 
@@ -368,6 +399,23 @@ this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
         alert(res.status);
     });
 ```
+
+#### 全局拦截器
+
+```
+mounted: function(){
+  //会拦截到所有的交互请求
+  Vue.http.interceptors.push(function(request,next){
+    console.log('request init');
+    next(function(response){
+      console.log('response init');
+      return response;
+    });
+  });
+}
+```
+
+
 
 
 ***
@@ -2327,7 +2375,7 @@ computed:{
 <a name="8b">
 
 
-### 路由嵌套
+### 路由嵌套、编程式路由、命名路由
 
 ```
 /user/username
@@ -2346,15 +2394,50 @@ const routes=[
 ```
 
 
-**路由实例方法:**
+**编程式路由:**
 
-直接添加一个路由,表现切换路由，本质是往历史记录里面添加:
+通过js直接添加一个路由，表现为页面跳转，本质是往历史记录里面添加:
 
-`router.push({path:'home'});`
+`$router.push("name");`
+`$router.push({path:'home'});`
+`$router.push({path:'home?a=123'});`
+`$router.push({path:'home',query:{a:123}});`
 
 替换路由，不会往历史记录里面添加:
 
-`router.replace({path:'news'});`
+`$router.replace({path:'news'});`
+
+
+
+**命名路由:**
+
+`<router-link v-bind:to="{name:'cart',params:{cartId:123}}">跳转到购物车页面</router-link>`
+
+注意: 要将属性to用bind绑定，否则不会渲染成实际的url！
+
+
+**命名视图:**
+
+```
+routes: [
+  {
+    path: '/',
+    name: 'GoodsList',
+    components:{
+      default:GoodsList,
+      title: Title,
+      img: Image
+    }
+  }
+]
+
+// 同时渲染三个视图
+<router-view></router-view>
+<router-view name='title'></router-view>
+<router-view name='img'></router-view>
+```
+
+
 
 
 
@@ -2387,7 +2470,7 @@ const routes=[
 
 可以提供基本的项目结构，自然也包括了vue-loader等加载器。
 
-- 安装:`npm install vue-cli`
+- 安装:`npm install vue-cli -g`
 
 - 用脚手架初始化项目: `vue init webpack-simple vue-cli-demo`
 
@@ -2569,6 +2652,9 @@ new Vue({
 
 
 
+
+
+
 ***
 
 
@@ -2580,7 +2666,7 @@ new Vue({
 **目录结构:**
 
 ```
-|-myCom
+|-my-com
     |-index.js
     |-MyCom.vue
 ```
@@ -2592,16 +2678,16 @@ import MyCom from './MyCom.vue'
 
 const Loading = {
     install: function(Vue){
-        Vue.component('MyCom', MyCom);
+        Vue.component('myCom', MyCom);
     }
 };
 
 export default Loading
 ```
 
-`import MyCom from 'MyCom'`
+`import myCom from 'my-com'`
 
-然后就可以`Vue.use(MyCom)`来使用该组件了。
+然后就可以`Vue.use(myCom)`来使用该组件了。
 
 
 
@@ -2930,6 +3016,111 @@ store.state.b // -> moduleB 的状态
 
 
 ***
+
+
+<a name="11">
+
+
+
+## Vue的总结及概括
+
+
+- Model绑定view
+
+- 没有控制器概念
+ 
+- 数据驱动，状态管理
+
+
+Vue本身并不是一个框架，结合周边的生态构成一个灵活的、渐进式的框架。
+
+**声明式渲染 —— 组件系统 —— 客户端路由 —— 大规模状态管理 —— 构建工具**
+
+
+***
+
+
+### Vue是如何实现双向数据绑定的？
+
+
+利用`Object.defineProperty()`来实现。关于这个js中的原生方法，详情请看:[JavaScript高级程序设计](https://github.com/longyincug/Notebook/blob/master/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1.md#6a)
+
+
+html代码:
+```
+<input type='text' id='userName'>
+<span id="uName"></span>
+```
+
+js代码:
+```
+var obj = {};
+
+//这样定义的属性userName叫做访问器属性，在读取和写入属性时分别会调用get和set函数
+Object.defineProperty(obj, 'userName', {
+  get: function(){
+    console.log('get init');
+  },
+  set: function(val){
+    console.log('set init');
+    //当改变userName属性的值时，会触发DOM元素中的值同步改变
+    document.getElementById('uName').innerText = val;
+    document.getElementById('userName').value = val;
+  }
+});
+
+//监听键盘事件，当输入值变化时，同步改变属性的值
+document.getElementById('userName').addEventListener('keyup', function(event){
+  obj.userName = event.target.value; //此时会调用userName属性的set方法，因此数据会同步发生变化
+})
+```
+
+
+***
+
+
+### 什么是前端路由？
+
+
+**路由**是根据不同的url地址展示不同的内容或页面。
+
+**前端路由**就是把不同的内容或页面的任务交给前端来做，之前是通过服务端根据url的不同返回不同的页面实现的。
+
+**在什么时候使用前端路由？**
+
+单页面应用，大部分页面结构不变，只改变部分内容的使用。
+
+**优点:**
+
+- 用户体验好，不需要每次都从服务器全部获取，快速展现给用户。
+
+**缺点:**
+
+- 不利于SEO
+
+- 使用浏览器的前进、后退的时候会重新发送请求，没有合理地利用缓存
+
+- 单页面无法记住之前滚动的位置
+
+
+**vue-router包括:**
+
+动态路由、嵌套路由、编程式路由、命名路由和命名视图。
+
+
+vue-router有两种路由模式:`hash`和`history`:
+
+vue-router的history模式实质上是基于BOM中的history。使用`history.pushState` API来完成url跳转而无需重新加载页面。
+
+```
+new Router({
+  //默认mode是hash，因此可以看到地址栏端口号后面跟有#
+  mode: 'history',
+  routes
+})
+```
+
+
 
 
 
