@@ -252,6 +252,27 @@ http.createServer(function (req, res) {
 }).listen(7788);
 ```
 
+**Node.js作为客户端向第三方接口发送请求:**
+
+```
+var http = require('http');
+var util = require('util');
+
+http.get('http://www.xxx',function(res){
+  let data = '';
+  res.on('data',function(chunk){
+    data += chunk;
+  });
+  res.on('end',function(){
+    let result = JSON.parse(data);
+    //util.inspect能够将对象转换为字符串，便于调试
+    console.log(util.inspect(result));
+  })
+  //监听error
+}).on('error', (e)=>{console.log('错误')});
+```
+
+
 
 ***
 
@@ -1178,8 +1199,19 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 5...
 
 
-<a name="6a">
+想要快速构建一个Express项目的框架，可以使用`express-generator`来生成，就像Vue中的`vue-cli`一样。
 
+安装: `npm install -g express-generator`
+
+生成: `express server`
+
+这样就生成一个目录名为server的Express项目框架。
+
+
+***
+
+
+<a name="6a">
 
 
 ### 文件上传

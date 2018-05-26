@@ -2640,18 +2640,71 @@ new Vue({
 详情请查阅官方文档。
 
 
-
+***
 
 ### axios
 
 
-在Vue2.0出来时，`vue-resource`已经停止了更新，更推荐使用`axios`，一个依赖于ES6的Promise的HTTP库。
+在Vue2.0出来时，`vue-resource`已经停止了更新，官方更推荐使用`axios`，一个依赖于ES6的Promise的HTTP库。
 
 
 官方文档: [https://github.com/axios/axios](https://github.com/axios/axios)
 
+axios是一个全局的对象，并没有挂载到Vue实例上，因此可以直接调用。
 
+```
+methods:{
+  //GET请求
+  get:function(){
+    axios.get('a.html',{
+      params:{
+        userId:'123'
+      },
+      headers:{
+        token:'abc'
+      }
+    }).then(res=>{
+      this.msg = res.data;
+    }).catch(err=>{
+      console.log('error init.');
+    });
+  },
+  //POST请求
+  post:function(){
+    axios.post('a.html',{
+      userId:'123'
+    },{
+      headers:{
+        token:'abcd'
+      }
+    }).then(res=>{
+      this.msg = res.data;
+    })
+  },
+  //HTTP请求
+  http:function(){
+    axios({
+      url:'a.html',
+      method:'get',
+      data:{},//post请求的参数使用需要这个
+      params:{},//get请求参数需要使用这个
+      headers:{}
+    }).then(res=>{})
+  }
+},
 
+//axios中的全局拦截器
+mounted:function(){
+  axios.interceptors.request.use(function(config){
+    console.log('request init.');
+    return config;
+  });
+  axios.interceptors.response.use(function(response){
+    console.log('response init.');
+    return response;
+  })
+}
+```
 
 
 
