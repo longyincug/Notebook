@@ -2500,8 +2500,27 @@ routes: [
 ```
 new Vue({
   el: '#app',
-  render: h => h(App) //h是一个形参
+  render: h => h(App) //h是一个形参，代表createElement
   //之前是components:{App}
+})
+
+//实际上:
+render: function(createElement){
+  return createElement(App);
+}
+//createElement这个函数的作用是生成一个VNode节点，然后render函数得到它之后渲染成真实DOM节点并返回给mount函数
+```
+
+关于Vue的全局API:`Vue.compile`:
+```
+//在render函数中编译模板字符串。只在独立构建时有效
+var res = Vue.compile('<div><span>{{ msg }}</span></div>')
+new Vue({
+  data: {
+    msg: 'hello'
+  },
+  render: res.render,
+  staticRenderFns: res.staticRenderFns
 })
 ```
 
