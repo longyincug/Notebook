@@ -2704,7 +2704,7 @@ methods:{
   http:function(){
     axios({
       url:'a.html',
-      method:'get',
+      method:'get/post',
       data:{},//post请求的参数使用需要这个
       params:{},//get请求参数需要使用这个
       headers:{}
@@ -2773,9 +2773,8 @@ export default Loading
 ## Vuex
 
 
-官方文档: [https://vuex.vuejs.org/zh/getting-started.html](https://vuex.vuejs.org/zh/getting-started.html)
+详细介绍请查阅官方文档: [官方文档](https://vuex.vuejs.org/zh/getting-started.html)
 
-详细的介绍请查阅官方文档。
 
 **Vuex是什么?**
 
@@ -2818,8 +2817,12 @@ store.commit('increment')
 console.log(store.state.count) // -> 1
 ```
 
+state是唯一的数据源。
+
 
 **在 Vue 组件中获得 Vuex 状态**
+
+Vuex的store是单一状态树。
 
 ```
 //Vuex 通过 store 选项，提供了一种机制将状态从根组件“注入”到每一个子组件中
