@@ -1199,6 +1199,8 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 5...
 
 
+**快速构建:**
+
 想要快速构建一个Express项目的框架，可以使用`express-generator`来生成，就像Vue中的`vue-cli`一样。
 
 安装: `npm install -g express-generator`
