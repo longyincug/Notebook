@@ -200,6 +200,76 @@ rs.pipe(ws);
 
 <br/>
 
+**fs模块的其他方法:**
+
+- `fs.existsSync(path)` —— 检查一个文件是否存在。
+
+- `fs.stat(path, callback)` —— 获取文件的状态。
+
+    - 同步的方法为:`fs.statSync(path)`
+
+    - 返回一个对象，这个对象中保存了当前文件状态的相关信息。
+
+    ```
+    fs.stat('a.mp3',function(err, stat){
+        //size 文件的字节大小
+        //isFile() 是否是一个文件
+        //isDirectory() 是否是一个目录
+        console.log(stat.isDirectory());
+    });
+    ```
+
+- `fs.unlink(path, callback)` —— 删除文件。同步方法为`fs.unlinkSync(path)`。
+
+- `fs.readdir(path[,options], callback)` —— 读取一个文件夹的目录结构。
+
+    - 同步的方法为:`fs.readdirSync(path[,options])`
+    
+    ```
+    fs.readdir('.', function(err, files){
+        //files为一个字符串数组，每一个元素就是一个文件或文件夹的名字
+        if(!err){
+            console.log(files);
+        }
+    })
+    ```
+
+- `fs.truncate(path, len, callback)` —— 截断文件，将文件修改为指定大小。
+
+    - 同步的方法为:`fs.truncateSync(path, len)`
+    
+    ```
+    //截取，只留下hello.txt文件中的前10个字节，如果是汉字，占3个字节，可能出现乱码
+    fs.truncateSync('hello.txt', 10);
+    ```
+
+- `fs.mkdir(path[,mode], callback)` —— 创建一个目录。同步方法为:`fs.mkdirSync(path[,mode])`
+
+- `fs.rmdir(path, callback)` —— 删除一个目录。同步方法为:`fs.rmdirSync(path)`
+
+- `fs.rename(oldPath, newPath, callback)` —— 对文件进行重命名。
+
+    - 同步方法为:`fs.renameSync(oldPath, newPath)`
+    
+    - 可以在newPath中传入路径，然后将oldPath的文件**剪切**到新路径。
+
+- `fs.watchFile(filename[, options], listener)` —— 监视文件的修改。
+
+    - `options`是配置选项，可以设置监控周期`interval`的毫秒数，注意会影响性能。
+
+    - `listener`是回调函数，当文件发生变化时会调用。
+    
+    - 回调函数中的两个参数，`curr`是当前文件的状态，`prev`是修改前文件的状态，这两个状态都是`stat`对象。
+
+    ```
+    fs.watchFile('hello.txt', {interval:1000}, function(curr, prev){
+        console.log("修改前文件大小:"+prev.size);
+        console.log("修改后文件大小:"+curr.size);
+    })
+    ```
+
+
+<br/>
 
 **Buffer缓冲区模块**
 
