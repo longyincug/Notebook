@@ -468,7 +468,7 @@ Asynchronous Module Definition(异步模块定义)
 
 专门应用于浏览器端，模块的加载是异步的。
 
-实现: `sea.js`，github: https://github.com/seajs/seajs
+实现: `sea.js`，github: `https://github.com/seajs/seajs`
 
 模块使用时才会加载执行。
 

@@ -49,6 +49,7 @@
 
 
 ***
+<br>
 
 <a name="1" />
 
@@ -135,6 +136,7 @@ console.log(d);
 ```
 
 ***
+<br>
 
 <a name="2" />
 
@@ -203,6 +205,7 @@ console.log(d);
 	- 对象也会转换为true
 	
 ***
+<br>
 
 <a name="3" />
 
@@ -354,6 +357,7 @@ console.log(d);
 
 
 ***
+<br>
 
 <a name="4" />
 
@@ -689,6 +693,7 @@ console.log(d);
 		```
 
 ***
+<br>
 
 <a name="5" />
 
@@ -840,6 +845,7 @@ console.log(ret6);
 **虽然看起来和数组里的元素相同, 但由于是引用数据类型,每次新建一个对象, 都重新开辟了一块内存, 所以实际上比较内存地址, 并不相等！**
 
 ***
+<br>
 
 <a name="6">
 
@@ -920,6 +926,7 @@ console.log(ret6);
 
 
 ***
+<br>
 
 <a name="7">
 
@@ -973,6 +980,7 @@ var result = reg.test(str); //true
 `^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$`
 
 ***
+<br>
 
 <a name="8" />
 
@@ -1745,6 +1753,7 @@ areaDiv.onmousemove = function(event){
 	```
 
 ***
+<br>
 
 <a name="9">
 

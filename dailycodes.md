@@ -70,7 +70,7 @@ undefined
 ```
 
 ***
-
+<br>
 ### 写一个按照下面方式调用都能正常工作的 sum 方法:
 ```
 console.log(sum(2,3));   // Outputs 5
@@ -109,7 +109,7 @@ function sum(x, y) {
 
 
 ***
-
+<br>
 <a name="2">
 
 ## 每天一道面试题：2
@@ -139,7 +139,7 @@ console.log("A" - "B" + 2); // NaN
 ```
 
 ***
-
+<br>
 ### 下面代码输出什么？
 
 ```
@@ -193,7 +193,7 @@ js内部为了保证赋值语句的正确, 会在一条赋值语句执行前, �
 6. 所以就有了上面的运行结果, 再执行a.x, 自然就是undefined了
 
 ***
-
+<br>
 <a name="3">
 
 ## 每天一道面试题：3
@@ -251,7 +251,7 @@ console.log(add())//2
 如上, 使用IIFE把计数器变量保存为私有变量更安全, 同时也可以减少对全局空间的污染
 
 ***
-
+<br>
 ### 使用 typeof obj === "object" 判断 obj 是不是一个对象有什么潜在的弊端？如何避免这种弊端？
 
 ```
@@ -280,6 +280,8 @@ console.log(Object.prototype.toString.call(arr));//[object Array]
 console.log(Object.prototype.toString.call(null));//[object Null]
 ```
 
+***
+<br/>
 
 <a name="4">
 
@@ -356,7 +358,7 @@ new new Foo().getName();//3
 ![运算符优先级](images/PRI.png)
 
 ***
-
+<br>
 <a name="5">
 
 ## 每天一道面试题: 5
@@ -406,7 +408,7 @@ function foo2()
 尽管后面的语句不符合规范，但是因为没有执行到，所以第二个函数是返回 undefined
 
 ***
-
+<br>
 ### 解释一下下面代码的输出:
 
 ```
@@ -457,7 +459,7 @@ console.log(add(0.1,0.2));  //"0.10.2"
 ```
 
 ***
-
+<br>
 ### 实现函数 isInteger(x) 来判断 x 是否是整数
 
 **答案:**
@@ -482,7 +484,7 @@ Number.isInteger(true) // false
 JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间（不含两个端点），超过这个范围，无法精确表示这个值。ES6 引入了Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER这两个常量，用来表示这个范围的上下限，并提供了 Number.isSafeInteger() 来判断整数是否是安全型整数。
 
 ***
-
+<br>
 <a name="6">
 
 ## 每天一道面试题: 6
@@ -510,7 +512,7 @@ function isPalindrome(str) {
 ```
 
 ***
-
+<br>
 ### 在下面的代码中，数字 1-4 会以什么顺序输出？为什么会这样输出？
 
 ```
@@ -572,7 +574,7 @@ setInterval()、 setTimeout()只是将事件插入了"任务队列"，必须等�
 
 
 ***
-
+<br>
 <a name="7">
 
 ## 每天一道面试题: 7
@@ -664,7 +666,7 @@ var timer = setTimeout(function func(){
 
 
 ***
-
+<br>
 ### 下面的代码会输出什么？为什么？
 
 ```
@@ -697,7 +699,7 @@ MDN 上对于 reverse() 的描述是这样的：
 
 
 ***
-
+<br>
 
 ### 如果 list 很大，下面的这段递归代码会造成堆栈溢出，如何在不改变递归模式的前提下修缮这段代码？
 
@@ -775,7 +777,7 @@ nextListItem();
 
 
 ***
-
+<br>
 <a name="8">
 
 ## 每天一道面试题: 8
@@ -836,7 +838,7 @@ console.log(Boolean({})) //true
 
 
 ***
-
+<br>
 ### 解释下面代码的输出
 ```
 var a={},
@@ -869,7 +871,7 @@ console.log(a["[object Object]"]);
 ```
 
 ***
-
+<br>
 ### 解释下面代码的输出
 
 `console.log((function f(n){return ((n > 1) ? n * f(n-1) : n)})(10));`
@@ -888,7 +890,7 @@ console.log(ans);
 
 
 ***
-
+<br>
 <a name="9">
 
 ## 每天一道面试题: 9
@@ -953,7 +955,7 @@ Function.prototype.bind = Funtion.prototype.bind || function(context) {
 
 
 ***
-
+<br>
 ### 给你一个 DOM 元素，创建一个能访问该元素所有子元素的函数，并且要将每个子元素传递给指定的回调函数
 
 函数接受两个参数：
@@ -981,7 +983,7 @@ function Traverse(p_element,p_callback) {
 
 
 ***
-
+<br>
 <a name="10">
 
 ## 每天一道面试题: 10
@@ -1013,7 +1015,7 @@ console.log(maxn); // 6
 
 
 ***
-
+<br>
 ### 转化一个数字数组为function数组（每个function都弹出相应的数字）
 
 
@@ -1043,7 +1045,7 @@ for(var i=0; i<a.length; i++){
 
 
 ***
-
+<br>
 ### 给object数组进行排序（排序条件是每个元素对象的属性个数）
 
 
@@ -1108,7 +1110,7 @@ var result = mapped.map(function(el){
 
 
 ***
-
+<br>
 
 <a name="11">
 
@@ -1163,7 +1165,7 @@ func(5);
 
 
 ***
-
+<br>
 
 ### 实现如下语法的功能：var a = (5).plus(3).minus(6); //2
 
@@ -1189,7 +1191,7 @@ var a = (5).plus(3).minus(6);
 
 
 ***
-
+<br>
 
 ### 实现如下语法的功能：var a = add(2)(3)(4); //9
 
@@ -1235,7 +1237,7 @@ console.log(ans);
 
 
 ***
-
+<br>
 
 <a name="12">
 
@@ -1271,7 +1273,7 @@ obj.method(fn, 1);
 
 
 ***
-
+<br>
 ### 下面代码输出什么？(var和函数的提前声明)
 
 ```
@@ -1310,7 +1312,7 @@ alert(a);
 
 
 ***
-
+<br>
 ### 下面代码输出什么？(局部变量和全局变量)
 
 ```
@@ -1346,7 +1348,7 @@ console.log(c);
 
 
 ***
-
+<br>
 ### 下面代码的输出是什么？
 
 ```
@@ -1373,7 +1375,7 @@ undefinedhello
 
 
 ***
-
+<br>
 
 <a name="13">
 
@@ -1431,7 +1433,7 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 
 
 ***
-
+<br>
 ### 实现一段脚本，使得点击对应链接alert出相应的编号
 
 ```
@@ -1487,7 +1489,7 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 
 
 ***
-
+<br>
 
 <a name="14">
 
@@ -1568,7 +1570,7 @@ if(false){
 
 
 ***
-
+<br>
 <a name="14a">
 
 ### 请给出这段代码的运行结果
@@ -1612,7 +1614,7 @@ alert(bb);
 
 
 ***
-
+<br>
 
 <a name="15">
 
@@ -1662,7 +1664,7 @@ undefined
 
 
 ***
-
+<br>
 ### 请编写一个JavaScript函数 parseQueryString，它的用途是把URL参数解析为一个对象，如： var url = “http://witmax.cn/index.php?key0=0&key1=1&key2=2″
 
 
@@ -1687,7 +1689,7 @@ function parseQueryString(str){
 ```
 
 ***
-
+<br>
 <a name="16">
 
 ## 每天一道面试题: 16
@@ -1702,7 +1704,7 @@ function parseQueryString(str){
 object number function boolean undefined string
 
 ***
-
+<br>
 ### 传统事件绑定和符合W3C标准的事件绑定有什么区别？
 
 **答案:**
@@ -1722,7 +1724,7 @@ object number function boolean undefined string
 		- 这种方式只支持事件冒泡，不支持事件捕获
 
 ***
-
+<br>
 ### IE和DOM事件流的区别？
 
 **答案:**
@@ -1737,7 +1739,7 @@ IE9 以前：attachEvent(“onclick”)、detachEvent(“onclick”)
 IE9 开始跟 DOM 事件流是一样的，都是 addEventListener
 
 ***
-
+<br>
 ### IE和标准下有哪些兼容的写法？
 
 **答案:**
@@ -1751,7 +1753,7 @@ target = ev.srcElement||ev.target
 ```
 
 ***
-
+<br>
 ### b继承a的方法
 
 **答案:**
@@ -1763,7 +1765,7 @@ b.prototype = new a;
 ```
 
 ***
-
+<br>
 ### js指针、闭包、作用域
 
 **答案:**
@@ -1778,7 +1780,7 @@ this: 指向调用上下文
 作用域: 定义一个函数就开辟了一个局部作用域，整个js执行环境就是一个全局作用域
 
 ***
-
+<br>
 ### 事件委托是什么？如何阻止事件冒泡和默认事件？
 
 **答案:**
@@ -1797,7 +1799,7 @@ this: 指向调用上下文
 
 
 ***
-
+<br>
 
 <a name="17">
 
@@ -1818,7 +1820,7 @@ obj.removeChild() // 删除
 ```
 
 ***
-
+<br>
 ### js的本地对象，内置对象和宿主对象
 
 **答案:**
@@ -1828,7 +1830,7 @@ obj.removeChild() // 删除
 3. 宿主对象为浏览器自带的 `document`，`window` 等
 
 ***
-
+<br>
 ### document load 和 document ready 的区别
 
 **答案:**
@@ -1841,7 +1843,7 @@ obj.removeChild() // 删除
 
 
 ***
-
+<br>
 ### javascript的同源策略
 
 **答案:**
@@ -1852,7 +1854,7 @@ obj.removeChild() // 删除
 
 
 ***
-
+<br>
 ### 编写一个数组去重的方法
 
 **答案:**
@@ -1883,7 +1885,7 @@ function clrRepeat(arr){
 
 
 ***
-
+<br>
 
 ### 怎么判断某变量是否为数组数据类型？
 
@@ -1905,7 +1907,7 @@ if(typeof Array.isArray === "undefined"){
 ```
 
 ***
-
+<br>
 
 <a name="18">
 
@@ -1930,7 +1932,7 @@ while (len--) { //使用 while 的效率会比 for 循环更高
 ```
 
 ***
-
+<br>
 
 ### 当一个 DOM 节点被点击时候，我们希望能够执行一个函数, 应该怎么做
 
@@ -1944,7 +1946,7 @@ while (len--) { //使用 while 的效率会比 for 循环更高
 
 
 ***
-
+<br>
 
 ### undefined什么情况下发生?
 
@@ -1959,7 +1961,7 @@ undefined会在以下三种情况下产生:
 注意区分undefined和not defined(语法错误)是不一样的
 
 ***
-
+<br>
 
 ### 已知有字符串 foo="get-element-by-id",写一个 function 将其转化成驼峰表示法 "getElementById"
 
@@ -1988,7 +1990,7 @@ var newFoo = s.replace(/-([a-z])/g, function(m, p1){return p1.toUpperCase();});
 ```
 
 ***
-
+<br>
 
 ### 输出今天的日期，以YYYY-MM-DD的方式
 
@@ -2014,7 +2016,7 @@ alert(year + '-' + month + '-' + day);
 ```
 
 ***
-
+<br>
 
 ### 将字符串 `<tr><td>{$id}</td><td>{$name}</td></tr>`中的{$id}替换成 10，{$name}替换成 Tony （使用正则表达式）
 
@@ -2025,7 +2027,7 @@ alert(year + '-' + month + '-' + day);
 
 
 ***
-
+<br>
 
 <a name="19">
 
@@ -2065,7 +2067,7 @@ function escapeHtml(str) {
 
 
 ***
-
+<br>
 ### 用js实现随机选取10~100之间的10个数字，存入一个数组，并排序
 
 **答案:**
@@ -2087,7 +2089,7 @@ arr.sort();
 
 
 ***
-
+<br>
 
 ### 怎么添加、删除、复制、创建、查找节点
 
@@ -2112,7 +2114,7 @@ arr.sort();
 
 
 ***
-
+<br>
 
 ### 正则表达式构造函数 var reg=new RegExp(“xxx”)与正则表达字面量 var reg=//有什么不同？匹配邮箱的正则表达式？
 
@@ -2125,7 +2127,7 @@ arr.sort();
 
 
 ***
-
+<br>
 ### 写一个 function，清除字符串前后的空格。（兼容所有浏览器）
 
 **答案:**
@@ -2143,7 +2145,7 @@ if(!String.prototype.trim) {
 
 
 ***
-
+<br>
 
 ### Javascript 中 callee 和 caller 的作用？
 
@@ -2179,7 +2181,7 @@ console.log(result); //,1,1,2,3,5,8,13
 
 
 ***
-
+<br>
 
 <a name="20">
 
@@ -2204,7 +2206,7 @@ for(var i=0; i < document.forms.length; i++) {
 
 
 ***
-
+<br>
 
 ### 写出下面程序运行的结果
 
@@ -2222,7 +2224,7 @@ for(i=0, j=0; i<10, j<6; i++, j++) {
 
 
 ***
-
+<br>
 
 ### 阅读以下代码，分析出结果:
 
@@ -2245,7 +2247,7 @@ alert(arr3);
 
 
 ***
-
+<br>
 
 ### 写出简单描述html标签(不带属性的开始标签和结束标签)的正则表达式，并将以下字符串中的html标签去除
 
@@ -2295,7 +2297,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 ***
-
+<br>
 
 <a name="21">
 
@@ -2321,7 +2323,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 ***
-
+<br>
 
 
 ### JavaScript创建对象的几种方式
@@ -2527,7 +2529,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 ***
-
+<br>
 
 ### JavaScript如何实现继承？
 
@@ -2757,7 +2759,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 ***
-
+<br>
 
 ### js延迟加载的方式有哪些？
 
@@ -2771,7 +2773,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 ***
-
+<br>
 
 
 <a name="22">
@@ -2874,7 +2876,7 @@ JS中的垃圾收集器跟踪每个变量，对不再有用的变量打上标记
 
 
 ***
-
+<br>
 
 
 ### 下面代码的输出是什么？
@@ -2910,7 +2912,7 @@ console.log(CSSer.siteUrl);
 
 
 ***
-
+<br>
 
 ### 下面代码输出结果是什么？
 
@@ -2952,7 +2954,7 @@ foo.a(); // 1
 
 
 ***
-
+<br>
 
 
 <a name="23">
@@ -2978,7 +2980,7 @@ foo.a(); // 1
 
 
 ***
-
+<br>
 
 ### readonly和disable的区别？
 
@@ -2988,7 +2990,7 @@ readonly只针对input(text/password)和textarea有效，而disabled对于所有
 
 
 ***
-
+<br>
 
 ### HTTP 协议中，GET 和 POST 有什么区别？分别适用什么场景 ？
 
@@ -3007,7 +3009,7 @@ readonly只针对input(text/password)和textarea有效，而disabled对于所有
 
 
 ***
-
+<br>
 
 ### HTTP状态消息200/302/304/403/404/500分别代表什么？
 
@@ -3028,7 +3030,7 @@ readonly只针对input(text/password)和textarea有效，而disabled对于所有
 
 
 ***
-
+<br>
 
 
 
@@ -3052,7 +3054,7 @@ readonly只针对input(text/password)和textarea有效，而disabled对于所有
 
 
 ***
-
+<br>
 
 ### 如何获取对象 a 拥有的所有属性（可枚举的、不可枚举的，不包括继承来的属性）
 
@@ -3076,7 +3078,7 @@ for(o in obj){
 
 
 ***
-
+<br>
 
 ### 只允许使用 + - * / 和 Math.* ，求一个函数 y = f(x, a, b);当 x > 100时返回 a 的值，否则返回 b 的值，不能使用 if else 等条件语句，也不能使用|,?:,数组。
 
@@ -3094,7 +3096,7 @@ function f(x, a, b) {
 
 
 ***
-
+<br>
 
 <a name="25">
 
@@ -3124,7 +3126,7 @@ C选项和D选项，正确。
 
 
 ***
-
+<br>
 
 ### 下面描述错误的是:
 
@@ -3144,7 +3146,7 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 
 ***
-
+<br>
 ### 列出 3 条以上 ff 和 IE 的脚本兼容问题
 
 
@@ -3169,7 +3171,7 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 
 ***
-
+<br>
 
 <a name="26">
 
@@ -3198,7 +3200,7 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 
 ***
-
+<br>
 
 ### 请写一个正则表达式：要求最短 6 位数，最长 20 位，阿拉伯数和英文字母（不区分大小写）组成
 
@@ -3226,7 +3228,7 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 
 ***
-
+<br>
 
 ### 下列 JavaScript 代码执行后，依次 alert 的结果是？
 
@@ -3263,7 +3265,7 @@ alert(obj.proto.a); // -1
 
 
 ***
-
+<br>
 
 <a name="27">
 
@@ -3303,7 +3305,7 @@ a(); // a不是函数，因此报错，number is not a function
 
 
 ***
-
+<br>
 
 ### 你做的页面在哪些浏览器测试过？这些浏览器的内核分别是什么？
 
@@ -3339,7 +3341,7 @@ Chrome: Blink内核，基于webkit
 
 
 ***
-
+<br>
 
 ### div + css 的布局较table布局有什么特点？
 
@@ -3356,7 +3358,7 @@ Chrome: Blink内核，基于webkit
 
 
 ***
-
+<br>
 
 <a name="28">
 
@@ -3378,7 +3380,7 @@ em: 斜体强调标签，表示内容的强调点。
 
 
 ***
-
+<br>
 
 ### 为什么利用多个域名来存储网站资源会更有效？
 
@@ -3400,7 +3402,7 @@ em: 斜体强调标签，表示内容的强调点。
 
 
 ***
-
+<br>
 
 ### 简述一下 src 与 href 的区别
 
@@ -3417,7 +3419,7 @@ href是Hypertext Reference的缩写，指向网络资源所在位置，建立和
 
 
 ***
-
+<br>
 
 <a name="29">
 
@@ -3445,7 +3447,7 @@ href是Hypertext Reference的缩写，指向网络资源所在位置，建立和
 
 
 ***
-
+<br>
 
 ### 你如何理解HTML结构的语义化？
 
@@ -3467,7 +3469,7 @@ HTML 标签语义化，简单来说，就是让标签有含义，给某块内容
 
 
 ***
-
+<br>
 
 ### CSS中可以通过哪些属性定义，使得一个DOM元素不显示在浏览器可视范围内？
 
@@ -3481,7 +3483,7 @@ HTML 标签语义化，简单来说，就是让标签有含义，给某块内容
 
 
 ***
-
+<br>
 
 ### 什么是 Css Hack？ie6,7,8 的 hack 分别是什么？
 
@@ -3516,7 +3518,7 @@ background-color: yellow\9;
 
 
 ***
-
+<br>
 
 <a name="30">
 
@@ -3540,7 +3542,7 @@ background-color: yellow\9;
 
 
 ***
-
+<br>
 
 ### rgba()和opacity的透明效果有什么不同？
 
@@ -3551,7 +3553,7 @@ rgba()和opacity都能实现透明效果，但最大的不同是opacity作用于
 
 
 ***
-
+<br>
 
 ### 如何垂直居中一个浮动元素？
 
@@ -3603,7 +3605,7 @@ rgba()和opacity都能实现透明效果，但最大的不同是opacity作用于
 
 
 ***
-
+<br>
 
 ### Sass、Less是什么？为什么要使用他们？
 
@@ -3618,7 +3620,7 @@ Less既可以在客户端上运行，也可以在服务器上运行（借助Node
 
 
 ***
-
+<br>
 
 <a name="31">
 
@@ -3638,7 +3640,7 @@ Less既可以在客户端上运行，也可以在服务器上运行（借助Node
 
 
 ***
-
+<br>
 
 
 ### BFC是什么？
@@ -3684,7 +3686,7 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 
 ***
-
+<br>
 
 ### 谈谈iframe的优缺点
 
@@ -3710,7 +3712,7 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 
 ***
-
+<br>
 
 <a name="32">
 
@@ -3751,7 +3753,7 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 
 ***
-
+<br>
 
 ### 本地存储（Local Storage ）和 cookies（储存在用户本地终端上的数据）之间的区别是什么？
 
@@ -3838,7 +3840,7 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 
 ***
-
+<br>
 
 
 ### 如何实现浏览器内多个标签页之间的通信?
@@ -3887,7 +3889,7 @@ setInterval(function(){
 
 
 ***
-
+<br>
 
 
 <a name="33">
@@ -3906,7 +3908,7 @@ setInterval(function(){
 
 
 ***
-
+<br>
 
 ### Ajax 是什么? 如何创建一个 Ajax？
 
@@ -3958,7 +3960,7 @@ xhr.send();
 
 
 ***
-
+<br>
 
 ### 简述Ajax的过程
 
@@ -3974,7 +3976,7 @@ xhr.send();
 
 
 ***
-
+<br>
 
 
 
@@ -3999,7 +4001,7 @@ xhr.send();
 
 
 ***
-
+<br>
 
 ### 页面编码和被请求的资源编码如果不一致如何处理？
 
@@ -4012,7 +4014,7 @@ xhr.send();
 
 
 ***
-
+<br>
 
 
 ### ajax的缺点
@@ -4027,7 +4029,7 @@ xhr.send();
 
 
 ***
-
+<br>
 
 
 
@@ -4046,7 +4048,7 @@ xhr.send();
 
 
 ***
-
+<br>
 
 
 <a name="35">
@@ -4072,7 +4074,7 @@ JSONP是一种用来跨域获取数据的解决方案，具体是通过动态创
 
 
 ***
-
+<br>
 
 ### 什么是Ajax和JSON，它们的优缺点是什么？
 
@@ -4091,7 +4093,7 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 
 
 ***
-
+<br>
 
 ### 什么是repaint和reflow？
 
@@ -4160,7 +4162,7 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 
 
 ***
-
+<br>
 
 
 <a name="36">
@@ -4182,7 +4184,7 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 
 
 ***
-
+<br>
 
 ### CSS实现：一个矩形内容，有投影，有圆角，hover状态慢慢变透明
 
@@ -4197,7 +4199,7 @@ div:hover {opacity: 0;}
 
 
 ***
-
+<br>
 
 ### 用CSS写一个简单的幻灯片
 
@@ -4297,7 +4299,7 @@ img:target {
 
 
 ***
-
+<br>
 
 
 <a name="37">
@@ -4332,7 +4334,7 @@ img:target {
 
 
 ***
-
+<br>
 
 ### HTTP 协议中 ， header信息里面，怎么控制页面失效时间（last-modified,cache-control,Expires 分别代表什么）
 
@@ -4388,7 +4390,7 @@ img:target {
 
 
 ***
-
+<br>
 
 
 
@@ -4437,7 +4439,7 @@ function deepCopy(p, o){
 
 
 ***
-
+<br>
 
 ### 小贤是一条可爱的小狗(Dog)，它的叫声很好听(wow)，每次看到主人的时候就会乖乖叫一声(yelp)。从这段描述可以得到以下对象：
 
@@ -4479,7 +4481,7 @@ madDog.yelp();
 
 
 ***
-
+<br>
 
 
 <a name="39">
@@ -4514,7 +4516,7 @@ function ready(fn){
 
 
 ***
-
+<br>
 
 ### 说出以下函数的作用是？空白区域应该填写什么？
 
@@ -4549,7 +4551,7 @@ function ready(fn){
 
 
 ***
-
+<br>
 
 
 <a name="40">
@@ -4619,7 +4621,7 @@ CMD 是 SeaJS 在推广过程中对模块定义的规范化产出。
 
 
 ***
-
+<br>
 
 <a name="41">
 
