@@ -76,6 +76,7 @@
 
 
 ***
+<br>
 
 
 <a name="1">
@@ -220,6 +221,7 @@ new Vue({
 
 
 ***
+<br>
 
 
 <a name="1b">
@@ -240,6 +242,7 @@ new Vue({
 
 
 ***
+<br>
 
 
 <a name="1c">
@@ -278,6 +281,7 @@ Vue2.0以后可以将过滤器用在v-bind表达式中:
 
 
 ***
+<br>
 
 
 <a name="1d">
@@ -419,6 +423,7 @@ mounted: function(){
 
 
 ***
+<br>
 
 
 <a name="1e">
@@ -438,6 +443,7 @@ mounted: function(){
 
 
 ***
+<br>
 
 
 <a name="2">
@@ -598,6 +604,7 @@ computed: {
 
 
 ***
+<br>
 
 
 <a name="2d">
@@ -627,6 +634,7 @@ computed: {
 
 
 ***
+<br>
 
 
 <a name="2e">
@@ -666,6 +674,7 @@ data:{
 
 
 ***
+<br>
 
 
 #### vue过滤器及自定义过滤器
@@ -756,6 +765,7 @@ Vue.filter('date', function(time){
 
 
 ***
+<br>
 
 
 <a name="2f">
@@ -816,6 +826,7 @@ window.onload=function(){
 
 
 ***
+<br>
 
 
 **自定义带参数的指令:**
@@ -846,6 +857,7 @@ Vue.directive('red',function(color){
 
 
 ***
+<br>
 
 
 <a name="2g">
@@ -869,6 +881,7 @@ Vue.directive('on').keyCodes.myctrl = 17;
 
 
 ***
+<br>
 
 
 <a name="2h">
@@ -903,6 +916,7 @@ bower info <包名>     查看包版本信息
 
 
 ***
+<br>
 
 
 <a name="2i">
@@ -975,6 +989,7 @@ new Vue({
 
 
 ***
+<br>
 
 
 <a name="3">
@@ -1042,6 +1057,7 @@ vm.$watch(name, callback, {deep:true});
 
 
 ***
+<br>
 
 
 <a name="3b">
@@ -1109,6 +1125,7 @@ vm.$watch(name, callback, {deep:true});
 
 
 ***
+<br>
 
 
 <a name="3c">
@@ -1183,6 +1200,7 @@ new Vue({
 
 
 ***
+<br>
 
 
 
@@ -1295,6 +1313,7 @@ new Vue({
 
 
 ***
+<br>
 
 
 <a name="3e">
@@ -1372,6 +1391,7 @@ Vue实现了一套内容分发的api，并将slot元素作为承载分发内容�
 
 
 ***
+<br>
 
 
 
@@ -1527,6 +1547,7 @@ subRoutes:{
 
 
 ***
+<br>
 
 
 <a name="4c">
@@ -1545,6 +1566,7 @@ subRoutes:{
 
 
 ***
+<br>
 
 
 
@@ -1583,6 +1605,7 @@ subRoutes:{
 
 
 ***
+<br>
 
 
 <a name='5a'>
@@ -1680,6 +1703,7 @@ components中的Menu.vue:
 
 
 ***
+<br>
 
 
 <a name="5b">
@@ -1702,6 +1726,7 @@ new Vue({
 ```
 
 ***
+<br>
 
 
 <a name="5c">
@@ -1725,6 +1750,7 @@ new Vue({
 
 
 ***
+<br>
 
 
 <a name="5d">
@@ -1835,6 +1861,7 @@ module.exports = {
 
 
 ***
+<br>
 
 
 #### `webpack-dev-server`
@@ -1873,6 +1900,7 @@ module.exports = {
 
 
 ***
+<br>
 
 
 <a name="5e">
@@ -1920,6 +1948,7 @@ module.exports = {
 
 
 ***
+<br>
 
 
 
@@ -2022,6 +2051,7 @@ module.exports = {
 
 
 ***
+<br>
 
 
 <a name='6b'>
@@ -2142,6 +2172,7 @@ Vue2.x中，组件的通信发生了一些变化。
 
 
 ***
+<br>
 
 
 
@@ -2196,6 +2227,7 @@ data:{show:true}
 
 
 ***
+<br>
 
 
 <a name="7b">
@@ -2256,6 +2288,7 @@ methods:{
 
 
 ***
+<br>
 
 
 
@@ -2307,6 +2340,7 @@ computed:{
 
 
 ***
+<br>
 
 
 <a name="8">
@@ -2370,6 +2404,7 @@ computed:{
 
 
 ***
+<br>
 
 
 <a name="8b">
@@ -2451,6 +2486,7 @@ routes: [
 
 
 ***
+<br>
 
 
 <a name="8c">
@@ -2578,6 +2614,7 @@ new Vue({
 
 
 ***
+<br>
 
 
 <a name="9">
@@ -2660,6 +2697,7 @@ new Vue({
 
 
 ***
+<br>
 
 ### axios
 
@@ -2728,6 +2766,7 @@ mounted:function(){
 
 
 ***
+<br>
 
 
 ### 自定义全局组件
@@ -2764,6 +2803,7 @@ export default Loading
 
 
 ***
+<br>
 
 
 
@@ -2852,6 +2892,7 @@ const Counter = {
 
 
 ***
+<br>
 
 
 <a name="10a">
@@ -2919,6 +2960,7 @@ getters: {
 
 
 ***
+<br>
 
 
 <a name="10b">
@@ -2978,6 +3020,7 @@ mutations: {
 
 
 ***
+<br>
 
 
 <a name="10c">
@@ -3048,6 +3091,7 @@ Actions同样也支持载荷分发。
 
 
 ***
+<br>
 
 
 <a name="10d">
@@ -3091,6 +3135,7 @@ store.state.b // -> moduleB 的状态
 
 
 ***
+<br>
 
 
 <a name="11">
@@ -3113,6 +3158,7 @@ Vue本身并不是一个框架，结合周边的生态构成一个灵活的、�
 
 
 ***
+<br>
 
 
 ### Vue是如何实现双向数据绑定的？
@@ -3152,6 +3198,7 @@ document.getElementById('userName').addEventListener('keyup', function(event){
 
 
 ***
+<br>
 
 
 ### 什么是前端路由？

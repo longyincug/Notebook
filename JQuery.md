@@ -16,6 +16,7 @@
 11. [Ajax](#11)
 
 ***
+<br>
 
 
 
@@ -76,6 +77,7 @@ $("#id").click(function(){});
 
 
 ***
+<br>
 
 <a name="2">
 
@@ -156,6 +158,7 @@ $("#uu>li").each(function(index, ele){
 
 
 ***
+<br>
 
 <a name="3">
 
@@ -327,6 +330,7 @@ $(function(){
 
 
 ***
+<br>
 
 <a name="4">
 
@@ -371,6 +375,7 @@ $(function(){
 ```
 
 ***
+<br>
 
 <a name="5">
 
@@ -517,6 +522,7 @@ $(window).scroll(function(){
 
 
 ***
+<br>
 
 <a name="6">
 
@@ -623,6 +629,7 @@ $("#tb").find("input").click(function(){
 
 
 ***
+<br>
 
 <a name="7">
 
@@ -921,6 +928,7 @@ $(document).mousedown(function(e){
 
 
 ***
+<br>
 
 <a name="8">
 
@@ -993,6 +1001,7 @@ per.sayHi("Tom").eat().sayHi();
 
 
 ***
+<br>
 
 <a name="9">
 
@@ -1178,6 +1187,7 @@ $(function () {
 
 
 ***
+<br>
 
 <a name="10">
 
@@ -1314,6 +1324,7 @@ $("p").animate({
 
 
 ***
+<br>
 
 
 

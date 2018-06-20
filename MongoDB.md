@@ -28,6 +28,7 @@
 
 
 ***
+<br>
 
 
 ## 将MongoDB设置为系统服务
@@ -67,6 +68,7 @@
 
 
 ***
+<br>
 
 
 ## MongoDB的操作使用
@@ -97,6 +99,7 @@ MongoDB中的三个概念：
 `show collections`: 显示当前数据库中所有的集合
 
 ***
+<br>
 
 ### 数据库的CRUD(增删改查)操作
 
@@ -138,6 +141,7 @@ MongoDB中的三个概念：
         ```
 
 ***
+<br>
 
 查询: `db.<collection>.find()`
 
@@ -188,6 +192,7 @@ MongoDB中的三个概念：
         - `db.stu.find({$or:[{num:{$lt:100}}, {num:{$gt:200}}]})`
 
 ***
+<br>
 
 修改: `db.<collection>.update({查询条件}，{新对象}，{options})`
 
@@ -240,6 +245,7 @@ MongoDB中的三个概念：
     - `db.<collection>.replaceOne()` —— 替换一个文档中的某些属性
 
 ***
+<br>
 
 删除: `db.<collection>.remove({},Boolean)`
 
@@ -264,6 +270,7 @@ MongoDB中的三个概念：
 
 
 ***
+<br>
 
 
 ## Node.JS中操作MongoDB
@@ -400,6 +407,7 @@ stuModel.create([
 
 
 ***
+<br>
 
 
 **查询**: `Model.find(conditions,[projection],[options],[callback])`
@@ -459,6 +467,7 @@ stuModel.count({}, function(err, count){
 
 
 ***
+<br>
 
 
 **修改**: `Model.update(conditions, doc, [options], [callback])`
@@ -497,6 +506,7 @@ stuModel.update({age:{$gt:18}}, {oldEnough:true}, function(err,raw){
 
 
 ***
+<br>
 
 
 **删除**: `Model.remove(conditions, [callback])`
@@ -521,6 +531,7 @@ stuModel.remove({name:'Tom'}, function(err){
 
 
 ***
+<br>
 
 
 ### 对文档进行操作(`Document`)
@@ -587,6 +598,7 @@ stuModel.remove({name:'Tom'}, function(err){
 
 
 ***
+<br>
 
 
 ### `mongoose`的模块化
