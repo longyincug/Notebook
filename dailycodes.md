@@ -4656,6 +4656,8 @@ CMD 是 SeaJS 在推广过程中对模块定义的规范化产出。
 5. 这个需要小技巧:设置需要自适应高度的盒子`margin-bottom`为`-3000px`(一个页面不会超过的高度)，同时设置`padding-bottom`为`3000px`。
 
 
+示例代码仅供参考: [demos](https://github.com/longyincug/Notebook/tree/master/demos)
+
 
 
 
