@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+		    .top{
+		       height: 200px;
+		       background-color: pink;
+		    }
+			.outer{
+			    /*margin-top: 100px;*/
+			    background-color: green;
+			    height: 200px;
+			}
+			.inner{
+			    /*设置给里面元素的上外边距会设置给外部*/
+			    margin-top: 100px;
+			    height: 100px;
+			    background-color: yellow;
+			}
+		</style>
+	</head>
+	<body>
+	    <div class="top"></div>
+	    <div class="outer">
+	        <div class="inner"></div>
+	    </div>
+	</body>
+</html>

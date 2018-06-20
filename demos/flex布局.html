@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>flex布局实现双飞翼布局</title>
+		<style type="text/css">
+		  html,body{
+		    display: flex;
+		    justify-content: center;
+		    width: 100%;
+		  }
+			.main{
+			  /*height: 100vh;*/
+			  height: 500px;
+			  /*width: 500px;*/
+			  flex-grow: 1;
+			  order: 2;
+			  background-color: greenyellow;
+			}
+			.left{
+			  width: 200px;
+			  background-color: red;
+			  order: 1;
+			}
+			.right{
+			  width: 300px;
+			  background-color: blue;
+			  order: 3;
+			}
+		</style>
+	</head>
+	<body>
+	  <div class="main">main</div>
+	  <div class="left">left</div>
+	  <div class="right">right</div>
+	</body>
+</html>

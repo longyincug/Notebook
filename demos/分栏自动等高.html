@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>伪等高布局</title>
+		<style type="text/css">
+			.content{
+			    overflow: hidden;
+			}
+			
+			.left{
+			    width: 300px;
+			   float: left;
+			    background-color: red;
+			    margin-bottom: -3000px;
+			    padding-bottom: 3000px;
+			}
+			.center{
+			    margin-left: 310px;
+			    margin-right: 310px;
+			    height: 600px;
+			    background-color: yellow;
+			}
+			.right{
+                width: 300px;
+			    float: right;
+			    background-color: orange;
+			    margin-bottom: -3000px;
+                padding-bottom: 3000px;
+			}
+			
+		</style>
+	</head>
+	<body>
+	    <div class="content">
+	        <!--
+	            注意要把浮动元素放在前面，否则会被center给挤到下一行
+	        -->
+	        <div class="left"></div>
+	        <div class="right"></div>
+	        <div class="center"></div>
+	    </div>
+	</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<style> 
+    body,html{
+        margin:0;
+        padding:0;
+        height:100%;
+    }
+    .left{
+        width:300px;
+        height:100%;
+        background-color:red;
+        position: absolute;
+        /*或者设置浮动*/
+       /*float: left;*/
+    }
+    .right{
+        height: 100%;
+        margin-left: 300px;
+        background-color:yellow;
+    }
+
+</style>
+<body>
+
+   <div class="left">左侧固定宽度</div>
+   <div class="right">右侧自适应</div>
+
+</body>
+</html>

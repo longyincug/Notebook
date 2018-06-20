@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>BFC实现</title>
+		<!--
+		    在BFC中，每个盒子的左外边框紧挨着包含块的左边框，即使在浮动里也是这样
+		    （尽管一个包含块的边框会因为浮动而萎缩），除非这个包含块的内部创建了一个新的BFC。
+		    
+		    这样，当我们给右侧的元素单独创建一个BFC时，它将不会紧贴在包含块的左边框，
+		    而是紧贴在左元素的右边框。
+		-->
+		<style type="text/css">
+			body,html{
+			    margin: 0;
+			    padding: 0;
+			    height: 100%;
+			}
+			.left{
+			    background-color: red;
+			    height: 100%;
+			    width: 300px;
+			    float: left;
+			}
+			.right{
+			    background-color: yellow;
+			    height: 100%;
+			    /*overflow: auto;*/
+			    overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+	    <div class="left"></div>
+	    <div class="right"></div>
+	</body>
+</html>

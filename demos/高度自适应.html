@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高度自适应</title>
+    <style>
+    html,body{
+        margin:0px;
+        height:100%;
+    }
+    .center{
+        width:200px;
+        height:100%;
+        background-color:#666666;
+    }
+    </style>
+</head>
+<body>
+    <div class="center"></div>
+</body>
+</html>
+
+
+<!--
+    对.center对象设置了height:100%,同时设置了html与body的height：100%，
+    这就是高度自适应的问题所在，一个对象的高度是否可以使用百分之比显示，取决于对象的父类对象，
+    在页面中，.center直接放在body属性中，因此它的父类对象是body，
+    而在默认状态下，浏览器并没有给body一个高度属性，
+    因此我们所设置的.centere为height：100%并不会产生任何效果，
+    但是一点我们给body设置了100%之后，他的子类对象.center的height:100%便发生作用了，
+    这便是浏览器解析规则引发的高度自适应的问题。
+
+代码中除了给出body的定义属性之外，还给html对象也应用了相同的样式定义，
+这样做的好处是使IE与firefox浏览器都能够高度自适应，Ie与firefox对页面的解析存在一定的差异，
+ie中html对象默认为100%的高度，而body不是，而在firefox/Chrome中html标签就不是100%的高度，
+因此两个标签都设置为100%,可以保证两款浏览器都能正常工作。
+-->
+
+
+
+
+
+
