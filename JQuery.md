@@ -1426,11 +1426,30 @@ $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?tags=cat&tagmo
 ```
 
 
-关于JSONP的使用:
+关于`$.ajax()`中JSONP选项的使用:
 
 ![JSONP](./images/jsonp.png)
 
+如:
 
+```
+$.ajax({
+    url:"http://localhost:7788/MyService.php?callback=?",   
+    dataType:"jsonp",
+    jsonpCallback:"callbackName",
+    success:function(data){
+        alert(data.name + " is a a" + data.sex);
+    }
+});
+```
+
+**关于`jsonp`的安全性防范:**
+
+1、防止`callback`参数意外截断js代码，特殊字符单引号双引号，换行符均存在风险（对一些特殊字符如尖括号进行编码处理）
+
+2、防止`callback`参数恶意添加标签（如`script`），造成`XSS`漏洞（`response header`添加设置`Content-Type`为`text/javascript`，避免浏览器按照HTML方式解析）
+
+3、防止跨域请求滥用，阻止非法站点恶意调用（通过`referer`白名单匹配，以及 `cookieToken` 机制来限制）
 
 
 
