@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>父子盒子margin传递</title>
+		<style type="text/css">
+			.wrapper{
+			    width: 200px;
+			    height: 200px;
+			    background-color: yellow;
+			}
+			.inner{
+			    width: 100px;
+			    height: 100px;
+			    background-color: green;
+			    /*明明是给子盒子设置的上外边距，却变成父盒子的了*/
+			    margin-top: 50px;
+			}
+			/*   要解决这个问题，有几种方案
+			 *   1. 给父盒子设置border-top，这样就将父子盒子的margin隔开，不再重叠。
+			 *   2. 给子盒子设置padding-top，也隔开了重叠的margin。
+			 *   3. 在父盒子和子盒子中加一个空的div并设置display为table，空的div不能隔断，但table可以。
+			 *   4. 使用父盒子的before伪元素并设置display为table。
+			 * 
+			 */
+			
+			/*.wrapper:before{
+			    content: "";
+			    display: table;
+			}*/
+		</style>
+	</head>
+	<body>
+	    <!--同一个BFC中的两个相邻父子box-->
+	    <div class="wrapper">
+	        <!--<table></table>-->
+	        <div class="inner"></div>
+	    </div>
+	</body>
+</html>

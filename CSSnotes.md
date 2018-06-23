@@ -15,21 +15,22 @@ opacity属性作用于元素,以及元素内的所有内容的透明度,
 2. 如果子盒子有一个浮动了,其余的子盒子都应该浮动
 3. 默认的隐式转换: **行内块元素**
 
-## 浮动元素外边距
-浮动的元素如li，相邻水平外边距是求和, 而不是取最大值
 
 ## 清除浮动
-- 如果清除了浮动，父元素自动检测孩子的高度，以最高的为准
+
+如果清除了浮动，父元素自动检测孩子的高度，以最高的为准
 
 ## 清除浮动的方法(`clear: both;`)
 
-- 额外标签法
-	- 最后一个元素的后面额外添加一个元素，并设置清除浮动
-	- 是W3C推荐的做法
-	- 添加了许多无意义的标签，结构化较差
-- 父级添加overflow属性方法
-	- 给**父元素**设置`overflow: hidden;`
-- 使用after伪元素清除浮动
+额外标签法
+- 最后一个元素的后面额外添加一个元素，并设置清除浮动
+- 是W3C推荐的做法
+- 添加了许多无意义的标签，结构化较差
+
+父级添加overflow属性方法
+- 给**父元素**设置`overflow: hidden;`
+
+使用after伪元素清除浮动
 ```
 .clearfix:after {
     content: "";
@@ -40,12 +41,12 @@ opacity属性作用于元素,以及元素内的所有内容的透明度,
 }
 ```
 
-- 使用before和after双伪元素清除浮动
+使用before和after双伪元素清除浮动
 	
 ```
 .clearfix:before, .clearfix:after {
     content: "";
-    display: table; // 这句话可以触发BFC, BFC可以清除浮动
+    display: table;
 }
 
 .clearfix:after {
@@ -368,6 +369,117 @@ body{
 **而`id`为`fixed`的`div`由于没有开启定位的祖先元素，会始终依据初始包含块来偏移，又因为`html`的`overflow`为`hidden`，`document`没有滚动条，初始包含块的位置不会变化，也不受`body`的滚动条影响，所以依据其定位的`div`不会随滚动条而滚动，这样就实现了`fixed`的效果。**
 
 尽管现在基本已经不需要考虑IE6的兼容性问题了，但这种解决思路还是值得学习，并且在移动端也时常会应用到。
+
+***
+
+<br>
+
+
+# 深入理解BFC原理及其在布局中的应用
+
+<br>
+
+## 谈谈你对盒模型的理解？
+
+当面试官问到这个问题，如果你只说出**W3C标准盒模型**和**IE盒模型**:
+
+> 标准盒模型中，`width`和`height`等于内容区(`content`)的宽高；
+> 而IE盒模型中，`width`和`height`等于`content`+`padding`+`border`的总宽高。
+
+这个答案显然是不够的。
+
+要是你能稍微扩展一点，说出**CSS3中对盒模型的类型设置属性**:
+
+- `box-sizing: content-box;` —— 标准盒模型
+
+- `box-sizing: border-box;` —— IE盒模型
+
+
+同时联想到**js中对盒模型属性的一些操作**:
+
+- 读取元素的内联样式属性及修改元素的样式属性 —— `元素.style.样式名` / `元素.style.样式名 = 样式值`
+
+- 获取元素的当前样式对象 —— `元素.currentStyle` / `getComputedStyle(元素, null)`
+
+- 读取元素的可见宽度和高度(content+padding) —— `元素.clientWidth` / `元素.clientHeight`
+
+- 读取元素的整个宽度和高度(content+padding+border) —— `元素.offsetWidth` / `元素.offsetHeight`
+
+这就应该是一个比较好的回答了。
+
+当然，如果你还能充分延伸，再多说一点:
+
+**盒模型 ——> block-level box的渲染 ——> BFC渲染规则**
+
+那真是极好的，一定能够让大多数面试官满意！
+
+
+<br>
+
+## `Box`和`Formatting Context`
+
+`Box`是CSS布局的对象和基本单位，一个页面就是由很多个`Box`组成的。
+
+元素的类型和`display`属性，决定了这个`Box`的类型，不同类型的`Box`会参与不同的`Formatting Context`(一个决定如何渲染文档的容器)，因此不同类型的`Box`内部会有不同的渲染规则。
+
+最常见的有两种盒子:
+
+- `block-level box`:
+
+    `display`属性为`block/list-item/table`的元素，会生成`block-level box`，并且参与`block formatting context`。
+
+- `inline-level box`:
+
+    `display`属性为`inline/inline-block/inline-table`的元素，会生成`inline-level box`，并且参与`inline formatting context`。
+
+
+什么是`Formatting Context`:
+
+> CSS2.1规范中的一个概念，它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。
+> 最常见的`Formatting Context`有`Block Formatting Context`(简称BFC)和`Inline Formatting Context`(简称IFC)。
+> 由于IFC在各浏览器有不同的实现和规则，我们一般只考虑BFC。
+
+
+<br>
+
+## BFC渲染规则
+
+BFC直译为块级格式化上下文，它是一个独立的渲染区域，只有`block-level box`参与，它规定了内部的盒子如何布局，并且与这个区域的外部毫不相干。
+
+1. 内部的盒子会在垂直方向一个接一个的放置。
+
+2. BFC的区域不会与浮动的盒子重叠。
+
+3. 内部的Box垂直方向的距离由`margin`决定，属于**同一个**BFC的两个**相邻**的Box，**垂直**方向上`margin`会发生重叠。
+
+4. 计算BFC的高度时，浮动元素也参与计算。
+
+
+### BFC渲染规则在布局中的应用
+
+1. 第一条规则自不用多说，块级盒子独占一行，垂直方向一个接一个放置。
+
+2. 利用第二条规则，可以很轻松地实现两列布局，只需要让右栏生成BFC:[左栏定宽右栏自适应](https://github.com/longyincug/Notebook/tree/master/demos/左栏定宽右栏自适应2.html)。
+
+3. 由于垂直方向`margin`重叠，上下两个兄弟box的`margin`会取较大值，推荐的解决方案是在其中一个box的外层加一个`div`并让其开启BFC，这样两个box就不相干了:[兄弟盒子margin重叠](https://github.com/longyincug/Notebook/tree/master/demos/兄弟盒子margin重叠.html)。
+
+    还有一个垂直方向`margin`重叠的情况，是父子box的`margin`传递，当同一个BFC中的父子盒子相邻时，给子盒子设置的上外边距，会传递，变成父盒子的外边距:[父子盒子margin传递](https://github.com/longyincug/Notebook/tree/master/demos/父子盒子margin传递.html)
+
+<br>
+
+## BFC什么时候出现(哪些元素会生成BFC)
+
+- 根元素
+
+- `float`属性不为`none`
+
+- `position`属性为`absolute`或`fixed`
+
+- `overflow`属性不为`visible`
+
+- `display`为`inline-block/table-cell/table-caption/flex/inline-flex`
+
+
 
 
 

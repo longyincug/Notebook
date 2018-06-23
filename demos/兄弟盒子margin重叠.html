@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>同一个BFC中的两个相邻兄弟盒子</title>
+		<style type="text/css">
+		    .up,.down{
+		        width: 100px;
+		        height: 100px;
+		    }
+			.up{
+			    background-color: yellow;
+			    /*给它设置下外边距*/
+			    margin-bottom: 50px;
+			}
+			.down{
+			    background-color: green;
+			    /*给它设置上外边距*/
+			    margin-top: 50px;
+			}
+		</style>
+	</head>
+	<body>
+	    <!--这是一个BFC中两个相邻的兄弟盒子-->
+	    <div class="up"></div>
+	    
+	    <!--这个包裹在外部的div专门用来开启BFC-->
+	    <div style="overflow: hidden;">
+	       <!--此时下面的div已经不与上面的div同处一个BFC了-->
+	       <div class="down"></div>
+	    </div>
+	    
+	</body>
+</html>
