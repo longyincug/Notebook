@@ -4642,6 +4642,7 @@ CMD 是 SeaJS 在推广过程中对模块定义的规范化产出。
 
 5. 分栏自动与盒子中最高栏等高。
 
+6. 当内容区main的高度足够长，footer紧跟在main的后面，当main的高度比较短（小于屏幕的高度），这个footer元素能够粘连在屏幕的底部。
 
 **答案:**
 
@@ -4655,8 +4656,11 @@ CMD 是 SeaJS 在推广过程中对模块定义的规范化产出。
 
 5. 这个需要小技巧:设置需要自适应高度的盒子`margin-bottom`为`-3000px`(一个页面不会超过的高度)，同时设置`padding-bottom`为`3000px`。
 
+6. 这是典型的粘连布局(`stickyFooter`)，首先设置主体区的`min-height`为视口高度`100%`，然后给主体区里的内容区设置一个`padding-bottom`等于`footer`的高度，再用负`margin`将`footer`移到`padding`区域。
 
-示例代码仅供参考: [demos](https://github.com/longyincug/Notebook/tree/master/demos)
+上述布局参考代码: [demos](https://github.com/longyincug/Notebook/tree/master/demos)
+
+<br>
 
 **双飞翼布局**和**圣杯布局**的对比：
 
@@ -4664,7 +4668,7 @@ CMD 是 SeaJS 在推广过程中对模块定义的规范化产出。
 
 2. 两种布局方式在实现上也有相同之处，都是让三列浮动，然后通过负边距形成三列布局。
 
-3. 两种布局方式的不同之处在于如何处理中间主列的位置：
+3. 两种布局方式的不同之处在于如何处理中间主列的位置:
 
     - 圣杯布局是利用父容器的左、右内边距+两个从列相对定位。
     
