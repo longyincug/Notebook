@@ -51,6 +51,7 @@
 ## 每天一道面试题：1
 
 ### 下面代码输出什么？
+
 ```
 var foo = 1;
 (function(){
@@ -70,8 +71,11 @@ undefined
 ```
 
 ***
+
 <br>
+
 ### 写一个按照下面方式调用都能正常工作的 sum 方法:
+
 ```
 console.log(sum(2,3));   // Outputs 5
 console.log(sum(2)(3));  // Outputs 5
@@ -110,6 +114,7 @@ function sum(x, y) {
 
 ***
 <br>
+
 <a name="2">
 
 ## 每天一道面试题：2
@@ -140,6 +145,7 @@ console.log("A" - "B" + 2); // NaN
 
 ***
 <br>
+
 ### 下面代码输出什么？
 
 ```
@@ -193,6 +199,7 @@ js内部为了保证赋值语句的正确, 会在一条赋值语句执行前, �
 6. 所以就有了上面的运行结果, 再执行a.x, 自然就是undefined了
 
 ***
+
 <br>
 <a name="3">
 
@@ -252,6 +259,7 @@ console.log(add())//2
 
 ***
 <br>
+
 ### 使用 typeof obj === "object" 判断 obj 是不是一个对象有什么潜在的弊端？如何避免这种弊端？
 
 ```
@@ -1120,7 +1128,8 @@ var result = mapped.map(function(el){
 ## 每天一道面试题: 11
 
 
-### 利用JavaScript打印出Fibonacci数列（不使用全局变量）
+###.+
+
 
 
 **答案:**
@@ -1169,7 +1178,8 @@ func(5);
 ***
 <br>
 
-### 实现如下语法的功能：var a = (5).plus(3).minus(6); //2
+###.+
+
 
 
 **答案:**
