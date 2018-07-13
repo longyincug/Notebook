@@ -51,7 +51,6 @@
 ## 每天一道面试题：1
 
 ### 下面代码输出什么？
-
 ```
 var foo = 1;
 (function(){
@@ -71,11 +70,8 @@ undefined
 ```
 
 ***
-
 <br>
-
 ### 写一个按照下面方式调用都能正常工作的 sum 方法:
-
 ```
 console.log(sum(2,3));   // Outputs 5
 console.log(sum(2)(3));  // Outputs 5
@@ -111,10 +107,8 @@ function sum(x, y) {
 
 ```
 
-
 ***
 <br>
-
 <a name="2">
 
 ## 每天一道面试题：2
@@ -145,7 +139,6 @@ console.log("A" - "B" + 2); // NaN
 
 ***
 <br>
-
 ### 下面代码输出什么？
 
 ```
@@ -199,7 +192,6 @@ js内部为了保证赋值语句的正确, 会在一条赋值语句执行前, �
 6. 所以就有了上面的运行结果, 再执行a.x, 自然就是undefined了
 
 ***
-
 <br>
 <a name="3">
 
@@ -259,7 +251,6 @@ console.log(add())//2
 
 ***
 <br>
-
 ### 使用 typeof obj === "object" 判断 obj 是不是一个对象有什么潜在的弊端？如何避免这种弊端？
 
 ```
@@ -672,7 +663,6 @@ var timer = setTimeout(function func(){
 
 <a name="7a">
 
-
 ***
 <br>
 ### 下面的代码会输出什么？为什么？
@@ -704,7 +694,6 @@ MDN 上对于 reverse() 的描述是这样的：
 `slice()` 方法用于提取目标数组的一部分，返回一个新数组，原数组不变
 
 而数组与字符串""做加法运算输出，会调用toString()方法，将数组中除中括号外的字符全部打印出来
-
 
 ***
 <br>
@@ -963,7 +952,6 @@ Function.prototype.bind = Funtion.prototype.bind || function(context) {
 };
 ```
 
-
 ***
 <br>
 ### 给你一个 DOM 元素，创建一个能访问该元素所有子元素的函数，并且要将每个子元素传递给指定的回调函数
@@ -1023,7 +1011,6 @@ let maxn = Math.max(...a);
 console.log(maxn); // 6
 ```
 
-
 ***
 <br>
 ### 转化一个数字数组为function数组（每个function都弹出相应的数字）
@@ -1052,7 +1039,6 @@ for(var i=0; i<a.length; i++){
 }
 
 ```
-
 
 ***
 <br>
@@ -1118,7 +1104,6 @@ var result = mapped.map(function(el){
 });
 ```
 
-
 ***
 <br>
 
@@ -1128,8 +1113,7 @@ var result = mapped.map(function(el){
 ## 每天一道面试题: 11
 
 
-###.+
-
+### 利用JavaScript打印出Fibonacci数列（不使用全局变量）
 
 
 **答案:**
@@ -1174,12 +1158,10 @@ func(5);
 
 学习了ES6，还可以用generator实现。
 
-
 ***
 <br>
 
-###.+
-
+### 实现如下语法的功能：var a = (5).plus(3).minus(6); //2
 
 
 **答案:**
@@ -1200,7 +1182,6 @@ var a = (5).plus(3).minus(6);
 
 
 ```
-
 
 ***
 <br>
@@ -1322,7 +1303,6 @@ alert(a);
 
 上面这题，输出10，因为即使{}里面的变量，声明也会提前，所以在if判断之前，全局作用域已经有了`a`，返回true，然后赋值
 
-
 ***
 <br>
 ### 下面代码输出什么？(局部变量和全局变量)
@@ -1358,7 +1338,6 @@ console.log(c);
 
 而函数体内声明的局部变量，外部访问不到。
 
-
 ***
 <br>
 ### 下面代码的输出是什么？
@@ -1384,7 +1363,6 @@ undefinedhello
 注意：给基本数据类型添加属性，不会报错，但是引用的话，会返回`undefined`！
 
 `10 + undefined`，`undefined`会转为`NaN`
-
 
 ***
 <br>
@@ -1443,7 +1421,6 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 
 ```
 
-
 ***
 <br>
 ### 实现一段脚本，使得点击对应链接alert出相应的编号
@@ -1498,7 +1475,6 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 </script>
 
 ```
-
 
 ***
 <br>
@@ -1624,7 +1600,6 @@ alert(bb);
 
 ```
 
-
 ***
 <br>
 
@@ -1673,7 +1648,6 @@ undefined
 因为是`this.m_Element`调用的`addEventListener`函数，所以内部的this全指向它了
 
 可以试着加上一行代码`this.m_Element.m_Text = 'hello world'`，就会alert出`hello world`了
-
 
 ***
 <br>
@@ -1807,7 +1781,6 @@ this: 指向调用上下文
 - 比如为了不让a点击之后跳转，我们就要给它的点击事件进行阻止。还有一些浏览器的默认事件
 - `return false`
 - 对于使用addEventListener绑定的事件，需要使用`e.preventDefault();`阻止默认事件
-	
 
 
 ***
@@ -1853,7 +1826,6 @@ obj.removeChild() // 删除
 
 `document.ready` 原生js中没有这个方法，jquery中有`$(document).ready(function(){})`，DOM结构绘制完毕就执行，不必等到加载完毕
 
-
 ***
 <br>
 ### javascript的同源策略
@@ -1863,7 +1835,6 @@ obj.removeChild() // 删除
 一段脚本只能读取来自于同一来源的窗口和文档的属性，这里的统一来源指的是**主机名**、**协议**和**端口号**的组合
 
 同源策略带来的麻烦: 同域名下的请求无法实现，如果说想要请求其他来源的js文件，或者json数据，可以通过jsonp来解决。
-
 
 ***
 <br>
@@ -1894,7 +1865,6 @@ function clrRepeat(arr){
 // 注意indexOf()为ES5的新方法，IE8及以下不支持！
 
 ```
-
 
 ***
 <br>
@@ -1955,7 +1925,6 @@ while (len--) { //使用 while 的效率会比 for 循环更高
 在 JS 里通过 onclick 绑定：`xxx.onclick = test`
 
 通过事件添加进行绑定：`addEventListener(xxx, 'click', test)`
-
 
 ***
 <br>
@@ -2030,13 +1999,12 @@ alert(year + '-' + month + '-' + day);
 ***
 <br>
 
-### 将字符串 `<tr><td>{$id}</td><td>{$name}</td></tr>`中的{$id}替换成 10，{$name}替换成 Tony （使用正则表达式）
+### 将字符串 `<tr><td>{$id}</td><td>{$name}</td></tr>`中的`{$id}`替换成 10，`{$name`}替换成 Tony （使用正则表达式）
 
 
 **答案:**
 
 `'<tr><td>{$id}</td><td>{$id}_{$name}</td></tr>'.replace(/{\$id}/g, '10').replace(/{\$name}/g, 'Tony');`
-
 
 ***
 <br>
@@ -2077,7 +2045,6 @@ function escapeHtml(str) {
 
 ```
 
-
 ***
 <br>
 ### 用js实现随机选取10~100之间的10个数字，存入一个数组，并排序
@@ -2098,7 +2065,6 @@ while(i-- > 0){
 
 arr.sort();
 ```
-
 
 ***
 <br>
@@ -2137,7 +2103,6 @@ arr.sort();
 
 邮箱的正则匹配: `/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]{2,5}){1,2}$/`
 
-
 ***
 <br>
 ### 写一个 function，清除字符串前后的空格。（兼容所有浏览器）
@@ -2154,7 +2119,6 @@ if(!String.prototype.trim) {
 
 }
 ```
-
 
 ***
 <br>
@@ -2191,7 +2155,6 @@ console.log(result); //,1,1,2,3,5,8,13
 
 ```
 
-
 ***
 <br>
 
@@ -2216,7 +2179,6 @@ for(var i=0; i < document.forms.length; i++) {
 }
 ```
 
-
 ***
 <br>
 
@@ -2233,7 +2195,6 @@ for(i=0, j=0; i<10, j<6; i++, j++) {
 **答案:**
 
 `10 // i=5, j=5`
-
 
 ***
 <br>
@@ -2256,7 +2217,6 @@ alert(arr3);
 关于Array类型、Array的转换方法请看: [Array类型](./JavaScript高级程序设计.md/#5b) 
 
 之前也做过这种题: [关于reverse方法](#7a)
-
 
 ***
 <br>
@@ -2385,7 +2345,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 	> 缺点: 对于一些可以共享且相同的函数方法，却要多次创建在实例化对象中，占用内存，且复用性差。
 
-
+5. 原型模式 : 让所有的对象实例共享原型对象所包含的属性和方法，不必在构造函数中定义然后多次在实例对象中创建了，只需要添加给原型即可
 5. 原型模式 : 让所有的对象实例共享原型对象所包含的属性和方法，不必在构造函数中定义然后多次在实例对象中创建了，只需要添加给原型即可
 
 	```
@@ -2412,7 +2372,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 	> 缺点: 省略了传递给构造函数初始化参数这一环节，导致所有的实例默认都具有相同的属性值。更大的问题是对于原型上的引用类型属性，所有的实例之间会共享修改，丧失了独特性。
 
-
+6. 混合构造函数原型模式 : 最常见的创建自定义类型方式，构造函数中定义实例属性，原型对象中添加共享属性和方法
 6. 混合构造函数原型模式 : 最常见的创建自定义类型方式，构造函数中定义实例属性，原型对象中添加共享属性和方法
 
 	```
@@ -2442,9 +2402,9 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 	> 优点: 支持向构造函数传递参数，每个实例都有自己的一份实例属性的副本，每个实例共享对方法的引用，最大限度节省内存。
+	
 
-
-
+7. 动态原型模式 : 将构造函数和原型对象等定义统一到一个函数中，封装性更强，并且通过检测必要情况来决定是否初始化原型，效率更高
 7. 动态原型模式 : 将构造函数和原型对象等定义统一到一个函数中，封装性更强，并且通过检测必要情况来决定是否初始化原型，效率更高
 	```
 	function Person(name, age, job){
@@ -2469,9 +2429,9 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 	> 评价: 原型方法的添加只执行一次，对原型所做的修改也能立即在实例中反映，可以说相当完美，但是需要注意不能使用对象字面量重写原型，否则会切断现有实例与新原型的联系。
+	
 
-
-
+8. 寄生构造函数模式 : 当有特殊需求比如说创建一个具有额外方法的数组，由于不能直接修改Array，就可以使用这个模式
 8. 寄生构造函数模式 : 当有特殊需求比如说创建一个具有额外方法的数组，由于不能直接修改Array，就可以使用这个模式
 	
 	```
@@ -2498,13 +2458,13 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 	- 除了使用了new操作符，并且把使用的包装函数叫做构造函数外，其余和工厂模式一模一样。
-
+	
 	- 注意: 返回的对象与构造函数和原型没有关系，与在构造函数外部创建的对象没有什么不同，因此不能使用instanceof操作符来确定对象类型。
-
+	
 	- 建议在可以使用其他模式的情况下，不要使用这种模式。
+	
 
-
-
+9. 稳妥构造函数模式 : 用来创建没有公共属性，不引用this的安全稳妥对象
 9. 稳妥构造函数模式 : 用来创建没有公共属性，不引用this的安全稳妥对象
 
 	```
@@ -2539,7 +2499,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 
-
 ***
 <br>
 
@@ -2563,7 +2522,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 为了解决原型中包含引用类型值的问题，开始使用借用构造函数，也叫伪造对象或经典继承
 
 
-	```
+	​```
 	function SuperType() {
 		this.colors = ["red", "blue", "green"];
 	}
@@ -2578,24 +2537,24 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	alert(instance1.colors); //"red,blue,green,black"
 	var instance2 = new SubType();
 	alert(instance2.colors); //"red,blue,green" 
-	```
-
-
+	​```
+	
+	
 	- 将SuperType函数在SubType构造函数中调用，在每个实例中执行，这样每个实例中都会有一份SuperType中的属性方法的副本，也就实现了继承SuperType。
 	
 	- 这种模式的优势就是可以在子类型构造函数中向超类型构造函数传递参数。
 	
 	> 存在的问题就是，所有的类型都只能使用构造函数模式（因为超类型的原型中定义的方法对于子类型不可见），因此方法都在构造函数中定义，函数复用就无从谈起了。
+	
 
-
-
+3. 组合继承
 3. 组合继承
 
 
 	> 也叫伪经典继承，将原型链和借用构造函数的技术组合到一块。使用原型链实现对原型属性和方法的继承，而通过构造函数来实现对实例属性的继承。
-
-
-	```
+	
+	
+	​```
 	function SuperType(name) {
 		this.name = name;
 		this.colors = ["red", "blue", "green"];
@@ -2610,7 +2569,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 		SuperType.call(this, name);
 		this.age = age;
 	}
-
+	
 	// 继承方法
 	SubType.prototype = new SuperType();
 	SubType.prototype.constructor = SubType;
@@ -2627,41 +2586,41 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	alert(instance2.colors); //"red,blue,green"
 	instance2.sayName(); //"Greg";
 	instance2.sayAge(); //27 
-	```
-
-
+	​```
+	
+	
 	- 将SubType的原型指定为SuperType的一个实例，大致步骤和原型链继承类似，只是多了在SubType中借调SuperType的过程。
-
+	
 	- 实例属性定义在构造函数中，而方法则定义在构造函数的新原型中，同时将新原型的constructor指向构造函数。
-
+	
 	- 可以通过`instanceof`和`isPrototypeOf()`来识别基于组合继承创建的对象。
-
+	
 	- 避免了原型链和借用构造函数的缺陷，融合了它们的优点，成为JS中最常用的继承模式。
-
-
+	
+	
 	> 实际上是借用了构造函数，以覆盖的方式，解决了在原型链继承中原型的引用类型属性共享在所有实例中的问题。
 	> 
 	> 因为在子类型中借调构造函数(SuperType.call(this))时，会在自己的所有实例中执行一遍SuperType中的代码，由于每个实例this都是不同的，因此SuperType中定义的属性会在每个实例中有一份副本，也就避免了原型链继承中，原型属性共享的问题（覆盖了原型属性）。
+	
 
-
-
+4. 原型式继承
 4. 原型式继承
 
 
 	> 不自定义类型的情况下，临时创建一个构造函数，借助已有的对象作为临时构造函数的原型，然后在此基础实例化对象，并返回。
-
-
-	```
+	
+	
+	​```
 	function object(o){
 	 function F(){}
 	 F.prototype = o;
 	 return new F();
 	} 
-	```
-
+	​```
+	
 	- 本质上是object()对传入其中的对象执行了一次浅复制
-
-	```
+	
+	​```
 	var person = {
 	 name: "Nicholas",
 	 friends: ["Shelby", "Court", "Van"]
@@ -2670,21 +2629,21 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	var anotherPerson = object(person);
 	anotherPerson.name = "Greg";
 	anotherPerson.friends.push("Rob");
-
+	
 	var yetAnotherPerson = object(person);
 	yetAnotherPerson.name = "Linda";
 	yetAnotherPerson.friends.push("Barbie");
-
+	
 	alert(person.friends); //"Shelby,Court,Van,Rob,Barbie" 
-	```
-
-
+	​```
+	
+	
 	- 原型的引用类型属性会在各实例之间共享。
 	
 	- 当只想单纯地让一个对象与另一个对象保持类似的情况下，原型式继承是完全可以胜任的。
+	
 
-
-
+5. 寄生式继承
 5. 寄生式继承
 
 	> 其实就是在原型式继承得到对象的基础上，在内部再以某种方式来增强对象，然后返回。
@@ -2716,9 +2675,9 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 组合继承是JS中最常用的继承模式，但其实它也有不足，组合继承无论什么情况下都会调用两次超类型的构造函数，并且创建的每个实例中都要屏蔽超类型对象的所有实例属性。
 	> 
 	> 寄生组合式继承就解决了上述问题，被认为是最理想的继承范式
-
-
-	```
+	
+	
+	​```
 	function object(o) {
 		function F(){}
 		F.prototype = o;
@@ -2750,22 +2709,22 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	SubType.prototype.sayAge = function() {
 		alert(this.age);
 	};
-	```
-
+	​```
+	
 	既然在组合模式中我们通过借调构造函数来为每个实例定义实例属性，从而覆盖原型属性，影响了效率，那么是否可以把原型改变一下呢，不让它作为SuperType的实例，这样就不会有一些无用的原型属性了。
 	
-
+	
 	> 不必为了指定子类型的原型而调用超类型的构造函数，我们需要的只不过是超类型原型的一个副本。
-
-
+	
+	
 	1. 在inheritPrototype函数中用到了原型式继承中的object()方法，将超类型的原型指定为一个临时的空构造函数的原型，并返回构造函数的实例。
 	2. 此时由于构造函数内部为空（不像SuperType里面有实例属性），所以返回的实例也不会自带实例属性，这很重要！因为后面用它作为SubType的原型时，就不会产生无用的原型属性了，也就不用借调构造函数进行所谓的“重写”了。
 	3. 此时返回的实例对象的constructor指向那个空构造函数。
 	4. 然后为这个对象重新指定constructor为SubType，并将其赋值给SubType的原型。这样，就达到了将超类型构造函数的实例作为子类型原型的目的，同时没有一些从SuperType继承过来的无用原型属性。
+	
+	
 
-
-
-
+详细解读请见笔记: [JavaScript高级程序设计: 继承](./JavaScript高级程序设计.md/#6c)
 详细解读请见笔记: [JavaScript高级程序设计: 继承](./JavaScript高级程序设计.md/#6c)
 
 
@@ -2781,7 +2740,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 1. defer和async
 2. 动态创建DOM方式（创建 script，插入到 DOM 中，加载完毕后 callBack）
 3. 按需ajax异步载入js
-
 
 
 ***
@@ -2886,7 +2844,6 @@ JS中的垃圾收集器跟踪每个变量，对不再有用的变量打上标记
 3. 避免创建过多的对象  原则：不用了的东西要及时归还。
 
 
-
 ***
 <br>
 
@@ -2964,7 +2921,6 @@ foo.a(); // 1
 
 ```
 
-
 ***
 <br>
 
@@ -2999,7 +2955,6 @@ foo.a(); // 1
 **答案:**
 
 readonly只针对input(text/password)和textarea有效，而disabled对于所有的表单元素都有效，当表单元素在使用了disabled后，当我们将表单submit的时候，这个元素的值不会被传递出去，而readonly会将该值传递出去。
-
 
 ***
 <br>
@@ -3064,7 +3019,6 @@ readonly只针对input(text/password)和textarea有效，而disabled对于所有
 - `Object.prototype.toString.call([]);` // "[object Array]"
 
 
-
 ***
 <br>
 
@@ -3105,7 +3059,6 @@ function f(x, a, b) {
 
 }
 ```
-
 
 ***
 <br>
@@ -3156,7 +3109,6 @@ D. localStorage存储的数据在电脑重启后丢失
 A正确，B正确。当onload事件触发时，页面上所有的DOM，样式表，脚本，图片，flash都已经加载完成了；当DOMContentLoaded事件触发时，仅当DOM加载完成，不包括样式表，图片，flash。
 C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，localStorage存储的数据没有时间限制。
 
-
 ***
 <br>
 ### 列出 3 条以上 ff 和 IE 的脚本兼容问题
@@ -3180,7 +3132,6 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 7、鼠标滚轮事件
 
 8、currentStyle和getComputedStyle
-
 
 ***
 <br>
@@ -3227,7 +3178,7 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 - `(?=pattern)` 正向先行断言
 
 	- 代表字符串中的一个位置，紧接该位置之后的字符序列**能够**匹配pattern。
- 
+
 	- 例如对`a regular expression`这个字符串，要想匹配regular中的re，但不能匹配expression中的re，可以用`re(?=gular)`，该表达式限定了re右边的位置，这个位置之后是gular，但并不消耗gular这些字符，将表达式改为`re(?=gular).`，将会匹配reg，元字符.匹配了g，括号这一砣匹配了e和g之间的位置。
 
 
@@ -3236,7 +3187,6 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 	- 代表字符串中的一个位置，紧接该位置之后的字符序列**不能**匹配pattern。 
 
 	- 例如对`regex represents regular expression`这个字符串，要想匹配除regex和regular之外的re，可以用`re(?!g)`，该表达式限定了re右边的位置，这个位置后面不是字符g。负向和正向的区别，就在于该位置之后的字符能否匹配括号中的表达式。
-
 
 
 ***
@@ -3274,7 +3224,6 @@ delete F.prototype['a'];
 alert(f.a); // undefined
 alert(obj.proto.a); // -1
 ```
-
 
 ***
 <br>
@@ -3315,7 +3264,6 @@ a=6;
 a(); // a不是函数，因此报错，number is not a function
 ```
 
-
 ***
 <br>
 
@@ -3351,7 +3299,6 @@ Chrome: Blink内核，基于webkit
 - 在Standards模式下可以使用`margin: 0 auto`来使元素水平居中，但在Quirks模式下，则会失效。
 
 
-
 ***
 <br>
 
@@ -3367,7 +3314,6 @@ Chrome: Blink内核，基于webkit
 表现与结构分离。
 
 易于搜索引擎检索，排名更容易靠前。
-
 
 ***
 <br>
@@ -3389,7 +3335,6 @@ title: 为设置该属性的元素提供建议性的信息。
 strong: 粗体强调标签，表示内容的重要性。
 
 em: 斜体强调标签，表示内容的强调点。
-
 
 ***
 <br>
@@ -3429,7 +3374,6 @@ src是source的缩写，指向外部资源的位置，指向的内容将会被�
 href是Hypertext Reference的缩写，指向网络资源所在位置，建立和当前元素（锚点）或当前文档（链接）之间的联系。
 `<link href="common.css" rel="stylesheet" />`如果在文档中添加这个，那么浏览器会识别文档为css文件，并行下载资源而不会停止对当前文档的处理。这也是为什么建议使用link方式来加载css而不是使用@import方式。
 
-
 ***
 <br>
 
@@ -3455,7 +3399,6 @@ href是Hypertext Reference的缩写，指向网络资源所在位置，建立和
 - 如果图片过大，可以使用特殊编码的图片，加载时会先加载一张压缩的特别厉害的缩略图，以提高用户体验。
 
 - 如果图片展示区域小于图片的真实大小，则应在服务器端根据业务需要先行进行图片压缩，图片压缩后大小与展示一致。
-
 
 
 ***
@@ -3493,7 +3436,6 @@ HTML 标签语义化，简单来说，就是让标签有含义，给某块内容
 可以设置absolute，然后left为-9999px;
 隐藏文字可以设置text-indent为-9999px。
 
-
 ***
 <br>
 
@@ -3528,7 +3470,6 @@ background-color: yellow\9;
 <![endif]-->
 ```
 
-
 ***
 <br>
 
@@ -3552,7 +3493,6 @@ background-color: yellow\9;
 
 如: `<input>`、`<img>`、`<button>`、`<textarea>`、`<label>`
 
-
 ***
 <br>
 
@@ -3562,7 +3502,6 @@ background-color: yellow\9;
 
 rgba()和opacity都能实现透明效果，但最大的不同是opacity作用于元素，以及元素内所有内容的透明度，
 而rgba()只作用于元素的颜色或其背景色，设置rgba透明的元素的子元素不会继承透明效果。
-
 
 ***
 <br>
@@ -3615,7 +3554,6 @@ rgba()和opacity都能实现透明效果，但最大的不同是opacity作用于
 }
 ```
 
-
 ***
 <br>
 
@@ -3649,7 +3587,6 @@ Less既可以在客户端上运行，也可以在服务器上运行（借助Node
 可继承: `font-size`、`font-family`、`color`、`ul`、`li`、`dl`、`dd`、`dt`
 
 不可继承: `border`、`padding`、`margin`、`width`、`height`
-
 
 ***
 <br>
@@ -3694,7 +3631,6 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 	- zoom表示放大，写几就放大为几倍 `zoom:1;`
 	- 这个样式只在IE中支持，其他浏览器都不支持
 - 如果为元素指定了宽度，则自动开启`hasLayout`。
-
 
 
 ***
@@ -3825,19 +3761,19 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 
 	WebStorage的优点：
-
+	
 	- （1）存储空间更大：cookie为4KB，而WebStorage是5MB；
-
+	
 	- （2）节省网络流量：WebStorage不会传送到服务器，存储在本地的数据可以直接获取，也不会像cookie一样每次请求都会传送到服务器，所以减少了客户端和服务器端的交互，节省了网络流量；
-
+	
 	- （3）对于那种只需要在用户浏览一组页面期间保存而关闭浏览器后就可以丢弃的数据，sessionStorage会非常方便；
-
+	
 	- （4）快速显示：有的数据存储在WebStorage上，再加上浏览器本身的缓存。获取数据时可以从本地获取会比从服务器端获取快得多，所以速度更快；
-
+	
 	- （5）安全性：WebStorage不会随着HTTP header发送到服务器端，所以安全性相对于cookie来说比较高一些，不会担心截获，但是仍然存在伪造问题；
-
+	
 	- （6）WebStorage提供了一些方法，数据操作比cookie方便；
-
+	
 		- `setItem (key, value)` ——  保存数据，以键值对的方式储存信息。
 		
 		- `getItem (key)` ——  获取数据，将键值传入，即可获取到对应的value值。
@@ -3848,9 +3784,8 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 		
 		- `key (index)` —— 获取某个索引的key。
 
-
 参考资料: [浅谈session,cookie,sessionStorage,localStorage的区别及应用场景](https://www.cnblogs.com/cencenyue/p/7604651.html)
-
+参考资料: [浅谈session,cookie,sessionStorage,localStorage的区别及应用场景](https://www.cnblogs.com/cencenyue/p/7604651.html)
 
 ***
 <br>
@@ -3919,7 +3854,6 @@ setInterval(function(){
 它是关于网页制作的过程中让不同的设备有不同的尺寸和不同的功能。
 响应式设计是让网站在所有的设备上运行正常。
 
-
 ***
 <br>
 
@@ -3971,7 +3905,6 @@ xhr.setRequestHeader();
 xhr.send();
 ```
 
-
 ***
 <br>
 
@@ -4011,7 +3944,6 @@ xhr.send();
 出于安全考虑，服务器不允许ajax跨域获取数据，但是可以跨域获取文件内容，所以基于这一点，可以动态创建script标签，使用标签的src属性访问js文件的形式获取js脚本，
 并且这个js脚本中的内容是函数调用，该函数调用的参数是服务器返回的数据，为了获取这里的参数数据，需要事先在页面中定义回调函数，在回调函数中处理服务器返回的数据。
 这是跨域问题的主流解决方案。
-
 
 ***
 <br>
@@ -4059,7 +3991,6 @@ xhr.send();
 - 创建并插入 iframe，让它异步执行 js
 
 
-
 ***
 <br>
 
@@ -4103,7 +4034,6 @@ Ajax全称是asynchronous JavaScript and XML，即异步JavaScript 和 XML，用
 JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 
 优点: 轻量级、易于人的阅读和编写，便于JS解析，支持复合数据类型，支持多语言，传输速度快。
-
 
 ***
 <br>
@@ -4173,7 +4103,6 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 	- 将需要多次重排的元素，比如动画效果的元素，设置为绝对定位，让其脱离文档流，不影响其他元素。
 
 
-
 ***
 <br>
 
@@ -4209,7 +4138,6 @@ div {width: 200px;height: 100px;border-radius: 10px;box-shadow: 10px 10px 5px #8
 div:hover {opacity: 0;}
    
 ```
-
 
 ***
 <br>
@@ -4450,7 +4378,6 @@ function deepCopy(p, o){
 }
 ```
 
-
 ***
 <br>
 
@@ -4492,7 +4419,6 @@ var madDog = new MadDog();
 madDog.yelp();
 ```
 
-
 ***
 <br>
 
@@ -4527,7 +4453,6 @@ function ready(fn){
 }
 ```
 
-
 ***
 <br>
 
@@ -4561,7 +4486,6 @@ function ready(fn){
 该函数的作用是使用format函数，用函数的参数替换掉{0}这样的内容，返回一个格式化后的结果。
 
 第一个空是arguments，第二个空是`/\{(\d+)\}/ig`
-
 
 ***
 <br>
