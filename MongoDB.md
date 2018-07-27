@@ -465,6 +465,36 @@ stuModel.count({}, function(err, count){
 });
 ```
 
+nodejs常用的商品**列表排序分页查询**：
+
+```javascript
+let page = parseInt(req.param("page"));
+let pageSize = parseInt(req.param("pageSize"));
+let sort = parseInt(req.param("sort"));
+let skip = (page-1)*pageSize;
+let params = {};
+let goodsModel = Goods.find(params);
+
+//这里是链式操作
+goodsModel.sort({'salePrice':sort}).skip(skip).limit(pageSize);
+goodsModel.exec(function (err, docs) {
+  if(err){
+    res.json({
+      status: 1,
+      result: [],
+      msg: err.message
+    });
+  } else {
+    res.json({
+      status: 0,
+      result: docs,
+      msg: ""
+    })
+  }
+});
+```
+
+
 
 ***
 <br>
