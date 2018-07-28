@@ -70,12 +70,16 @@ undefined
 ```
 
 ***
+
 <br>
+
 ### 写一个按照下面方式调用都能正常工作的 sum 方法:
+
 ```
 console.log(sum(2,3));   // Outputs 5
 console.log(sum(2)(3));  // Outputs 5
 ```
+
 针对这个题, 可以判断参数个数来实现：
 
 **答案:**
@@ -108,7 +112,9 @@ function sum(x, y) {
 ```
 
 ***
+
 <br>
+
 <a name="2">
 
 ## 每天一道面试题：2
@@ -124,7 +130,7 @@ console.log("A" - "B" + "2");
 console.log("A" - "B" + 2);
 ```
 
-注意不同类型数据在不同运算下的类型转换
+注意不同类型数据在不同运算下的类型转换。
 
 **答案:**
 
@@ -138,7 +144,9 @@ console.log("A" - "B" + 2); // NaN
 ```
 
 ***
+
 <br>
+
 ### 下面代码输出什么？
 
 ```
@@ -167,11 +175,11 @@ console.log(b.x); // {n:2}
 ```
 **一种解释:**
 
-1. 由于 . 运算符优先级高于= , 所以先给{n:1}对象创建了x属性, 对象变成{n:1,x:undefined}(当前a和b都是指向此内存对象)
-2. 然后连等从右往左执行, 先把a指向改成{n:2}, 然后把最初的内存对象的x属性指向改成{n:2}(因为.运算符已执行, 所以此时a.x是指{n:1,x:undefined}的x属性), 内存对象变成{n:1,x:{n:2}}
+1. 由于 `.` 运算符优先级高于`=` , 所以先给`{n:1}`对象创建了x属性, 对象变成`{n:1,x:undefined}`(当前a和b都是指向此内存对象)
+2. 然后连等从右往左执行, 先把a指向改成`{n:2}`, 然后把最初的内存对象的x属性指向改成`{n:2}`(因为`.`运算符已执行, 所以此时`a.x`是指`{n:1,x:undefined}`的x属性), 内存对象变成`{n:1,x:{n:2}}`，
 此时只有b还是指向这个内存对象  所以:
-	- a.x  -->undefined
-	- b -->{n:1,x:{n:2}}
+	- a.x  → undefined
+	- b → {n:1,x:{n:2}}
 
 **另一种解释:**
 
@@ -179,20 +187,22 @@ js内部为了保证赋值语句的正确, 会在一条赋值语句执行前, �
 
 所以这段代码  `a.x=a={n:2}; `的逻辑是：
 
-1. 在执行前, 会先将a和a.x中的a的引用地址都取出来, 此时他们都指向{n:1}
+1. 在执行前, 会先将a和a.x中的a的引用地址都取出来, 此时他们都指向`{n:1}`
 
-2. 在内存中创建一个新对象{n:2}
+2. 在内存中创建一个新对象`{n:2}`
 
-3. 执行a={n:2}, 将a的引用从指向{n:1}改为指向新的{n:2}
+3. 执行`a={n:2}`, 将a的引用从指向`{n:1}`改为指向新的`{n:2}`
 
-4. 执行a.x=a, 此时a已经指向了新对象, 而a.x因为在执行前保留了原引用, 所以a.x的a依然指向原先的{n:1}对象, 所以给原对象新增一个属性x, 内容为{n:2}也就是现在a
+4. 执行`a.x=a`, 此时a已经指向了新对象, 而`a.x`因为在执行前保留了原引用, 所以a.x的a依然指向原先的`{n:1}`对象, 所以给原对象新增一个属性x, 内容为`{n:2}`也就是现在a
 
-5. 语句执行结束, 原对象由{n:1}变成{n:1,x:{n:2}}, 而原对象因为无人再引用他, 所以被GC回收, 当前a指向新对象{n:2}
+5. 语句执行结束, 原对象由`{n:1}`变成`{n:1,x:{n:2}}`, 而原对象因为无人再引用他, 所以被GC回收, 当前a指向新对象{n:2}
 
-6. 所以就有了上面的运行结果, 再执行a.x, 自然就是undefined了
+6. 所以就有了上面的运行结果, 再执行`a.x`, 自然就是`undefined`了
 
 ***
+
 <br>
+
 <a name="3">
 
 ## 每天一道面试题：3
@@ -250,7 +260,9 @@ console.log(add())//2
 如上, 使用IIFE把计数器变量保存为私有变量更安全, 同时也可以减少对全局空间的污染
 
 ***
+
 <br>
+
 ### 使用 typeof obj === "object" 判断 obj 是不是一个对象有什么潜在的弊端？如何避免这种弊端？
 
 ```
@@ -357,7 +369,9 @@ new new Foo().getName();//3
 ![运算符优先级](images/PRI.png)
 
 ***
+
 <br>
+
 <a name="5">
 
 ## 每天一道面试题: 5
@@ -407,7 +421,9 @@ function foo2()
 尽管后面的语句不符合规范，但是因为没有执行到，所以第二个函数是返回 undefined
 
 ***
+
 <br>
+
 ### 解释一下下面代码的输出:
 
 ```
@@ -434,31 +450,34 @@ JavaScript 中的 number 类型就是浮点型，JavaScript 中的浮点数采�
 
 - **一是先升幂再降幂:**
 
-```
-function add(num1, num2){
-  let r1, r2, m;
-  r1 = (''+num1).split('.')[1].length;
-  r2 = (''+num2).split('.')[1].length;
-
-  m = Math.pow(10,Math.max(r1,r2));
-  return (num1 * m + num2 * m) / m;
-}
-console.log(add(0.1,0.2));   //0.3
-console.log(add(0.15,0.2256)); //0.3756
-```
+    ```
+    function add(num1, num2){
+      let r1, r2, m;
+      r1 = (''+num1).split('.')[1].length;
+      r2 = (''+num2).split('.')[1].length;
+    
+      m = Math.pow(10,Math.max(r1,r2));
+      return (num1 * m + num2 * m) / m;
+    }
+    console.log(add(0.1,0.2));   //0.3
+    console.log(add(0.15,0.2256)); //0.3756
+    ```
 
 - **二是使用内置的 toPrecision() 和 toFixed() 方法**
-	- 注意，方法的返回值是字符串
+	
+	注意，方法的返回值是字符串
 
-```
-function add(x, y) {
-    return x.toPrecision() + y.toPrecision()
-}
-console.log(add(0.1,0.2));  //"0.10.2"
-```
+    ```
+    function add(x, y) {
+        return x.toPrecision() + y.toPrecision()
+    }
+    console.log(add(0.1,0.2));  //"0.10.2"
+    ```
 
 ***
+
 <br>
+
 ### 实现函数 isInteger(x) 来判断 x 是否是整数
 
 **答案:**
@@ -483,7 +502,9 @@ Number.isInteger(true) // false
 JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间（不含两个端点），超过这个范围，无法精确表示这个值。ES6 引入了Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER这两个常量，用来表示这个范围的上下限，并提供了 Number.isSafeInteger() 来判断整数是否是安全型整数。
 
 ***
+
 <br>
+
 <a name="6">
 
 ## 每天一道面试题: 6
@@ -511,7 +532,9 @@ function isPalindrome(str) {
 ```
 
 ***
+
 <br>
+
 ### 在下面的代码中，数字 1-4 会以什么顺序输出？为什么会这样输出？
 
 ```
@@ -573,7 +596,9 @@ setInterval()、 setTimeout()只是将事件插入了"任务队列"，必须等�
 
 
 ***
+
 <br>
+
 <a name="7">
 
 ## 每天一道面试题: 7
@@ -664,7 +689,9 @@ var timer = setTimeout(function func(){
 <a name="7a">
 
 ***
+
 <br>
+
 ### 下面的代码会输出什么？为什么？
 
 ```
@@ -696,6 +723,7 @@ MDN 上对于 reverse() 的描述是这样的：
 而数组与字符串""做加法运算输出，会调用toString()方法，将数组中除中括号外的字符全部打印出来
 
 ***
+
 <br>
 
 ### 如果 list 很大，下面的这段递归代码会造成堆栈溢出，如何在不改变递归模式的前提下修缮这段代码？
@@ -871,6 +899,7 @@ console.log(a["[object Object]"]);
 
 ***
 <br>
+
 ### 解释下面代码的输出
 
 `console.log((function f(n){return ((n > 1) ? n * f(n-1) : n)})(10));`
@@ -889,7 +918,9 @@ console.log(ans);
 
 
 ***
+
 <br>
+
 <a name="9">
 
 ## 每天一道面试题: 9
@@ -953,7 +984,9 @@ Function.prototype.bind = Funtion.prototype.bind || function(context) {
 ```
 
 ***
+
 <br>
+
 ### 给你一个 DOM 元素，创建一个能访问该元素所有子元素的函数，并且要将每个子元素传递给指定的回调函数
 
 函数接受两个参数：
@@ -981,7 +1014,9 @@ function Traverse(p_element,p_callback) {
 
 
 ***
+
 <br>
+
 <a name="10">
 
 ## 每天一道面试题: 10
@@ -1012,7 +1047,9 @@ console.log(maxn); // 6
 ```
 
 ***
+
 <br>
+
 ### 转化一个数字数组为function数组（每个function都弹出相应的数字）
 
 
@@ -1041,7 +1078,9 @@ for(var i=0; i<a.length; i++){
 ```
 
 ***
+
 <br>
+
 ### 给object数组进行排序（排序条件是每个元素对象的属性个数）
 
 
@@ -1159,6 +1198,7 @@ func(5);
 学习了ES6，还可以用generator实现。
 
 ***
+
 <br>
 
 ### 实现如下语法的功能：var a = (5).plus(3).minus(6); //2
@@ -1184,6 +1224,7 @@ var a = (5).plus(3).minus(6);
 ```
 
 ***
+
 <br>
 
 ### 实现如下语法的功能：var a = add(2)(3)(4); //9
@@ -1230,6 +1271,7 @@ console.log(ans);
 
 
 ***
+
 <br>
 
 <a name="12">
@@ -1266,7 +1308,9 @@ obj.method(fn, 1);
 
 
 ***
+
 <br>
+
 ### 下面代码输出什么？(var和函数的提前声明)
 
 ```
@@ -1304,7 +1348,9 @@ alert(a);
 上面这题，输出10，因为即使{}里面的变量，声明也会提前，所以在if判断之前，全局作用域已经有了`a`，返回true，然后赋值
 
 ***
+
 <br>
+
 ### 下面代码输出什么？(局部变量和全局变量)
 
 ```
@@ -1339,7 +1385,9 @@ console.log(c);
 而函数体内声明的局部变量，外部访问不到。
 
 ***
+
 <br>
+
 ### 下面代码的输出是什么？
 
 ```
@@ -1365,6 +1413,7 @@ undefinedhello
 `10 + undefined`，`undefined`会转为`NaN`
 
 ***
+
 <br>
 
 <a name="13">
@@ -1422,7 +1471,9 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 ```
 
 ***
+
 <br>
+
 ### 实现一段脚本，使得点击对应链接alert出相应的编号
 
 ```
@@ -1477,6 +1528,7 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 ```
 
 ***
+
 <br>
 
 <a name="14">
@@ -1558,7 +1610,9 @@ if(false){
 
 
 ***
+
 <br>
+
 <a name="14a">
 
 ### 请给出这段代码的运行结果
@@ -1601,6 +1655,7 @@ alert(bb);
 ```
 
 ***
+
 <br>
 
 <a name="15">
@@ -1650,7 +1705,9 @@ undefined
 可以试着加上一行代码`this.m_Element.m_Text = 'hello world'`，就会alert出`hello world`了
 
 ***
+
 <br>
+
 ### 请编写一个JavaScript函数 parseQueryString，它的用途是把URL参数解析为一个对象，如： var url = “http://witmax.cn/index.php?key0=0&key1=1&key2=2″
 
 
@@ -1675,7 +1732,9 @@ function parseQueryString(str){
 ```
 
 ***
+
 <br>
+
 <a name="16">
 
 ## 每天一道面试题: 16
@@ -1689,8 +1748,11 @@ function parseQueryString(str){
 
 object number function boolean undefined string
 
+
 ***
+
 <br>
+
 ### 传统事件绑定和符合W3C标准的事件绑定有什么区别？
 
 **答案:**
@@ -1710,7 +1772,9 @@ object number function boolean undefined string
 		- 这种方式只支持事件冒泡，不支持事件捕获
 
 ***
+
 <br>
+
 ### IE和DOM事件流的区别？
 
 **答案:**
@@ -1725,7 +1789,9 @@ IE9 以前：attachEvent(“onclick”)、detachEvent(“onclick”)
 IE9 开始跟 DOM 事件流是一样的，都是 addEventListener
 
 ***
+
 <br>
+
 ### IE和标准下有哪些兼容的写法？
 
 **答案:**
@@ -1739,7 +1805,9 @@ target = ev.srcElement||ev.target
 ```
 
 ***
+
 <br>
+
 ### b继承a的方法
 
 **答案:**
@@ -1751,7 +1819,9 @@ b.prototype = new a;
 ```
 
 ***
+
 <br>
+
 ### js指针、闭包、作用域
 
 **答案:**
@@ -1766,7 +1836,9 @@ this: 指向调用上下文
 作用域: 定义一个函数就开辟了一个局部作用域，整个js执行环境就是一个全局作用域
 
 ***
+
 <br>
+
 ### 事件委托是什么？如何阻止事件冒泡和默认事件？
 
 **答案:**
@@ -1805,7 +1877,9 @@ obj.removeChild() // 删除
 ```
 
 ***
+
 <br>
+
 ### js的本地对象，内置对象和宿主对象
 
 **答案:**
@@ -1815,7 +1889,9 @@ obj.removeChild() // 删除
 3. 宿主对象为浏览器自带的 `document`，`window` 等
 
 ***
+
 <br>
+
 ### document load 和 document ready 的区别
 
 **答案:**
@@ -1827,7 +1903,9 @@ obj.removeChild() // 删除
 `document.ready` 原生js中没有这个方法，jquery中有`$(document).ready(function(){})`，DOM结构绘制完毕就执行，不必等到加载完毕
 
 ***
+
 <br>
+
 ### javascript的同源策略
 
 **答案:**
@@ -1837,7 +1915,9 @@ obj.removeChild() // 删除
 同源策略带来的麻烦: 同域名下的请求无法实现，如果说想要请求其他来源的js文件，或者json数据，可以通过jsonp来解决。
 
 ***
+
 <br>
+
 ### 编写一个数组去重的方法
 
 **答案:**
@@ -1867,6 +1947,7 @@ function clrRepeat(arr){
 ```
 
 ***
+
 <br>
 
 ### 怎么判断某变量是否为数组数据类型？
@@ -1889,6 +1970,7 @@ if(typeof Array.isArray === "undefined"){
 ```
 
 ***
+
 <br>
 
 <a name="18">
@@ -1914,6 +1996,7 @@ while (len--) { //使用 while 的效率会比 for 循环更高
 ```
 
 ***
+
 <br>
 
 ### 当一个 DOM 节点被点击时候，我们希望能够执行一个函数, 应该怎么做
@@ -1927,6 +2010,7 @@ while (len--) { //使用 while 的效率会比 for 循环更高
 通过事件添加进行绑定：`addEventListener(xxx, 'click', test)`
 
 ***
+
 <br>
 
 ### undefined什么情况下发生?
@@ -1942,6 +2026,7 @@ undefined会在以下三种情况下产生:
 注意区分undefined和not defined(语法错误)是不一样的
 
 ***
+
 <br>
 
 ### 已知有字符串 foo="get-element-by-id",写一个 function 将其转化成驼峰表示法 "getElementById"
@@ -1971,6 +2056,7 @@ var newFoo = s.replace(/-([a-z])/g, function(m, p1){return p1.toUpperCase();});
 ```
 
 ***
+
 <br>
 
 ### 输出今天的日期，以YYYY-MM-DD的方式
@@ -1997,6 +2083,7 @@ alert(year + '-' + month + '-' + day);
 ```
 
 ***
+
 <br>
 
 ### 将字符串 `<tr><td>{$id}</td><td>{$name}</td></tr>`中的`{$id}`替换成 10，`{$name`}替换成 Tony （使用正则表达式）
@@ -2007,6 +2094,7 @@ alert(year + '-' + month + '-' + day);
 `'<tr><td>{$id}</td><td>{$id}_{$name}</td></tr>'.replace(/{\$id}/g, '10').replace(/{\$name}/g, 'Tony');`
 
 ***
+
 <br>
 
 <a name="19">
@@ -2046,7 +2134,9 @@ function escapeHtml(str) {
 ```
 
 ***
+
 <br>
+
 ### 用js实现随机选取10~100之间的10个数字，存入一个数组，并排序
 
 **答案:**
@@ -2105,6 +2195,7 @@ arr.sort();
 
 ***
 <br>
+
 ### 写一个 function，清除字符串前后的空格。（兼容所有浏览器）
 
 **答案:**
@@ -2121,6 +2212,7 @@ if(!String.prototype.trim) {
 ```
 
 ***
+
 <br>
 
 ### Javascript 中 callee 和 caller 的作用？
@@ -2346,7 +2438,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 缺点: 对于一些可以共享且相同的函数方法，却要多次创建在实例化对象中，占用内存，且复用性差。
 
 5. 原型模式 : 让所有的对象实例共享原型对象所包含的属性和方法，不必在构造函数中定义然后多次在实例对象中创建了，只需要添加给原型即可
-5. 原型模式 : 让所有的对象实例共享原型对象所包含的属性和方法，不必在构造函数中定义然后多次在实例对象中创建了，只需要添加给原型即可
 
 	```
 	function Person() {
@@ -2372,7 +2463,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 	> 缺点: 省略了传递给构造函数初始化参数这一环节，导致所有的实例默认都具有相同的属性值。更大的问题是对于原型上的引用类型属性，所有的实例之间会共享修改，丧失了独特性。
 
-6. 混合构造函数原型模式 : 最常见的创建自定义类型方式，构造函数中定义实例属性，原型对象中添加共享属性和方法
 6. 混合构造函数原型模式 : 最常见的创建自定义类型方式，构造函数中定义实例属性，原型对象中添加共享属性和方法
 
 	```
@@ -2405,7 +2495,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	
 
 7. 动态原型模式 : 将构造函数和原型对象等定义统一到一个函数中，封装性更强，并且通过检测必要情况来决定是否初始化原型，效率更高
-7. 动态原型模式 : 将构造函数和原型对象等定义统一到一个函数中，封装性更强，并且通过检测必要情况来决定是否初始化原型，效率更高
 	```
 	function Person(name, age, job){
 
@@ -2431,7 +2520,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 评价: 原型方法的添加只执行一次，对原型所做的修改也能立即在实例中反映，可以说相当完美，但是需要注意不能使用对象字面量重写原型，否则会切断现有实例与新原型的联系。
 	
 
-8. 寄生构造函数模式 : 当有特殊需求比如说创建一个具有额外方法的数组，由于不能直接修改Array，就可以使用这个模式
 8. 寄生构造函数模式 : 当有特殊需求比如说创建一个具有额外方法的数组，由于不能直接修改Array，就可以使用这个模式
 	
 	```
@@ -2464,7 +2552,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	- 建议在可以使用其他模式的情况下，不要使用这种模式。
 	
 
-9. 稳妥构造函数模式 : 用来创建没有公共属性，不引用this的安全稳妥对象
 9. 稳妥构造函数模式 : 用来创建没有公共属性，不引用this的安全稳妥对象
 
 	```
@@ -2548,7 +2635,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	
 
 3. 组合继承
-3. 组合继承
 
 
 	> 也叫伪经典继承，将原型链和借用构造函数的技术组合到一块。使用原型链实现对原型属性和方法的继承，而通过构造函数来实现对实例属性的继承。
@@ -2604,7 +2690,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	
 
 4. 原型式继承
-4. 原型式继承
 
 
 	> 不自定义类型的情况下，临时创建一个构造函数，借助已有的对象作为临时构造函数的原型，然后在此基础实例化对象，并返回。
@@ -2643,7 +2728,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	- 当只想单纯地让一个对象与另一个对象保持类似的情况下，原型式继承是完全可以胜任的。
 	
 
-5. 寄生式继承
 5. 寄生式继承
 
 	> 其实就是在原型式继承得到对象的基础上，在内部再以某种方式来增强对象，然后返回。
@@ -2724,7 +2808,6 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	
 	
 
-详细解读请见笔记: [JavaScript高级程序设计: 继承](./JavaScript高级程序设计.md/#6c)
 详细解读请见笔记: [JavaScript高级程序设计: 继承](./JavaScript高级程序设计.md/#6c)
 
 
@@ -3111,6 +3194,7 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 ***
 <br>
+
 ### 列出 3 条以上 ff 和 IE 的脚本兼容问题
 
 

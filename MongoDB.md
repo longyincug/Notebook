@@ -532,7 +532,21 @@ stuModel.update({age:{$gt:18}}, {oldEnough:true}, function(err,raw){
     if(err) return handlerError(err);
     console.log('The raw response from mongo was ', raw);
 });
+
+//使用$pull来对嵌套数组中数据进行删除
+//如下，删除用户id为10001的购物车列表数据中的 id为21的商品
+UserModel.update({userId:"10001"}, {$pull:{'cartList':{'productId':"21"}}}, function(err,raw){
+    if(err) return handlerError(err);
+    console.log('The raw response from mongo was ', raw);
+});
+
+//还可以对指定的嵌套数据进行匹配和修改
+User.update({"userId":"10001","cartList.productId":"21"},{
+    "cartList.$.productNum":10,
+    "cartList.$.checked":1
+},function(){});
 ```
+
 
 
 ***

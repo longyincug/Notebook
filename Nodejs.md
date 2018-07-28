@@ -767,7 +767,10 @@ server.get('/login', function (req, res) {
     // Express提供了req.query来获取查询参数对象
     var user = req.query['user'];
     var pass = req.query['pass'];
-
+    
+    //req.originalUrl是请求的资源路径（包括参数）: /login?a=1&b=2
+    //req.path是不包括请求参数的资源路径 : /login
+    
     if(users[user] == null){
         res.send({ok: false, msg: "此用户不存在"});
     } else {
