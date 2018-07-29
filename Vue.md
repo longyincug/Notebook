@@ -2036,18 +2036,27 @@ module.exports = {
 5. **自定义键盘事件**
 
     - Vue1.x: `Vue.directive('on').keyCodes.myCtrl = 17;`
-    - Vue2.x: `Vue.config.keyCodes.myCtrl = 17;`
+    - Vue2.x: `Vue.config.keyCodes.myCtrl = 17;`（或者直接使用`@keyup.enter=func`）
 
 
 6. **过滤器**
 
-    - 之前系统自带许多过滤器: currency/json/limitBy/filterBy...
+    - 之前系统自带许多过滤器: `currency/json/limitBy/filterBy...`
+    
     - Vue2.x删除了内置过滤器。
+    
     - 现在只能通过`Vue.filter(id,fn)`自定义过滤器，或者引入一些工具库如`lodash`来使用过滤器。
 
     - 过滤器传参形式也发生了变化:
         - Vue1.x: `{{msg | toDou '5' '12'}}`
+        
         - Vue2.x: `{{msg | toDou('12','5')}}`
+
+    - 两种过滤器的使用方式：
+        - 局部引入(写好的插件)：Vue组件中，`import {currency} from '../util/currency'` → `{{price | currency("￥")}}`
+        
+        - 全局引入：`main.js`中，`import {currency} from './util/currency'` → `Vue.filter("currency",currency)`
+
 
 
 ***
