@@ -27,7 +27,11 @@
 
 ## 数据库 学习笔记
 
-[MongoDB](./MongoDB.md)
+[MongoDB在windows上的安装和配置](./MongoDB在windows上的安装和配置.md)
+
+[MongoDB常用语法及基本使用](./MongoDB常用语法及基本使用.md)
+
+[Node.js中操作MongoDB](./Node.js中操作MongoDB.md)
 
 
 
