@@ -18,7 +18,7 @@
 
 
 
-
+<br>
 
 <a name="1">
 
@@ -36,7 +36,7 @@ Google开源的前端JS结构化框架。
 - 定制表单验证
 - Ajax封装
 
-
+<br>
 
 
 ### 1.2 与jQuery的比较
@@ -51,7 +51,7 @@ Angular：
 
 > JS结构化框架，主体不再是DOM，而是页面中的动态数据。
 
-
+<br>
 
 ### 1.3 应用领域
 
@@ -64,7 +64,7 @@ Angular：
 > 3. 利用ajax和路由技术
 
 
-
+<br>
 
 
 ### 1.4 简单指令
@@ -136,7 +136,7 @@ Angular：
 <p>您输入的内容是：<span>{{username}}</span></p>
 ```
 
-
+<br>
 
 ### 1.5 双向数据绑定
 
@@ -156,7 +156,7 @@ Angular：
 
 **`ng-model`是双向数据绑定，`{{}}`是单向数据绑定(model→view)，`ng-init`是单向数据绑定(view→model)。**
 
-
+<br>
 
 ### 1.6 Angular中的MVC和MVVM模式
 
@@ -189,8 +189,8 @@ Angular：
 
 <a name="2">
 
-
-
+<br>
+<br>
 
 ## 2. 作用域对象和控制器对象
 
@@ -236,7 +236,8 @@ angular.module('myApp',[])
 .controller('mycontroller2',function(){})
 ```
 
-
+<br>
+<br>
 
 <a name="3">
 
@@ -254,7 +255,7 @@ angular.module('myApp',[])
 
 在`Angular`中有三种依赖注入方式：
 
-###内联注入
+### 内联注入
 
 ```js
 module.controller('ctrl', ['$scope',function(sco){
@@ -266,7 +267,7 @@ module.controller('ctrl', ['$scope',function(sco){
 
 
 
-###推断型注入
+### 推断型注入
 
 参数名必须和依赖对象名一致，因为被注入的是作用域`scope`。
 
@@ -279,7 +280,7 @@ module.controller('ctrl', ctrl);
 
 ​
 
-###声明式注入
+### 声明式注入
 
 可以替换参数的名称。
 
@@ -291,7 +292,8 @@ ctrl.$inject = ['$scope'];
 module.controller('ctrl', ctrl);
 ```
 
-
+<br>
+<br>
 
 <a name="4">
 
@@ -299,7 +301,7 @@ module.controller('ctrl', ctrl);
 
 ## 4. 常用指令及过滤器
 
-###常用指令
+### 常用指令
 
 - `ng-click`：当点击时，调用作用域对象的方法，传入`$event`。
 - `ng-controller`：指定控制器构造函数名，会自动创建一个新的子作用域。
@@ -370,10 +372,10 @@ module.controller('ctrl', ctrl);
   ```
 
 
-
+<br>
+<br>
 
 <a name="5">
-
 
 
 ## 5. 关于$http的使用
@@ -440,7 +442,7 @@ $http.post(url, data, [config]).then(function(res){}, function(err){});
 
 
 
-###Angular文件上传
+### Angular文件上传
 
 常用的表单提交编码方式有两种：`multipart/form-data` 和 `application/x-www-form-urlencoded`，如果是`html`页面中的`form`表单上传，可以使用`enctype`来指定提交方式，不指定时默认就是后者。
 
@@ -468,11 +470,10 @@ $http({
 }).then((res)=>{}, (err)=>{});
 ```
 
-
+<br>
+<br>
 
 <a name="6">
-
-
 
 
 ## 6. ng-options的使用
@@ -533,7 +534,8 @@ $scope.arr = {
 <select ng-model="flag" ng-options="value as key for (key,value) in arr"></select>
 ```
 
-
+<br>
+<br>
 
 <a name="7">
 
@@ -554,7 +556,7 @@ $scope.arr = {
 
 
 
-###代表是否通过验证的属性(布尔类型)
+### 代表是否通过验证的属性(布尔类型)
 
 - `formName.inputFieldName.$pristine` → 未修改过的表单，为true表示未修改。
 - `formName.inputFieldName.$dirty` → 修改过的表单。
@@ -653,14 +655,14 @@ formName.inputFieldName.$error
 ```
 
 
-
-
+<br>
+<br>
 
 <a name="8">
 
 
 
-##8. `$watch`监视及相关原理
+## 8. `$watch`监视及相关原理
 
 可以指定监视scope中的变量，当其发生变化时执行某些动作。
 
@@ -677,7 +679,7 @@ $scope.$watch('arr', function(){
 当我们的模板加载完成，compiler就会找到所有的指令，并创建对应的`$watch`。
 
 
-
+<br>
 
 
 ### digest loop
@@ -689,7 +691,7 @@ $scope.$watch('arr', function(){
 当`$digest loop`完成，DOM就会发生改变。
 
 
-
+<br>
 
 
 ### Angular Context
@@ -703,10 +705,10 @@ $scope.$watch('arr', function(){
 > 所有的事件会进入angular context 然后执行`$digest loop`，这意味着我们每点击一次鼠标，每键入一个字符，轮询loop都会检查页面上所有的`$watch`。
 
 
+<br>
 
 
-
-###`$apply`
+### `$apply`
 
 如何进入`Angular Context`呢？
 
@@ -746,10 +748,10 @@ angular.module('testApp',[]).controller('test',function($scope,$http,$interval){
 
 关于数据绑定和数据监视的原理解读，详见：[谈谈Angular关于$watch，$apply 以及 $digest的工作原理](https://www.cnblogs.com/cunjieliu/p/4370441.html)。
 
-
+<br>
+<br>
 
 <a name="9">
-
 
 
 ## 9. Angular中的服务
@@ -763,6 +765,7 @@ angular.module('testApp',[]).controller('test',function($scope,$http,$interval){
 - 服务都是单例对象，只有当第一次调用时才会被实例化，后面使用的都是这个实例。
 - Angular提供的内置服务，都通过依赖注入进行自动注册，因此可以很轻松的包含到应用中。
 
+<br>
 
 **自定义服务：**
 
@@ -836,7 +839,7 @@ myApp.service("StudentService",["http", function($http){
 }]);
 ```
 
-
+<br>
 
 ### factory
 
@@ -896,7 +899,7 @@ myApp.factory("mathService",[function(){
 都是惰性、单例的。
 
 
-
+<br>
 
 
 ### constant
@@ -920,14 +923,14 @@ myApp.constant("constService",{
 
 constant创建的服务不会修改它的内容，需要修改内容，最好用`value`来创建。
 
-
+<br>
 
 ### value
 
 `value`和`constant`都是主要用于存放一些数据或方法以供使用，区别是constant一般存放固定内容，value一般存放可能会被修改的内容。
 
 
-
+<br>
 
 
 ### provider
@@ -974,7 +977,7 @@ myapp.provider("mathProvider",function(){
 });
 ```
 
-`setA`方法不能被`mathProvider.setA`调用，必须使用`config`来调用，表示对服务的配置（注意实参的名字要在后面添加`Provider`）：
+`setA`方法不能被`mathProvider.setA`调用，必须使用`config`来调用，表示对服务的配置（注意形参的名字要在后面添加`Provider`）：
 
 ```js
 myApp.config(function(mathProviderProvider){
@@ -996,7 +999,8 @@ myApp.config(function($httpProvider){
 
 服务的用处就是做`model`层的事，将一些底层的业务写在服务中。
 
-
+<br>
+<br>
 
 <a name="10">
 
@@ -1023,7 +1027,7 @@ myapp.directive("myDirect",[function(){
 <my-direct></my-direct>
 ```
 
-
+<br>
 
 ### restrict属性
 
@@ -1063,7 +1067,7 @@ angular.module("myApp",[]).directive("myDirect",[function(){
 还可以使用`templateUrl`来引入外部的html模板，angular会自动用ajax读取这个模板，注意页面必须运行在服务器环境中。
 
 
-
+<br>
 
 
 ### link属性
@@ -1092,7 +1096,7 @@ myapp.directive("myDirect",[function(){
 `attr`表示属性对象。
 
 
-
+<br>
 
 
 ### scope属性
@@ -1182,8 +1186,8 @@ Vue → .vue
 ```
 
 
-
-
+<br>
+<br>
 
 <a name="11">
 
@@ -1297,7 +1301,7 @@ myapp.config(function($stateProvider){
 
 
 
-###子路由
+### 子路由
 
 ```js
 //配置$state服务，其实就是配置路由表
@@ -1395,8 +1399,8 @@ myapp.controller("moviectrl",function($scope,$state){
 注意名字的规范，在组件中注册指令时`scope`内变量为`isLogin`，那么父级html页面中指令所在标签中接收数据的名字是`is-login`！
 
 
-
-
+<br>
+<br>
 
 <a name="12">
 
