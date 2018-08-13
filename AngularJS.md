@@ -686,7 +686,7 @@ $scope.$watch('arr', function(){
 
 这是一个轮询的机制，当浏览器发送一个事件，此时`$digest`就会被激活，去轮询之前创建的`$watch list`，看是否所有`$watch`都已经更新。
 
-关于**脏值检测：**就是当其中有一个值改变，会重新轮询，直到所有的`$watch`都没有改变，这样做是为了确保所有的model都是“干净”的。如果连续轮询超过10次，就会抛出异常，来退出无限的轮询。
+关于**脏值检测**：就是当其中有一个值改变，会重新轮询，直到所有的`$watch`都没有改变，这样做是为了确保所有的model都是“干净”的。如果连续轮询超过10次，就会抛出异常，来退出无限的轮询。
 
 当`$digest loop`完成，DOM就会发生改变。
 
@@ -1143,19 +1143,19 @@ myapp.directive("myDirect",[function(){
 //定义时：
 angular.module("myApp",[]).directive("myDirect",[function(){
 	return {
-	    scope:{
-            //这里的属性用来接收组件外部数据的
+		scope:{
+			//这里的属性用来接收组件外部数据的
 			"a": "@",
-             "obj": '='
+			"obj": '='
 		},
-        restrict: "E",
-        templateUrl: "./template/myDirect.html",
-        link: function($scope, ele, attr){
-            //在这里初始化 组件独自作用域的 属性值
-          	$scope.flag = 0;
-            //如果在这里修改obj，会影响到所有使用该数据的组件
-            //$scope.obj = {}
-        }
+		restrict: "E",
+		templateUrl: "./template/myDirect.html",
+		link: function($scope, ele, attr){
+			//在这里初始化 组件独自作用域的 属性值
+			$scope.flag = 0;
+			//如果在这里修改obj，会影响到所有使用该数据的组件
+			//$scope.obj = {}
+		}
 	}
 }]);
 
