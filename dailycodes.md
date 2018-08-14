@@ -44,6 +44,7 @@
 40. [每天一道面试题: 40](#40)
 41. [每天一道面试题: 41](#41)
 
+<br>
 
 
 <a name="1">
@@ -54,9 +55,9 @@
 ```
 var foo = 1;
 (function(){
-	console.log(foo);
-	var foo = 2;
-	console.log(foo);
+    console.log(foo);
+    var foo = 2;
+    console.log(foo);
 })();
 ```
 
@@ -86,15 +87,14 @@ console.log(sum(2)(3));  // Outputs 5
 
 ```
 function sum() {
-  var fir = arguments[0];
-  if(arguments.length === 2) {
-    return arguments[0] + arguments[1]
-  } else {
-    return function(sec) {
-       return fir + sec;
+    var fir = arguments[0];
+    if(arguments.length === 2) {
+        return arguments[0] + arguments[1]
+    } else {
+        return function(sec) {
+            return fir + sec;
+        }
     }
-  }
- 
 }
 ```
 
@@ -102,11 +102,11 @@ function sum() {
 
 ```
 function sum(x, y) {
-	if(y !== undefined){
-		return x + y;
-	} else {
-		return function(y) {return x + y; };
-	}
+    if(y !== undefined){
+        return x + y;
+    } else {
+        return function(y) {return x + y; }
+    }
 }
 
 ```
@@ -173,13 +173,16 @@ console.log(b); // {n:1, x:{n:2}}
 console.log(a.x); // undefined
 console.log(b.x); // {n:2}
 ```
+
 **一种解释:**
 
-1. 由于 `.` 运算符优先级高于`=` , 所以先给`{n:1}`对象创建了x属性, 对象变成`{n:1,x:undefined}`(当前a和b都是指向此内存对象)
+1. 由于 `.` 运算符优先级高于`=` , 所以先给`{n:1}`对象创建了x属性, 对象变成`{n:1,x:undefined}`(当前a和b都是指向此内存对象);
+
 2. 然后连等从右往左执行, 先把a指向改成`{n:2}`, 然后把最初的内存对象的x属性指向改成`{n:2}`(因为`.`运算符已执行, 所以此时`a.x`是指`{n:1,x:undefined}`的x属性), 内存对象变成`{n:1,x:{n:2}}`，
 此时只有b还是指向这个内存对象  所以:
-	- a.x  → undefined
-	- b → {n:1,x:{n:2}}
+	- `a.x`  → `undefined`
+	
+	- `b` → `{n:1,x:{n:2}}`
 
 **另一种解释:**
 
@@ -187,15 +190,15 @@ js内部为了保证赋值语句的正确, 会在一条赋值语句执行前, �
 
 所以这段代码  `a.x=a={n:2}; `的逻辑是：
 
-1. 在执行前, 会先将a和a.x中的a的引用地址都取出来, 此时他们都指向`{n:1}`
+1. 在执行前, 会先将`a`和`a.x`中的a的引用地址都取出来, 此时他们都指向`{n:1}`
 
 2. 在内存中创建一个新对象`{n:2}`
 
 3. 执行`a={n:2}`, 将a的引用从指向`{n:1}`改为指向新的`{n:2}`
 
-4. 执行`a.x=a`, 此时a已经指向了新对象, 而`a.x`因为在执行前保留了原引用, 所以a.x的a依然指向原先的`{n:1}`对象, 所以给原对象新增一个属性x, 内容为`{n:2}`也就是现在a
+4. 执行`a.x=a`, 此时a已经指向了新对象, 而`a.x`因为在执行前保留了原引用, 所以a.x的a依然指向原先的`{n:1}`对象, 所以给原对象新增一个属性x, 内容为`{n:2}`也就是现在`a`
 
-5. 语句执行结束, 原对象由`{n:1}`变成`{n:1,x:{n:2}}`, 而原对象因为无人再引用他, 所以被GC回收, 当前a指向新对象{n:2}
+5. 语句执行结束, 原对象由`{n:1}`变成`{n:1,x:{n:2}}`, 而原对象只剩`b`在引用他, 当前a指向新对象{n:2}
 
 6. 所以就有了上面的运行结果, 再执行`a.x`, 自然就是`undefined`了
 
@@ -245,6 +248,7 @@ bar bar undefined bar
 **IIFE的优点:**
 
 1. 创建块级（私有）作用域, 避免了向全局作用域中添加变量和函数, 因此也避免了多人开发中全局变量和函数的命名冲突
+
 2. IIFE中定义的任何变量和函数, 都会在执行结束时被销毁。这种做法可以减少闭包占用的内存问题, 因为没有指向匿名函数的引用。只要函数执行完毕, 就可以立即销毁其作用域链了
 
 ```
@@ -292,6 +296,7 @@ console.log(Object.prototype.toString.call(null));//[object Null]
 ```
 
 ***
+
 <br/>
 
 <a name="4">
@@ -309,7 +314,7 @@ var getName = function () { alert (4);};
 function getName() { alert (5);}
 ```
 
-### 请写出以下输出结果:
+### 函数声明及表达式如上，请写出以下输出结果:
 
 ```
 Foo.getName();
@@ -335,38 +340,57 @@ new Foo().getName();//3
 new new Foo().getName();//3
 ```
 
-首先定义了一个叫Foo的函数, 之后为Foo创建了一个叫getName的**静态属性**存储了一个匿名函数, 之后为Foo的**原型对象**新创建了一个叫getName的匿名函数。之后又通过**函数变量表达式**创建了一个getName的函数, 最后再**声明**一个叫getName的函数。
+首先定义了一个叫`Foo`的函数, 然后为`Foo`创建了一个叫`getName`的**静态属性**存储一个匿名函数, 之后为`Foo`的**原型对象**新创建了一个叫`getName`的匿名函数。之后又通过**函数变量表达式**创建了一个`getName`的函数, 最后再**声明**一个叫`getName`的函数。
 
-1. 第一问, `Foo.getName` 是访问Foo函数上存储的静态属性, 所以输出2
-2. 第二问, 直接调用getName函数, 既然是直接调用, 就是访问当前上文作用域内的叫getName的函数, 所以跟1 2 3都没关系, 而又由于函数声明提升, 5先被声明, 然后被4覆盖, 最后应该输出4
-3. 第三问, `Foo().getName();` 先执行了Foo函数, 然后调用Foo函数的返回值对象的getName属性函数:
-	1. Foo函数的第一句  `getName = function () { alert (1); };`  是一句函数赋值语句, 注意它没有var声明, 所以先向当前Foo函数作用域内寻找getName变量, 没有
-	2. 再向当前函数作用域上层, 即外层作用域内寻找是否含有getName变量, 找到了, 也就是第二问中的alert(4)函数, 将此变量的值赋值为 `function(){alert(1)}`
-	3. 此处实际上是将外层作用域内的getName函数修改了
-		- 注意: 此处若依然没有找到会一直向上查找到window对象, 若window对象中也没有getName属性, 就在window对象中创建一个getName变量
-	4. 接着, Foo函数的返回值是this, 而this的指向是由所在函数的调用方式决定。在此处, 是直接调用, 所以this指向window对象
-	5. 此时Foo函数返回window对象, 相当于执行`window.getName()`, 而window中的getName已经被修改为`alert(1)`, 所以最终输出1
+1. 第一问, `Foo.getName` 是访问Foo函数上存储的静态属性, 所以输出2。
 
-4. 第四问, 直接调用getName函数, 相当于`window.getName()`, 因为这个变量已经被Foo函数执行时修改了, 所以结果与第三问相同, 为1
-5. 第五问,  `new Foo.getName();` ,此处考察的是js的运算符优先级问题
-	- 根据优先级顺序表可知, 点(.)的优先级高于new操作, 所以相当于是`new (Foo.getName)();`
-	- 所以实际上将getName函数作为构造函数来执行, 所以输出2
-6. 第六问, ` new Foo().getName();`, 首先看运算符优先级 括号高于new, 实际执行为`(new Foo()).getName()`
-	- 先执行Foo函数, 而Foo此时作为构造函数却有返回值, 这里需要说明下js中的构造函数返回值问题
-	- **构造函数的返回值:** 传统语言中, 构造函数不应该有返回值, 实际执行的返回值就是此构造函数的实例化对象, 在js中构造函数可以有返回值也可以没有
-		- 没有返回值则按照其他语言一样返回实例化对象
-		- 若有返回值则检查其返回值是否为引用类型。如果是非引用类型, 如基本类型（string,number,boolean,null,undefined）则与无返回值相同, 实际返回其实例化对象
-		- 若返回值是引用类型, 则实际返回值为这个引用类型
-	- 原题中, 返回的是this, 而this在构造函数中本来就代表当前实例化对象, 所以最终Foo函数返回实例化对象
-	- 之后调用实例化对象的getName函数, 因为在Foo构造函数中没有为实例化对象添加任何属性, 遂到当前对象的原型对象（prototype）中寻找getName, 找到了, 最终输出3
+2. 第二问, 直接调用`getName`函数, 既然是直接调用, 就是访问当前上文作用域内的叫`getName`的函数, 所以跟1 2 3都没关系, 而又由于函数声明提升, 5先被声明, 然后被4覆盖, 最后应该输出4。
+
+3. 第三问, `Foo().getName();` 先执行了`Foo`函数, 然后调用`Foo`函数的返回值对象的`getName`属性函数:
+	1. Foo函数的第一句  `getName = function () { alert (1); };`  是一句函数赋值语句, 注意它没有var声明, 所以先向当前Foo函数作用域内寻找`getName`变量, 没有;
+	
+	2. 再向当前函数作用域上层, 即外层作用域内寻找是否含有`getName`变量, 找到了, 也就是第二问中的alert(4)函数, 将此变量的值赋值为 `function(){alert(1)}`
+	
+	3. 此处实际上是将外层作用域内的`getName`函数修改了;
+		- 注意: 此处若依然没有找到会一直向上查找到`window`对象, 若`window`对象中也没有`getName`属性, 就在`window`对象中创建一个`getName`变量;
+	
+	4. 接着, `Foo`函数的返回值是`this`, 而`this`的指向是由所在函数的调用方式决定。在此处, 是直接调用, 所以`this`指向`window`对象;
+	
+	5. 此时`Foo`函数返回`window`对象, 相当于执行`window.getName()`, 而`window`中的`getName`已经被修改为`alert(1)`, 所以最终输出1。
+
+4. 第四问, 直接调用`getName`函数, 相当于`window.getName()`, 因为这个变量已经被`Foo`函数执行时修改了, 所以结果与第三问相同, 为1。
+
+5. 第五问,  `new Foo.getName();` ,此处考察的是js的运算符优先级问题:
+
+	- 根据优先级顺序表可知, 点(`.`)的优先级高于`new`操作, 所以相当于是`new (Foo.getName)();`
+
+	- 所以实际上将`getName`函数作为构造函数来执行, 输出2。
+
+6. 第六问, ` new Foo().getName();`, 首先看运算符优先级 括号高于`new`, 实际执行为`(new Foo()).getName()`:
+	
+	- 先执行`Foo`函数, 而`Foo`此时作为构造函数却有返回值, 这里需要说明下js中的构造函数返回值问题;
+	
+	- **构造函数的返回值:** 传统语言中, 构造函数不应该有返回值, 实际执行的返回值就是此构造函数的实例化对象, 在js中构造函数可以有返回值也可以没有:
+	
+		- 没有返回值则按照其他语言一样返回实例化对象;
+		
+		- 若有返回值则检查其返回值是否为引用类型。如果是非引用类型, 如基本类型（string,number,boolean,null,undefined）则与无返回值相同, 实际返回其实例化对象;
+		
+		- 若返回值是引用类型, 则实际返回值为这个引用类型;
+	
+	- 原题中, 返回的是`this`, 而`this`在构造函数中本来就代表当前实例化对象, 所以最终`Foo`函数返回实例化对象;
+	
+	- 之后调用实例化对象的`getName`函数, 因为在`Foo`构造函数中没有为实例化对象添加任何属性, 遂到当前对象的原型对象（`prototype`）中寻找`getName`, 找到了, 最终输出3。
 
 7. 第七问, `new new Foo().getName();` 同样是运算符优先级问题, 最终实际执行为 `new ((new Foo()).getName)();`
-	- 先初始化Foo的实例化对象, 然后将其原型上的getName函数作为构造函数再次new
-	- 最终结果是3
+	
+	- 先初始化`Foo`的实例化对象, 然后将其原型上的`getName`函数作为构造函数再次`new`;
+	
+	- 最终结果是3。
 
 **运算符优先级**
 
-![运算符优先级](images/PRI.png)
+![运算符优先级](./images/PRI.png)
 
 ***
 
@@ -381,17 +405,17 @@ new new Foo().getName();//3
 ```
 function foo1()
 {
-  return {
-      bar: "hello"
-  };
+    return {
+        bar: "hello"
+    };
 }
 
 function foo2()
 {
-  return
-  {
-      bar: "hello"
-  };
+    return
+    {
+        bar: "hello"
+    };
 }
 ```
 
@@ -406,7 +430,7 @@ var test = 1 +
 console.log(test);  //3
 ```
 
-在上述情况下，为了正确解析代码，就不会自动填充分号了，但是对于 return 、break、continue 等语句，如果后面紧跟换行，解析器一定会自动在后面填充分号(;)，所以上面的第二个函数就变成了这样：
+在上述情况下，为了正确解析代码，就不会自动填充分号了，但是对于 `return` 、`break`、`continue` 等语句，如果后面紧跟换行，解析器一定会自动在后面填充分号(;)，所以上面的第二个函数就变成了这样：
 
 ```
 function foo2()
@@ -418,7 +442,7 @@ function foo2()
 }
 ```
 
-尽管后面的语句不符合规范，但是因为没有执行到，所以第二个函数是返回 undefined
+尽管后面的语句不符合规范，但是因为没有执行到，所以第二个函数是返回 `undefined`。
 
 ***
 
@@ -443,36 +467,24 @@ JavaScript 中的 number 类型就是浮点型，JavaScript 中的浮点数采�
 0.2 => 0.0011 0011 0011 0011…（无限循环）
 ```
 
-双精度浮点数的小数部分最多支持 52 位，所以两者相加之后得到这么一串 `0.0100110011001100110011001100110011001100...`, 因浮点数小数位的限制而截断的二进制数字，这时候，再把它转换为十进制，就成了 `0.30000000000000004`
+双精度浮点数的小数部分最多支持 52 位，所以两者相加之后得到这么一串 `0.0100110011001100110011001100110011001100...`, 因浮点数小数位的限制而截断的二进制数字，这时候，再把它转换为十进制，就成了 `0.30000000000000004`。
 
 
-**对于保证浮点数计算的正确性，有两种常见方式:**
+**为了保证浮点数计算的正确性，可以先升幂再降幂:**
 
-- **一是先升幂再降幂:**
+```
+function add(num1, num2){
+    let r1, r2, m;
+    r1 = (''+num1).split('.')[1].length;
+    r2 = (''+num2).split('.')[1].length;
 
-    ```
-    function add(num1, num2){
-      let r1, r2, m;
-      r1 = (''+num1).split('.')[1].length;
-      r2 = (''+num2).split('.')[1].length;
-    
-      m = Math.pow(10,Math.max(r1,r2));
-      return (num1 * m + num2 * m) / m;
-    }
-    console.log(add(0.1,0.2));   //0.3
-    console.log(add(0.15,0.2256)); //0.3756
-    ```
+    m = Math.pow(10,Math.max(r1,r2));
+    return (num1 * m + num2 * m) / m;
+}
+console.log(add(0.1,0.2));   //0.3
+console.log(add(0.15,0.2256)); //0.3756
+```
 
-- **二是使用内置的 toPrecision() 和 toFixed() 方法**
-	
-	注意，方法的返回值是字符串
-
-    ```
-    function add(x, y) {
-        return x.toPrecision() + y.toPrecision()
-    }
-    console.log(add(0.1,0.2));  //"0.10.2"
-    ```
 
 ***
 
@@ -499,7 +511,7 @@ Number.isInteger("15") // false
 Number.isInteger(true) // false
 ```
 
-JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间（不含两个端点），超过这个范围，无法精确表示这个值。ES6 引入了Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER这两个常量，用来表示这个范围的上下限，并提供了 Number.isSafeInteger() 来判断整数是否是安全型整数。
+JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间（不含两个端点），超过这个范围，无法精确表示这个值。ES6 引入了`Number.MAX_SAFE_INTEGER` 和 `Number.MIN_SAFE_INTEGER`这两个常量，用来表示这个范围的上下限，并提供了 `Number.isSafeInteger()` 来判断整数是否是安全型整数。
 
 ***
 
@@ -518,7 +530,7 @@ JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间（不含两
 ```
 function isPalindrome(str) {
     var str = str.replace(/\W/g, '').toLowerCase();
-    return (str == str.split('').reverse().join(''));
+    return str == str.split('').reverse().join('');
 }
 ```
 
@@ -527,7 +539,7 @@ function isPalindrome(str) {
 ```
 function isPalindrome(str) {
 	var str = str.replace(/[^A-Za-z]/g, '').toLowerCase();
-	return str == str.split("").reduceRight(function(sum, w) {return sum + w;});
+	return str == str.split('').reduceRight(function(sum, w) {return sum + w;});
 }
 ```
 
@@ -565,23 +577,23 @@ JavaScript语言的一大特点就是单线程。
 
 1. 所有同步任务都在主线程上执行，形成一个执行栈（execution context stack）。
 
-2. 主线程之外，还存在一个"任务队列"（task queue）。只要异步任务有了运行结果，就在"任务队列"之中放置一个事件。
+2. 主线程之外，还存在一个**任务队列**（task queue）。只要异步任务有了运行结果，就在**任务队列**之中放置一个事件。
 
-3. 一旦"执行栈"中的所有同步任务执行完毕，系统就会读取"任务队列"，看看里面有哪些事件, 哪些对应的异步任务，于是结束等待状态，进入执行栈，开始执行。
+3. 一旦**执行栈**中的所有同步任务执行完毕，系统就会读取**任务队列**，看看里面有哪些事件, 哪些对应的异步任务，于是结束等待状态，进入执行栈，开始执行。
 
 4. 主线程不断重复上面的第三步。
 
 #### 事件及回调函数
 
-- "任务队列"中的事件，除了IO设备的事件以外，还包括一些用户产生的事件（比如鼠标点击、页面滚动等等）。只要**指定过回调函数**，这些事件发生时就会进入"任务队列"，等待主线程读取。
+- **任务队列**中的事件，除了IO设备的事件以外，还包括一些用户产生的事件（比如鼠标点击、页面滚动等等）。只要**指定过回调函数**，这些事件发生时就会进入"任务队列"，等待主线程读取。
 
-- 所谓"回调函数"（callback），就是那些会被主线程挂起来的代码。异步任务必须指定回调函数，当主线程**开始执行异步任务，就是执行对应的回调函数**。
+- 所谓回调函数（callback），就是那些会被主线程挂起来的代码。异步任务必须指定回调函数，当主线程**开始执行异步任务，就是执行对应的回调函数**。
 
-- "任务队列"是一个**先进先出**的数据结构，排在前面的事件，优先被主线程读取。主线程的读取过程基本上是自动的，只要执行栈一清空，"任务队列"上第一位的事件就自动进入主线程。但是，由于存在后文提到的"定时器"功能，主线程**首先要检查一下执行时间，某些事件只有到了规定的时间，才能返回主线程**。
+- 任务队列是一个**先进先出**的数据结构，排在前面的事件，优先被主线程读取。主线程的读取过程基本上是自动的，只要执行栈一清空，"任务队列"上第一位的事件就自动进入主线程。但是，由于存在后文提到的"定时器"功能，主线程**首先要检查一下执行时间，某些事件只有到了规定的时间，才能返回主线程**。
 
 #### 定时器
 
-setInterval()、 setTimeout()只是将事件插入了"任务队列"，必须等到当前代码（执行栈）执行完，主线程才会去执行它指定的回调函数。要是当前代码耗时很长，有可能要等很久，所以并没有办法保证，回调函数一定会在定时器指定的时间执行。
+`setInterval()`、 `setTimeout()`只是将事件插入了"任务队列"，必须等到当前代码（执行栈）执行完，主线程才会去执行它指定的回调函数。要是当前代码耗时很长，有可能要等很久，所以并没有办法保证，回调函数一定会在定时器指定的时间执行。
 
 
 #### 总结
@@ -642,11 +654,11 @@ for(var i = 0; i < 5; i++) {
 
 ```
 for(var i=0; i<5; i++){
-	(function(i){
-		setTimeout(function(){
-			console.log(i);
-		}, 1000);
-	})(i);
+    (function(i){
+        setTimeout(function(){
+            console.log(i);
+        }, 1000);
+    })(i);
 }
 ```
 
@@ -654,21 +666,21 @@ for(var i=0; i<5; i++){
 
 ```
 (function($) { 
-        //代码
- } )(jQuery);
+    //代码
+} )(jQuery);
 ```
 
 **另一种解法，使用bind:**
 
 ```
 for(var i = 0; i < 5; i++) {
-  setTimeout(console.log.bind(console, i), i * 1000);
+    setTimeout(console.log.bind(console, i), i * 1000);
 }
 ```
 
-bind是和apply、call一样，是Function的扩展方法，所以应用场景是`func.bind()`，而传的参数形式和call一样，第一个参数是this指向，之后的参数是func的实参，`fun.bind(thisArg[, arg1[, arg2[, ...]]])`
+`bind`是和`apply`、`call`一样，是`Function`的扩展方法，所以应用场景是`func.bind()`，而传的参数形式和`call`一样，第一个参数是`this`指向，之后的参数是`func`的实参，`fun.bind(thisArg[, arg1[, arg2[, ...]]])`
 
-ps:`bind(obj, *args)`方法返回的是一个柯里化的函数，所以可以接受后面的参数作为func的实参。
+ps: `bind(obj, *args)`方法返回的是一个柯里化的函数，所以可以接受后面的参数作为func的实参。
 
 关于bind详情看:[bind的用法](#9a)
 
@@ -676,13 +688,11 @@ ps:`bind(obj, *args)`方法返回的是一个柯里化的函数，所以可以�
 ```
 var num = 0;
 var timer = setTimeout(function func(){
-	
-	console.log(num++);
-	if(num < 5){
-		setTimeout(func, 1000);
-	}
+    console.log(num++);
+    if(num < 5){
+        setTimeout(func, 1000);
+    }
 }, 1000);
-
 ```
 
 
@@ -695,9 +705,9 @@ var timer = setTimeout(function func(){
 ### 下面的代码会输出什么？为什么？
 
 ```
-var arr1 = "john".split(''); j o h n
-var arr2 = arr1.reverse(); n h o j
-var arr3 = "jones".split(''); j o n e s
+var arr1 = "john".split(''); //j o h n
+var arr2 = arr1.reverse(); //n h o j
+var arr3 = "jones".split(''); //j o n e s
 arr2.push(arr3);
 console.log("array 1: length=" + arr1.length + " last=" + arr1.slice(-1));
 console.log("array 2: length=" + arr2.length + " last=" + arr2.slice(-1));
@@ -712,15 +722,13 @@ array 2: length=5 last=j,o,n,e,s
 
 MDN 上对于 reverse() 的描述是这样的：
 
-> Description
-
 > The reverse method transposes the elements of the calling array object in place, mutating the array, and returning a reference to the array.
 
-`reverse()` 会改变数组本身，并返回原数组的引用
+`reverse()` 会改变数组**本身**，并返回**原数组**的引用。
 
-`slice()` 方法用于提取目标数组的一部分，返回一个新数组，原数组不变
+`slice()` 方法用于提取目标数组的一部分，返回一个新数组，原数组不变。
 
-而数组与字符串""做加法运算输出，会调用toString()方法，将数组中除中括号外的字符全部打印出来
+而数组与字符串`""`做加法运算输出，会调用`toString()`方法，将数组中的字符全部打印出来。
 
 ***
 
@@ -750,15 +758,14 @@ var nextListItem = function() {
     var item = list.pop();
 
     if (item) {
-        // process the list item...
-        setTimeout( nextListItem, 0);
+        setTimeout(nextListItem, 0);
     }
 };
 ```
 
 解决方式原理请参考: [每天一道面试题: 6](#6a)
 
-利用 setTimeout 的异步性质，完美地去除了这个调用栈。
+利用 `setTimeout` 的异步性质，完美地去除了这个调用栈。
 
 简单举个例子:
 ```
@@ -766,17 +773,15 @@ var list = [0, 1];
  
 var nextListItem = function() {
     var item = list.pop();
- 
     if (item) {
-      nextListItem();
+        nextListItem();
     }
- 
     console.log(item);
 };
  
 nextListItem();
 ```
-上面的代码会依次输出0和1，因为程序中形成了一个调用栈，1被压到了栈底，最后出栈
+上面的代码会依次输出0和1，因为程序中形成了一个调用栈，1被压到了栈底，最后出栈。
 
 把程序改成这样:
 ```
@@ -784,25 +789,27 @@ var list = [0, 1];
  
 var nextListItem = function() {
     var item = list.pop();
- 
+
     if (item) {
         // process the list item...
         setTimeout( nextListItem, 0);
     }
- 
     console.log(item);
 };
  
 nextListItem();
 ```
-这回就是1和0了，因为`setTimeout`的回调只有当主体的js执行完后才会去执行，所以先输出1，自然也就没有栈这一说法了
 
-事实上，并不是所有递归都能这样改写，如果下一次递归调用依赖于前一次递归调用返回的值，就不能这么改了
+这回就是1和0了，因为`setTimeout`的回调只有当主体的js执行完后才会去执行，所以先输出1，自然也就没有栈这一说法了。
+
+事实上，并不是所有递归都能这样改写，如果下一次递归调用依赖于前一次递归调用返回的值，就不能这么改了。
 
 
 
 ***
+
 <br>
+
 <a name="8">
 
 ## 每天一道面试题: 8
@@ -819,23 +826,23 @@ console.log("1 && 2 = "+(1 && 2));
 
 逻辑与和逻辑或运算符会返回一个值，并且二者都是短路运算符：
 
-- 逻辑与返回第一个是 false 的操作数 或者 最后一个是 true的操作数
-	- 如果某个操作数为 false，则该操作数之后的操作数都不会被计算
+- 逻辑**与**返回第一个是 `false` 的操作数 或者 最后一个是 `true` 的操作数
+	- 如果某个操作数为 `false`，则该操作数之后的操作数都不会被计算
 ```
 console.log(1 && 2 && 0);  //0
 console.log(1 && 0 && 1);  //0
 console.log(1 && 2 && 3);  //3
 ```
 
-- 逻辑或返回第一个是 true 的操作数 或者 最后一个是 false的操作数
-	- 如果某个操作数为 true，则该操作数之后的操作数都不会被计算
+- 逻辑**或**返回第一个是 `true` 的操作数 或者 最后一个是 `false` 的操作数
+	- 如果某个操作数为 `true`，则该操作数之后的操作数都不会被计算
 ```
 console.log(1 || 2 || 0); //1
 console.log(0 || 2 || 1); //2
 console.log(0 || 0 || false); //false
 ```
 
-- 如果逻辑与和逻辑或作混合运算，则逻辑与的优先级高：
+- 如果**逻辑与**和**逻辑或**作混合运算，则逻辑**与**的优先级高：
 ```
 console.log(1 && 2 || 0); //2
 console.log(0 || 2 && 1); //1
@@ -856,13 +863,14 @@ console.log(Boolean([])) //true(都是对象，所以转化为Boolean，都是tr
 console.log(Boolean({})) //true
 ```
 
-所以在 if 中，[] 和 {} 都表现为 true
+所以在 if 中，`[]` 和 `{}` 都表现为 `true`！
 
-注意: `[] == ![] //true` 前者是按相等运算的转换规则，后者是按Boolean的转换规则
+注意: `[] == ![] //true` 前者是按相等运算的转换规则，后者是按`Boolean`的转换规则！
 
 
 
 ***
+
 <br>
 
 ### 解释下面代码的输出
@@ -882,9 +890,9 @@ console.log(a[b]);
 
 > The reason for this is as follows: When setting an object property, JavaScript will implicitly stringify the parameter value. In this case, since b and c are both objects, they will both be converted to "[object Object]". As a result, a[b] anda[c] are both equivalent to a["[object Object]"] and can be used interchangeably. Therefore, setting or referencing a[c] is precisely the same as setting or referencing a[b].
 
-答案是456
+答案是456。
 
-Javascript中对象的key值，一定会是一个string值，如果不是，则会隐式地进行转换，当执行到`a[b]=123`时，b并不是一个string值，将b执行toString()方法转换(得到"[object Object]"), a[c]也是相同道理，所以代码可以看做这样执行：
+`Javascript`中对象的`key`值，一定会是一个`string`值，如果不是，则会隐式地进行转换，当执行到`a[b]=123`时，b并不是一个`string`值，将b执行`toString()`方法转换(得到`[object Object]`), `a[c]`也是相同道理，所以代码可以看做这样执行：
 
 ```
 var a={},
@@ -898,6 +906,7 @@ console.log(a["[object Object]"]);
 ```
 
 ***
+
 <br>
 
 ### 解释下面代码的输出
@@ -4097,7 +4106,7 @@ JSONP是一种用来跨域获取数据的解决方案，具体是通过动态创
 该脚本的内容是一个函数调用，参数就是服务器返回的数据，为了处理这些数据，需要事先在页面定义好回调函数，本质上使用的并不是ajax技术。
 
 
-详细介绍请见笔记: [JavaScript高级程序设计:JSONP](https://github.com/longyincug/Notebook/blob/master/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1.md#21d)
+详细介绍请见笔记: [JavaScript高级程序设计:JSONP](./JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1.md#21d)
 
 
 
