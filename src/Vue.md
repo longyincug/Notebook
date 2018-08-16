@@ -2504,7 +2504,7 @@ routes: [
 ### Vue脚手架vue-cli
 
 
-之前用`vue-loader`实现了模块化组件的打包和管理:[Vue2.0中vue-loader的使用](https://github.com/longyincug/Notebook/blob/master/Vue.md#5)
+之前用`vue-loader`实现了模块化组件的打包和管理:[Vue2.0中vue-loader的使用](#5)
 
 手动创建`webpack`配置文件，安装了`vue-loader`、`css-loader`等等一大堆模块，完成了整个项目的构建。
 
@@ -3173,7 +3173,7 @@ Vue本身并不是一个框架，结合周边的生态构成一个灵活的、�
 ### Vue是如何实现双向数据绑定的？
 
 
-利用`Object.defineProperty()`来实现。关于这个js中的原生方法，详情请看:[JavaScript高级程序设计](https://github.com/longyincug/Notebook/blob/master/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1.md#6a)
+利用`Object.defineProperty()`来实现。关于这个js中的原生方法，详情请看:[JavaScript高级程序设计](./JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1.md#6a)
 
 
 html代码:

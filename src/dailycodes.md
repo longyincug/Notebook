@@ -278,12 +278,12 @@ console.log(typeof null === 'object');  //true
 ```
 
 
-从上面的输出结果可知, `typeof obj === "object"` 并不能准确判断 obj 就是一个 Object。
+从上面的输出结果可知, `typeof obj === "object"` 并不能准确判断 obj 就是一个 `Object`。
 
 可以通过 `Object.prototype.toString.call(obj) === "[object Object]"`来避免这种弊端：
 
-当我们直接在页面中打印一个对象时, 事实上是输出对象的toString()方法的返回值
-如果我们希望在输出对象时不输出`[object Object]`, 可以为对象添加一个toString()方法,也可以改写原型的toString()方法
+当我们直接在页面中打印一个对象时, 事实上是输出对象的`toString()`方法的返回值
+如果我们希望在输出对象时不输出`[object Object]`, 可以为对象添加一个`toString()`方法,也可以改写原型的toString()方法
 
 **答案:**
 
@@ -962,33 +962,32 @@ var stoleSecretIdentity =  function (){
 }
 ```
 
-`stoleSecretIdentity` 的上下文是全局环境，所以第一个输出 `undefined`
+`stoleSecretIdentity` 的上下文是全局环境，所以第一个输出 `undefined`;
 
-若要输出 `John Doe`，则要通过 `call 、apply 和 bind` 等方式改变 stoleSecretIdentity 的`this` 指向(hero)
+若要输出 `John Doe`，则要通过 `call 、apply 和 bind` 等方式改变 `stoleSecretIdentity` 的`this` 指向(hero)：
 
 ```
 var stoleSecretIdentity = hero.getSecretIdentity.bind(hero);
 ```
 
-第二个是调用对象的方法，输出 John Doe
+第二个是调用对象的方法，输出 John Doe。
 
-#### bind方法
+**bind方法**
 
-bind和call以及apply一样，都是可以改变上下文的this指向的。
-不同的是，call和apply一样，直接引用在方法上，而bind绑定this后返回一个方法，但内部核心还是apply
+`bind`和`call`以及`apply`一样，都是可以改变上下文的`this`指向的。
+不同的是，`call`和`apply`一样，直接引用在方法上，而`bind`绑定`this`后返回一个方法，但内部核心还是`apply`。
 
-bind的核心是返回一个**未执行的方法**, 如果直接使用apply或者call，方法及参数已经确定并执行
+`bind`的核心是返回一个**未执行的方法**, 如果直接使用`apply`或者`call`，方法及参数已经确定并执行;
 
-bind是function的一个函数扩展方法，但是不兼容ie6~8，兼容代码如下:
+`bind`是`function`的一个函数扩展方法，但是不兼容`ie6~8`，兼容代码如下:
 
 ```
 Function.prototype.bind = Funtion.prototype.bind || function(context) {
-	var that = this;
-	return function(){
-		return that.apply(context, arguments);
-	}
-	
-	// 但是该兼容方法并没有实现bind返回的函数柯里化！因此不建议在bind中传入除了obj以外的参数。
+    var that = this,
+    _args = Array.prototype.slice.call(arguments, 1);
+    return function(){
+        return that.apply(context, _args.concat(Array.prototype.slice.call(arguments)));
+    }
 };
 ```
 
@@ -1004,7 +1003,6 @@ Function.prototype.bind = Funtion.prototype.bind || function(context) {
 
 - 指定的回调函数
 
-
 **答案:**
 
 
@@ -1012,14 +1010,13 @@ Function.prototype.bind = Funtion.prototype.bind || function(context) {
 
 ```
 function Traverse(p_element,p_callback) {
-   p_callback(p_element);
-   var list = p_element.children;
-   for (var i = 0; i < list.length; i++) {
-       Traverse(list[i],p_callback);  // recursive call
-   }
+    p_callback(p_element);
+    var list = p_element.children;
+    for (var i = 0; i < list.length; i++) {
+        Traverse(list[i],p_callback);  // recursive call
+    }
 }
 ```
-
 
 
 ***
@@ -1036,10 +1033,10 @@ function Traverse(p_element,p_callback) {
 **答案:**
 
 ```
-
 var a = [1, 2, 3, 6, 5, 4];
 var ans = Math.max.apply(null, a);
-
+//使用call，apply方法时，如果第一个参数传null/undefined，在浏览器中默认指向window对象，在node中指向global对象
+//但严格模式下不会自动变换指向
 ```
 
 很巧妙的利用了apply，如果不是数组，是很多数字求最大值，我们可以这样:
@@ -1062,28 +1059,27 @@ console.log(maxn); // 6
 ### 转化一个数字数组为function数组（每个function都弹出相应的数字）
 
 
+
 **答案:**
 
 这道题跟[第7天](#7)的第一题类似，用闭包保存变量到内存即可。
+
 ```
 var a = [1, 2, 3, 4, 5, 6];
 
 for(var i=0; i<a.length; i++){
-	var num = a[i];
-	(function(num) {
-    	var f = function() {
-      		console.log(num);
-    	};
-    	
-    	a[i] = f;
-    
-	})(num);
+    var num = a[i];
+    (function(num) {
+        var f = function() {
+            console.log(num);
+        };
+        a[i] = f;
+    })(num);
 }
 
 for(var i=0; i<a.length; i++){
-	a[i]();
+    a[i]();
 }
-
 ```
 
 ***
@@ -1108,7 +1104,7 @@ Object.prototype.getLength = function(){
 arr.sort(function(a, b){return a.getLength() - b.getLength(); });
 ```
 
-这题不难，数组排序，当然是sort，排序条件是对象的属性个数，可以写个函数计算，注意可能要用hasOwnProperty判断下
+这题不难，数组排序，当然是sort，排序条件是对象的属性个数，可以写个函数计算，注意可能要用`hasOwnProperty`判断下。
 
 
 `obj.hasOwnProperty(prop)`
@@ -1123,12 +1119,14 @@ arr.sort(function(a, b){return a.getLength() - b.getLength(); });
 
 `sort(compareFunction)`如果指明了 compareFunction ，那么数组会按照调用该函数的返回值排序。即 a 和 b 是两个将要被比较的元素：
 
-- 如果 compareFunction(a, b) 小于 0 ，那么 a 会被排列到 b 之前；
-- 如果 compareFunction(a, b) 等于 0 ， a 和 b 的相对位置不变；
-- 如果 compareFunction(a, b) 大于 0 ， b 会被排列到 a 之前。
+- 如果 `compareFunction(a, b)` 小于 0 ，那么 a 会被排列到 b 之前；
+
+- 如果 `compareFunction(a, b)` 等于 0 ， a 和 b 的相对位置不变；
+
+- 如果 `compareFunction(a, b)` 大于 0 ， b 会被排列到 a 之前。
 
 
-当 compareFunction 较为复杂，且元素较多的时候，某些 `compareFunction` 可能会导致很高的负载，可以使用 `map` 辅助排序
+当 `compareFunction` 较为复杂，且元素较多的时候，某些 `compareFunction` 可能会导致很高的负载，可以使用 `map` 辅助排序
 
 **一个使用映射改善排序的例子**
 
@@ -1153,6 +1151,7 @@ var result = mapped.map(function(el){
 ```
 
 ***
+
 <br>
 
 <a name="11">
