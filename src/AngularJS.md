@@ -89,8 +89,8 @@ Angular：
 
 ```html
 <body ng-app="myApp">
-	<div ng-controller="ctrl">
-	</div>
+    <div ng-controller="ctrl">
+    </div>
 </body>
 ```
 
@@ -210,8 +210,8 @@ Angular：
 
 ```js
 <body ng-app="myApp">
-	<div ng-controller="myController1">{{name}}</div>
-	<div ng-controller="myController2">{{name}}</div>
+    <div ng-controller="myController1">{{name}}</div>
+    <div ng-controller="myController2">{{name}}</div>
 </body>
 
 //创建模块对象，angular.module('模块名',[依赖的模块])
@@ -391,7 +391,7 @@ angular.module('baidu',[]).controller('search',function($scope,$http,$sce){
     $scope.$watch('keyword',function(){   
         $http.jsonp($sce.trustAsResourceUrl('http://suggestion.baidu.com/su'),{
         params:{wd:$scope.keyword},
-    	jsonpCallbackParam:'cb'
+        jsonpCallbackParam:'cb'
         }).then(function(json){
             console.log(json);
             $scope.arr = json.data.s;
@@ -452,21 +452,21 @@ $http.post(url, data, [config]).then(function(res){}, function(err){});
 
 ```js
 $http({
-	method: 'POST',
-	url: '/myapp/api',
-	headers: {
-		'Content-Type': undefined //这里很重要，需要取消post默认的Content-Type，否则后台接收不到！
-	},
-	transformRequest: function(data) {
-		var formData = new FormData();
-		formData.append('id', data.id);
-		formData.append('type', data.type);
-		return formData;
-	},
-	data: {
-		id: $scope.userId,
-		type: $scope.infoType
-	}
+    method: 'POST',
+    url: '/myapp/api',
+    headers: {
+        'Content-Type': undefined //这里很重要，需要取消post默认的Content-Type，否则后台接收不到！
+    },
+    transformRequest: function(data) {
+        var formData = new FormData();
+        formData.append('id', data.id);
+        formData.append('type', data.type);
+        return formData;
+    },
+    data: {
+        id: $scope.userId,
+        type: $scope.infoType
+    }
 }).then((res)=>{}, (err)=>{});
 ```
 
@@ -526,9 +526,9 @@ $scope.arr = [
 
 ```html
 $scope.arr = {
-	"广东":"粤",
-	"北京":"京",
-	"上海":"沪"
+    "广东":"粤",
+    "北京":"京",
+    "上海":"沪"
 };
 
 <select ng-model="flag" ng-options="value as key for (key,value) in arr"></select>
@@ -591,9 +591,9 @@ formName.inputFieldName.$error
 
 ```html
 <form name="myform">
-	姓名：
+    姓名：
     <input type="text" required name="username" ng-model="name">
-	<span ng-show="myform.username.$error.required">
+    <span ng-show="myform.username.$error.required">
         × 请填写姓名
     </span>
 </form>
@@ -777,15 +777,15 @@ angular.module('testApp',[]).controller('test',function($scope,$http,$interval){
 
 ```js
 myapp.service("MathService",[function(){
-	var a = 999;
+    var a = 999;
 
-	this.getA = function(){
-		return a;
-	}
+    this.getA = function(){
+        return a;
+    }
 
-	this.setA = function(number){
-		a = number;
-	}
+    this.setA = function(number){
+        a = number;
+    }
 }]);
 ```
 
@@ -796,14 +796,14 @@ myapp.service("MathService",[function(){
 ```js
 myapp.controller("Ctrl1",["MathService","$scope",function(MathService,$scope){
     $scope.a = '';
-	$scope.set = function(){
-		MathService.setA($scope.a);
-	}
+    $scope.set = function(){
+        MathService.setA($scope.a);
+    }
 }]);
 myapp.controller("Ctrl2",["MathService","$scope",function(MathService,$scope){
-	$scope.getA = function(){
-		return MathService.getA();
-	}
+    $scope.getA = function(){
+        return MathService.getA();
+    }
 }]);
 ```
 
@@ -863,29 +863,29 @@ myApp.factory("mathService",[function(){
 
 ```js
 myApp.factory("mathService",[function(){
-	var a = 10;
-			
-	function add(){
-		a++;
-	}
-	function minus(){
-		a--;
-	}
+    var a = 10;
+            
+    function add(){
+        a++;
+    }
+    function minus(){
+        a--;
+    }
 
-	function get(){
-		return a;
-	}
+    function get(){
+        return a;
+    }
 
-	function set(number){
-		a = number;
-	}
-	return {
+    function set(number){
+        a = number;
+    }
+    return {
         add: add,
         minus: minus,
         get: get,
         set: set,
         a: a
-	}
+    }
 }]);
 ```
 
@@ -939,13 +939,13 @@ constant创建的服务不会修改它的内容，需要修改内容，最好用
 
 ```js
 myapp.provider("mathProvider",function(){
-	return {
-		$get : function(){
-			return {
-				a : 886	
-			}
-		}
-	}
+    return {
+        $get : function(){
+            return {
+                a : 886    
+            }
+        }
+    }
 });
 ```
 
@@ -953,7 +953,7 @@ myapp.provider("mathProvider",function(){
 
 ```js
 myapp.controller("Ctrl1",["mathProvider",function(mathProvider){
-	alert(mathProvider.a);  //886
+    alert(mathProvider.a);  //886
 }]);
 ```
 
@@ -963,17 +963,17 @@ myapp.controller("Ctrl1",["mathProvider",function(mathProvider){
 
 ```js
 myapp.provider("mathProvider",function(){
-	var a = 886;
-	return {
-		setA : function(number){
-			a = number;
-		},
-		$get : function(){
-			return {
-				a : a
-			}
-		}
-	}
+    var a = 886;
+    return {
+        setA : function(number){
+            a = number;
+        },
+        $get : function(){
+            return {
+                a : a
+            }
+        }
+    }
 });
 ```
 
@@ -1078,14 +1078,14 @@ angular.module("myApp",[]).directive("myDirect",[function(){
 var myapp = angular.module("myapp",[]);
 
 myapp.directive("myDirect",[function(){
-	//返回一个指令定义对象
-	return {
-		restrict : "E",
-		templateUrl : "./template/myDirect.html",
-		link : function($scope,ele,attr){
-			$scope.a = 100;
-		}
-	}
+    //返回一个指令定义对象
+    return {
+        restrict : "E",
+        templateUrl : "./template/myDirect.html",
+        link : function($scope,ele,attr){
+            $scope.a = 100;
+        }
+    }
 }]);
 ```
 
@@ -1142,21 +1142,21 @@ myapp.directive("myDirect",[function(){
 ```js
 //定义时：
 angular.module("myApp",[]).directive("myDirect",[function(){
-	return {
-		scope:{
-			//这里的属性用来接收组件外部数据的
-			"a": "@",
-			"obj": '='
-		},
-		restrict: "E",
-		templateUrl: "./template/myDirect.html",
-		link: function($scope, ele, attr){
-			//在这里初始化 组件独自作用域的 属性值
-			$scope.flag = 0;
-			//如果在这里修改obj，会影响到所有使用该数据的组件
-			//$scope.obj = {}
-		}
-	}
+    return {
+        scope:{
+            //这里的属性用来接收组件外部数据的
+            "a": "@",
+            "obj": '='
+        },
+        restrict: "E",
+        templateUrl: "./template/myDirect.html",
+        link: function($scope, ele, attr){
+            //在这里初始化 组件独自作用域的 属性值
+            $scope.flag = 0;
+            //如果在这里修改obj，会影响到所有使用该数据的组件
+            //$scope.obj = {}
+        }
+    }
 }]);
 
 
@@ -1168,10 +1168,10 @@ angular.module("myApp",[]).directive("myDirect",[function(){
 
 //外置模板:可以读取a值，因为a通过标签的属性进入了组件内部
 <div>
-	<h1>---------------------------------------------</h1>
-	<h1>我是指令</h1>
-	<h1>我的作用域a的值是:{{ a }}</h1>
-	<h1>---------------------------------------------</h1>
+    <h1>---------------------------------------------</h1>
+    <h1>我是指令</h1>
+    <h1>我的作用域a的值是:{{ a }}</h1>
+    <h1>---------------------------------------------</h1>
 </div>
 ```
 
@@ -1265,18 +1265,18 @@ myapp.config(function($stateProvider){
 
 ```
 |--script
-	|--config
-		|--router.js
-	|--controller
-		|--mainCtrl.js
-	|--directive
-		|--header.js
-		|--footer.js
+    |--config
+        |--router.js
+    |--controller
+        |--mainCtrl.js
+    |--directive
+        |--header.js
+        |--footer.js
 |--view
-	|--template
-		|--header.html
-		|--footer.html
-	|--main.html
+    |--template
+        |--header.html
+        |--footer.html
+    |--main.html
 ```
 
 > 在`router.js`中使用`config`方法配置路由的`url`、`controller`、`templateUrl`，然后分别映射到对应目录下的文件，负责业务逻辑和视图展现。同时为了提高复用性和解耦，可以将一些公用的部分如header、footer提取出来放到view中的template中，并在directive中注册指令，即组件。
@@ -1287,12 +1287,12 @@ myapp.config(function($stateProvider){
 
 ```
 |--router
-	|--index.js
+    |--index.js
 |--components
-	|--Header.vue
-	|--Footer.vue
+    |--Header.vue
+    |--Footer.vue
 |--views
-	|--Main.vue
+    |--Main.vue
 ```
 
 > 在router中的`index.js`中配置routes规则的`path`、`component`，`component`映射到views中的`Main.vue`，然后在其中引入组件`Header`和`Footer`。模板和各自业务逻辑代码部分其实是一起放在vue文件中，然后按模块划分的。
@@ -1389,8 +1389,8 @@ myapp.controller("moviectrl",function($scope,$state){
 
 //app-position-info组件中：
 <div>
-	<p ng-bind="pos.benifit"></p>
-	<img ng-show="isLogin" class="p-a" ng-src="{{imagePath}}">
+    <p ng-bind="pos.benifit"></p>
+    <img ng-show="isLogin" class="p-a" ng-src="{{imagePath}}">
 </div>
 ```
 
@@ -1400,6 +1400,7 @@ myapp.controller("moviectrl",function($scope,$state){
 
 
 <br>
+
 <br>
 
 <a name="12">
@@ -1413,9 +1414,9 @@ myapp.controller("moviectrl",function($scope,$state){
 ```
 |--src
     |--lib
-    	|--angular.js
-    	|--angular-ui-router.js
-    	|--require.js
+        |--angular.js
+        |--angular-ui-router.js
+        |--require.js
     |--app.js
     |--app.router.js
 |--main.js
@@ -1435,14 +1436,14 @@ myapp.controller("moviectrl",function($scope,$state){
   ```html
   <!DOCTYPE html>
   <html>
-  	<head>
-  		<meta charset="UTF-8">
-  		<title>首页</title>
-  	</head>
-  	<body>
-  	    <ui-view></ui-view>
-  	    <script src="src/lib/require.js" type="text/javascript" data-main = "main.js"></script>
-  	</body>
+      <head>
+          <meta charset="UTF-8">
+          <title>首页</title>
+      </head>
+      <body>
+          <ui-view></ui-view>
+          <script src="src/lib/require.js" type="text/javascript" data-main = "main.js"></script>
+      </body>
   </html>
   ```
 
