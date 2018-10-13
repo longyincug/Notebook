@@ -70,39 +70,21 @@ opacity属性作用于元素,以及元素内的所有内容的透明度,
 
 
 ## 开启了绝对定位的盒子居中
+
 ```
 left: 50%;
 top: 50%;
 margin-top: -50px; //盒子高度100px
 margin-left: -50px; //盒子宽度100px
 ```
+或者使用`transform: translate(-50%, -50%)` 来让自身偏移到中央位置。
 
-## banner切换按钮
-
-相同的写到一起，特别的单独写
-```
-.banner a {
-    width: 24px;
-    height: 36px;
-    display: block;
-    position: absolute;
-    top: 50%;
-    margin-top: -18px;
-}
-.left {
-    left: 0;
-}
-.right {
-    right: 0;
-}
-
-```
 
 <br>
 
 # z-index层级
 
-在CSS中，要想调整重叠定位元素的堆叠顺序，可以对定位元素应用z-index层叠等级属性，其取值可为正整数、负整数和0，没有单位
+在CSS中，要想调整重叠定位元素的堆叠顺序，可以对定位元素应用z-index层叠等级属性，其取值可为**正整数**、**负整数**和**0**，没有单位。
 
 **注意**
 1. z-index的默认属性是0，取值越大，定位元素在层叠元素中越居上
@@ -111,6 +93,7 @@ margin-left: -50px; //盒子宽度100px
 4. 只有相对定位，绝对定位，固定定位有此属性，其余标准流，浮动，静态属性都无此属性，亦不可指定此属性
 
 ## 多个盒子重叠设置hover
+
 ```
 div {
     width: 250px;
@@ -143,7 +126,7 @@ div:hover {
 # 元素的显示与隐藏
 
 ## display显示
-`display: none; //隐藏某个元素，display: block; 显示某个元素`
+
 用来设置或检索对象是否及如何显示
 
 `display: none` 隐藏对象, 与它相反的是`display:block` 除了转换为块级元素之外，同时还有显示元素的意思
@@ -161,6 +144,7 @@ div:hover {
 特点：隐藏之后，**继续保留原有位置**
 
 ## overflow溢出
+
 检索或设置当对象的内容超过其指定高度及宽度时如何管理内容
 
 **visible**：不剪切也不添加滚动条，默认属性
@@ -174,13 +158,14 @@ div:hover {
 
 ## 仿视频播放暂停界面透明蒙版
 
-html结构
+html结构：
 ```
 <a href="#">
 	<img src="images/tudou.jpg" />
 	<div class="mask"></div>
 </a>
 ```
+
 CSS样式：
 ```
 a {
@@ -199,7 +184,7 @@ a {
     left: 0;
     display: none; //正常情况下，灰色蒙版是隐藏的
 }
-// 注意！什么时候出来蒙版？鼠标放到a上，a里面的mask显示出来，使用后代选择器
+// 注意！什么时候出来蒙版？鼠标放到a上，a里面的mask显示出来
 
 a:hover .mask {
     display: block; //显示出来
@@ -258,21 +243,22 @@ vertical-align: baseline | top | middle | bottom
 
 解决的方法就是：
 1. 给img设置 ` vertical-align: middle | top` 等，让图片不要和基线对齐
-```
-//网易的解决方案：
-img {
-    vertical-align: top;
-    border: 0;
-}
-```
+    ```
+    //网易的解决方案：
+    img {
+        vertical-align: top;
+        border: 0;
+    }
+    ```
+
 2. 给img添加 `display: block;` 转换为块级元素，就不会存在问题了
-```
-//新浪的解决方案：
-img {
-    display: block;
-    border: 0;
-}
-```
+    ```
+    //新浪的解决方案：
+    img {
+        display: block;
+        border: 0;
+    }
+    ```
 
 <br>
 
@@ -407,11 +393,11 @@ body{
 
 这就应该是一个比较好的回答了。
 
-当然，如果你还能充分延伸，再多说一点:
+当然，如果你还能充分延伸，再多说一些:
 
 **盒模型 ——> block-level box的渲染 ——> BFC渲染规则**
 
-那真是极好的，一定能够让大多数面试官满意！
+那真是极好的。
 
 
 <br>

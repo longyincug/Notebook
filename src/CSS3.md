@@ -81,13 +81,54 @@ IE8基本支持所有CSS2选择器。
 关于选择器在各浏览器的兼容性，可以查看:[Can I Use](https://caniuse.com/#search=selector)
 
 
-注意:
+关于选择器的一些注意点：
 
-- `[attribute~=value]`: 选择attribute属性值中包含value单词的元素。注意这里，必须value单独是一个属性值。而`[attr*=val]`只需要一个属性值中包含val即可。
+1. 兄弟元素选择器
+    
+    相邻兄弟元素选择器：`+`，只会匹配紧跟着的兄弟元素，`#wrap + .inner {}`。
+    
+    通用兄弟元素选择器：`~`，匹配所有的兄弟元素，`#wrap ~ div {}`。
 
-- `[attribute|=value]`: 选择attribute属性值为value，或者以`value-`开头的元素。
+2. 属性选择器
 
+    - `[attribute~=value]`: 选择attribute属性值中包含value单词的元素。注意这里，必须value单独是一个属性值。而`[attr*=val]`只需要一个属性值中包含val即可。
+    
+    - `[attribute|=value]`: 选择attribute属性值为value，或者以`value-`开头的元素。
 
+3. 伪类与伪元素选择器
+
+    - `:link`、`:visited`、`:hover`、`:active`
+
+        link和visited会覆盖所有状态，需要注意设置的先后顺序。
+    
+        visited涉及隐私问题，只有`color/background-color/border-color`才能被应用到已访问链接。
+
+    - 结构性伪类
+    
+        index的值从1开始计数，index可以为`n`、`even`、`odd`
+        
+        `:first-child` 可以选中第一个子元素
+        `:last-child` 可以选中最后一个子元素
+        `:nth-child()` 可以选中任意位置的子元素
+        
+        `:first-of-type`
+        `:last-of-type`
+        `:nth-of-type()`
+        
+        `child`是在所有的子元素中排列，而`type`是在当前类型的子**元素**（如`div`/`p`）中排列。
+        
+        ```
+        <div id='wrap'>
+            <div class='inner'>div</div>
+            <p class='inner'>p</p>
+            <h1 class='inner'>h1</h1>
+        </div>
+        ```
+        如上，如果使用选择器：`#wrap .inner:nth-of-type(1)`，结果是内层的div、p、h1都会被选中！
+
+    - 伪元素选择器
+    
+        `::before`、`::after`、`::selection`、`::first-letter`...
 
 ***
 
