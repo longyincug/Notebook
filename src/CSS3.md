@@ -7,7 +7,7 @@
 
 1. [CSS3选择器](#1)
 
-2. [CSS3边框与圆角](#2)
+2. [CSS3圆角与阴影](#2)
 
 	- [CSS3圆角](#2a)
 	- [CSS3盒阴影](#2b)
@@ -127,7 +127,9 @@ IE8基本支持所有CSS2选择器。
         如上，如果使用选择器：`#wrap .inner:nth-of-type(1)`，结果是内层的div、p、h1都会被选中！
 
     - 伪元素选择器
-    
+        
+        注意伪元素实际上是给出元素的**子元素**。
+        
         `::before`、`::after`、`::selection`、`::first-letter`...
 
 ***
@@ -138,7 +140,7 @@ IE8基本支持所有CSS2选择器。
 
 
 
-## CSS3边框与圆角
+## CSS3圆角与阴影
 
 
 <a name="2a">
@@ -175,7 +177,11 @@ IE8基本支持所有CSS2选择器。
 <a name="2b">
 
 
-### CSS3盒阴影
+### CSS3文字阴影和盒阴影
+
+`text-shadow`: 用来为文字添加阴影，可以添加多层，多层阴影之间用逗号隔开。
+
+语法: `text-shadow: h-shadow v-shadow blur color , ...;` (颜色和模糊距离为可选)
 
 
 `box-shadow`: 可以设置一个或多个下拉阴影的框。
@@ -251,7 +257,7 @@ div {
 语法: `border-image-source: none|image;`
 
 
-**border-image-slice**: 指定图像的边界向内偏移。
+**border-image-slice**: 指定图像的切片位置。
 
 语法: `border-image-slice: number|%|fill;`
 
@@ -305,6 +311,8 @@ div {
 }
 ```
 
+`webkit`内核的浏览器有`-webkit-background-clip: text;`的用法，可以让背景绘制在文字上。
+
 
 <a name="3b">
 
@@ -334,7 +342,7 @@ div {
 兼容IE9+。
 
 ```
-background-size: 100%; // 如果只写一个，指定width，第二个默认为auto，根据原始比例自动缩放
+background-size: 100%; // 相对于背景区的百分比。如果只写一个，指定width，第二个默认为auto，根据原始比例自动缩放
 
 backround-size: cover; // 即将背景图片等比缩放以填满整个容器，不留白，可能溢出。
 
@@ -377,7 +385,13 @@ background-clip: content-box;
 /*background-attachment: fixed; 一般这个很少用，就算要用也是放在body中*/
 ```
 
-
+如何设置背景图片模糊？
+```
+#bg{
+    background: url(img.jpg) no-repeat;
+    filter: blur(10px);
+}
+```
 
 ***
 
@@ -390,6 +404,7 @@ background-clip: content-box;
 
 ### CSS3线性渐变
 
+注意，渐变实质上是**图片**！所以需要设置给`background-image`。
 
 线性渐变(`Linear Gradients`)：沿着一根轴线改变颜色，从起点到终点颜色进行顺序渐变（从一边拉向另一边）
 
@@ -408,7 +423,7 @@ div {
 
 默认方向是**从上到下**。
 
-**线性渐变-从左到右**(注意兼容性语法): 
+**线性渐变**(注意兼容性语法): 
 ```
 background: -webkit-linear-gradient(begin-direction, color-stop1...);
 background:    -moz-linear-gradient(  end-direction, color-stop1...);
@@ -421,7 +436,7 @@ background: 		linear-gradient(to end-direction,color-stop1...);
 background: -webkit-linear-gradient(left, red, blue);
 background:    -moz-linear-gradient(right, red, blue);
 background:      -o-linear-gradient(right, red, blue);
-background: 		linear-gradient(toright, red, blue);
+background: 		linear-gradient(to right, red, blue);
 ```
 
 
@@ -940,6 +955,9 @@ transform: rotate(180deg);
 transition: transform 2s ease-in-out 1s;
 ```
 
+如果有多个属性需要应用不同的过渡效果，用逗号隔开:
+
+`transition: width 2s linear, height 3s ease;`
 
 
 ***

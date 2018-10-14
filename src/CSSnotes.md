@@ -227,7 +227,7 @@ input {
 
 # vertical-align
 
-设置或检索内容的垂直对齐方式。
+设置或检索内容的垂直对齐方式, 该属性定义行内元素的基线相对于该元素所在行的基线的垂直对齐。
 
 ```
 vertical-align: baseline | top | middle | bottom
@@ -239,7 +239,7 @@ vertical-align: baseline | top | middle | bottom
 
 ## 去除图片底侧空白缝隙
 
-有个很重要的特性要记住：图片或者表单等行内块元素，他的底线会和父级盒子的基线对齐，这样会造成一个问题，就是图片底侧会有一个空白缝隙
+有个很重要的特性要记住：图片或者表单等行内块元素，他的底线会和父级盒子的基线对齐，这样会造成一个问题，就是图片底侧会有一个空白缝隙。
 
 解决的方法就是：
 1. 给img设置 ` vertical-align: middle | top` 等，让图片不要和基线对齐
@@ -259,6 +259,28 @@ vertical-align: baseline | top | middle | bottom
         border: 0;
     }
     ```
+
+## 实现一张图片的垂直居中
+
+```
+body,html{
+    height: 100%;
+}
+body:after{
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+img{
+    vertical-align: middle;
+}
+```
+
+该属性定义行内元素的基线相对于该元素所在行的基线的垂直对齐。假设有两个行内块元素a和b，
+当a加了一个`vertical-align:middle`样式之后，b的底部（基线）就会对齐a的中间位置。
+如果a和b都加了一个`vertical-align:middle`样式，那么就互相对齐了对方的中间位置，也就是它们在垂直方向上的中线对齐了。
+
 
 <br>
 
@@ -300,8 +322,33 @@ li {
 
 <br>
 
-# IE6下的fixed失效问题
+# 自定义字体及字体图标
 
+`@font-face`: 允许网页开发者为其网页指定在线字体，通过这种作者自备字体的方式，可以消除对用户电脑字体的依赖。
+
+自定义字体，有两个属性必须要指定，`font-family`所指定的字体名字将会被用于`font-family`属性，`src`用来引用字体资源。
+
+如：
+```
+<style>
+    @font-face {
+        font-family: "MyFont";
+        src: url(fonts/demo.TTF);
+        font-weight: normal;
+        font-style: normal;
+    }
+</style>
+```
+
+当自定义完字体后，就可以在元素内使用该字体图标，并指定元素的`font-family`为事先定义的值。
+
+由于不同浏览器支持的格式不同，字体资源文件的格式可能是`ttf/eot/svg/woff`等。
+
+常见的字体图标网站：[icomoon](https://icomoon.io/app/#/select)、[阿里巴巴矢量图标库](http://www.iconfont.cn/)
+
+<br>
+
+# IE6下的fixed失效问题
 
 在IE6下，`position: fixed`不会生效，元素依旧会随着滚动条而滚动，我们可以用`position: absolute`来模拟`fixed`的效果。
 
