@@ -857,7 +857,7 @@ console.log(0 && 2 || 1); //1
 
 要注意**空数组([])**和**空对象({})**:
 ```
-console.log([] == false) //true ([]调用indexOf方法, 返回"", 是false)
+console.log([] == false) //true ([]会调用valueOf方法, 返回"", 是false)
 console.log({} == false) //false({}返回"[object Object]"字符串)
 console.log(Boolean([])) //true(都是对象，所以转化为Boolean，都是true)
 console.log(Boolean({})) //true
@@ -2616,8 +2616,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 	> 为了解决原型中包含引用类型值的问题，开始使用借用构造函数，也叫伪造对象或经典继承
 
-
-	​```
+	```
 	function SuperType() {
 		this.colors = ["red", "blue", "green"];
 	}
@@ -2632,8 +2631,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	alert(instance1.colors); //"red,blue,green,black"
 	var instance2 = new SubType();
 	alert(instance2.colors); //"red,blue,green" 
-	​```
-	
+	```
 	
 	- 将SuperType函数在SubType构造函数中调用，在每个实例中执行，这样每个实例中都会有一份SuperType中的属性方法的副本，也就实现了继承SuperType。
 	
@@ -2648,7 +2646,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 也叫伪经典继承，将原型链和借用构造函数的技术组合到一块。使用原型链实现对原型属性和方法的继承，而通过构造函数来实现对实例属性的继承。
 	
 	
-	​```
+	```
 	function SuperType(name) {
 		this.name = name;
 		this.colors = ["red", "blue", "green"];
@@ -2680,8 +2678,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	alert(instance2.colors); //"red,blue,green"
 	instance2.sayName(); //"Greg";
 	instance2.sayAge(); //27 
-	​```
-	
+	```
 	
 	- 将SubType的原型指定为SuperType的一个实例，大致步骤和原型链继承类似，只是多了在SubType中借调SuperType的过程。
 	
@@ -2703,17 +2700,17 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 不自定义类型的情况下，临时创建一个构造函数，借助已有的对象作为临时构造函数的原型，然后在此基础实例化对象，并返回。
 	
 	
-	​```
+	```
 	function object(o){
 	 function F(){}
 	 F.prototype = o;
 	 return new F();
 	} 
-	​```
+	```
 	
 	- 本质上是object()对传入其中的对象执行了一次浅复制
 	
-	​```
+	```
 	var person = {
 	 name: "Nicholas",
 	 friends: ["Shelby", "Court", "Van"]
@@ -2728,7 +2725,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	yetAnotherPerson.friends.push("Barbie");
 	
 	alert(person.friends); //"Shelby,Court,Van,Rob,Barbie" 
-	​```
+	```
 	
 	
 	- 原型的引用类型属性会在各实例之间共享。
@@ -2769,7 +2766,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 寄生组合式继承就解决了上述问题，被认为是最理想的继承范式
 	
 	
-	​```
+	```
 	function object(o) {
 		function F(){}
 		F.prototype = o;
@@ -2801,7 +2798,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	SubType.prototype.sayAge = function() {
 		alert(this.age);
 	};
-	​```
+	```
 	
 	既然在组合模式中我们通过借调构造函数来为每个实例定义实例属性，从而覆盖原型属性，影响了效率，那么是否可以把原型改变一下呢，不让它作为SuperType的实例，这样就不会有一些无用的原型属性了。
 	
@@ -3208,22 +3205,19 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 **答案:**
 
+1、childNodes和children
 
-1、在IE下可通过 document.frames["id"];得到该 IFRAME 对象，而在火狐下则是通过 document.getElementById("content_panel_if").contentWindow;
+2、模拟点击事件
 
-2、childNodes和children
+3、事件注册
 
-3、模拟点击事件
+4、取消事件冒泡
 
-4、事件注册
+5、触发事件的源对象
 
-5、取消事件冒泡
+6、鼠标滚轮事件
 
-6、触发事件的源对象
-
-7、鼠标滚轮事件
-
-8、currentStyle和getComputedStyle
+7、currentStyle和getComputedStyle
 
 ***
 <br>
