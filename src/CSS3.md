@@ -854,10 +854,11 @@ x、y表示转换元素的坐标，那么目标矩阵:
 ### 扩展属性
 
 - `transform-style: flat|preserve-3d;`
-	- 指定嵌套的子元素怎样在三维空间中呈现，默认值为flat，子元素将不保留其 3D 位置。
+	- 指定嵌套的**子元素**怎样在三维空间中呈现，默认值为flat，子元素将不保留其 3D 位置。
 
 - `perspective: number|none;` 
 	- 指定观察者与z=0平面的距离，使元素产生透视效果
+	- 一般设置成500px ~ 800px较合适
 	
 
 - `perspective-origin: x-axis y-axis`
@@ -978,6 +979,14 @@ transition: transform 2s ease-in-out 1s;
 检索或设置对象所应用的动画特效。
 
 `animation: name duration timing-function delay iteration-count direction fill-mode play-state;`
+
+- `animation-iteration-count`: 动画执行的次数，可以为`[number]/infinite`
+
+- `animation-direction`: 是否反向运动，是则设置为`alternate`，反向运动也计入动画执行次数
+
+- `animation-fill-mode`: 动画之外的状态。`none(不设置)/forwards(结束时状态)/backwards(开始时状态)/both(由动画本身决定最终是结束或开始状态)`
+
+- `animation-play-state`:控制动画的运行状态。`running(运行)/paused(暂停)` 
 
 如果写了两个时间的值，位置即使不对应，第一个值会被设为`duration`，第二个值被设为`delay`。
 
