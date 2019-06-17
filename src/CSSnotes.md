@@ -91,6 +91,7 @@ margin-left: -50px; //盒子宽度100px
 2. 如果取值相同，则根据书写顺序，后来居上
 3. 后面数字一定不能加单位
 4. 只有相对定位，绝对定位，固定定位有此属性，其余标准流，浮动，静态属性都无此属性，亦不可指定此属性
+5. 如果z-index为1，则比（没有设置z-index的）定位元素层级都高；z-index为-1，则一定比（没有设置z-index的）定位元素层级低
 
 ## 多个盒子重叠设置hover
 
@@ -244,7 +245,6 @@ vertical-align: baseline | top | middle | bottom
 解决的方法就是：
 1. 给img设置 ` vertical-align: middle | top` 等，让图片不要和基线对齐
     ```
-    //网易的解决方案：
     img {
         vertical-align: top;
         border: 0;
@@ -253,7 +253,6 @@ vertical-align: baseline | top | middle | bottom
 
 2. 给img添加 `display: block;` 转换为块级元素，就不会存在问题了
     ```
-    //新浪的解决方案：
     img {
         display: block;
         border: 0;
@@ -390,7 +389,7 @@ body{
 }
 
 <body>
-    <div id="test"><div>
+    <div id="fixed"><div>
     <div style='height: 1000px;'>这是一个可以滚动的div<div>
 </body>
 ```
