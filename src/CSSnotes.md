@@ -370,7 +370,7 @@ li {
 
 ## 模拟fixed的效果
 
-```
+```html
 html{
     height: 100%; //这是浏览器视口的高度
     overflow: hidden;
@@ -379,7 +379,7 @@ body{
     height: 100%; //这是浏览器视口的高度
     overflow: auto;
 }
-#test{
+#fixed{
     position: absolute;
     left: 50px;
     top: 50px;
