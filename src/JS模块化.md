@@ -761,7 +761,7 @@ ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
   "description": "",
   "main": "index.js",
   "scripts": {
-  	// 如果直接写src，会自动寻找到其下的index.js文件并执行
+    // 如果直接写src，会自动寻找到其下的index.js文件并执行
     "dev": "babel-node src --presets env",
     // 将src目录中的代码全部编译转换至兼容当前node版本，并存放到build目录
     "build": "babel src -d build"
