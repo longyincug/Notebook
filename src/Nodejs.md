@@ -44,10 +44,17 @@
     - [Nodejs连接MySQL](#6d)
     - [Express结合模板引擎](#6e)
 
+7. [nodejs中异步操作的代码演进](#nodejs中异步操作的代码演进)
+
+    - [嵌套回调函数](#1-嵌套回调函数)
+    - [Promise](#2-promise)
+    - [Promisify](#3-promisify)
+    - [Generator](#4-generator)
+    - [async/await](#5-asyncawait)
 
 ***
-<br>
 
+<br>
 
 <a name="1">
 
@@ -1914,7 +1921,7 @@ read()
 如果服务器上的`NodeJS`版本较低，并不支持这些新的语法特性，那么我们可以使用`Babel`来将含有较新语法的代码向下编译为兼容运行环境的代码。
 
 
-
+### 5. asyncawait
 
 
 
