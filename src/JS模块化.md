@@ -1,4 +1,4 @@
-# JS模块化
+# JavaScript模块化规范详解
 
 
 ## 目录
@@ -26,14 +26,13 @@
 
 ***
 
-<br>
 
 
-<a name="1">
+<span id="1">
 
 
 
-## 为什么要模块化？
+## 1. 为什么要模块化？
 
 
 1. Web sites are turning into Web Apps.
@@ -45,10 +44,10 @@
 4. Deployment(部署) wants optimized(优化) code in few HTTP calls.
 
 
-<a name="2">
+<span id="2">
 
 
-## 模块化的好处
+## 2. 模块化的好处
 
 1. 避免命名冲突（减少命名空间污染）
 
@@ -60,10 +59,10 @@
 
 
 
-<a name="3">
+<span id="3">
 
 
-## 页面引入加载script存在的问题:
+## 3. 页面引入加载script存在的问题:
 
 - 请求过多
 
@@ -73,21 +72,20 @@
 
 
 
-<a name="4">
+<span id="4">
 
 
-## 模块化规范
+## 4. 模块化规范
 
 
+<span id="4a">
 
-<a name="4a">
 
-
-### CommonJS
+### 4.1 CommonJS
 
 每个文件都可当做一个模块
 
-- 在服务器端: 模块的加载是运行时同步加载的。
+- 在服务器端: 模块的加载是**运行时同步加载**的。
 
 - 在浏览器端: 模块需要提前编译打包处理。
 
@@ -108,13 +106,12 @@
 
 
 ***
-<br>
 
 
-<a name="4aa">
+<span id="4aa">
 
 
-#### Node.js模块化过程
+#### 4.1.1 Node.js模块化过程
 
 1. 安装Node.js
 
@@ -139,7 +136,7 @@
 4. 模块化编码
 	- module1.js
 
-		```
+		```js
 		module.exports = {
 			foo() {
 				console.log('module1 foo()');
@@ -149,7 +146,7 @@
 	
 	- module2.js
 	
-		```
+		```js
 		module.exports = function() {
 			console.log('module2()');
 		};
@@ -157,7 +154,7 @@
 
 	- module3.js
 	
-		```
+		```js
 		exports.foo = function() {
 			console.log('module3 foo()');
 		};
@@ -169,7 +166,7 @@
 
 	- app.js
 	
-		```
+		```js
 		/*
 		 * 1. 定义暴露模块:
 		 *	module.exports = value;
@@ -200,13 +197,12 @@
 
 
 ***
-<br>
 
 
-<a name="4ab">
+<span id="4ab">
 
 
-#### Browserify模块化过程
+#### 4.1.2 Browserify模块化过程
 
 
 由于浏览器端不具备node那样的环境，不能识别`require`等方法，所以浏览器端的模块化需要借助`Browserify`工具来完成打包，以便浏览器识别。
@@ -235,7 +231,7 @@
 	- 局部: `npm install browserify --save-dev` // 只是帮助我们编译打包文件，在开发环境(-dev)下安装即可，将来生产环境并不需要
 
 	安装完后，package.json中会变成:
-	```
+	```js
 	  {
 	  	"name": "browserify-test",
 	  	"version": "1.0.0"
@@ -246,7 +242,7 @@
 
 3. 定义模块代码
 
-	- 和Node.js中一样的定义。
+	和Node.js中一样的定义。
 	
 
 4. 打包处理js源文件:
@@ -259,15 +255,14 @@
 
 
 ***
+
+
+
+<span id="4b">
 <br>
 
 
-
-<a name="4b">
-
-
-
-### AMD
+### 4.2 AMD
 
 Asynchronous Module Definition(异步模块定义)
 
@@ -279,7 +274,7 @@ Asynchronous Module Definition(异步模块定义)
 
 	- 定义没有依赖的模块
 	
-		```
+		```js
 		define(function(){
 			return 模块
 		})
@@ -287,7 +282,7 @@ Asynchronous Module Definition(异步模块定义)
 
 	- 定义有依赖的模块
 	
-		```
+		```js
 		define(['module1','module2'], function(m1, m2){
 			return 模块
 		})
@@ -295,7 +290,7 @@ Asynchronous Module Definition(异步模块定义)
 
 2. 引入使用模块
 
-	```
+	```js
 	require(['module1','module2'], function(m1, m2){ //显式声明依赖注入
 		使用m1/m2
 	})
@@ -331,7 +326,7 @@ Asynchronous Module Definition(异步模块定义)
 
 	- module1.js
 		
-		```
+		```js
 		define(function(){
 			let msg = 'hello';
 			function getMsg(){
@@ -343,7 +338,7 @@ Asynchronous Module Definition(异步模块定义)
 
 	- module2.js
 	
-		```
+		```js
 		define(['module1', 'jquery'], function(m1, $){
 			let name = "module2";
 			function showMsg(){
@@ -356,7 +351,7 @@ Asynchronous Module Definition(异步模块定义)
 
 4. 编写应用主入口: main.js
 
-	```
+	```js
 	(function () {
 		// 配置
 		require.config({
@@ -387,12 +382,12 @@ Asynchronous Module Definition(异步模块定义)
 
 	例如:
 
-	```
+	```html
 	<script data-main="scripts/main" src="scripts/require.js"></script>
 	<script src="scripts/other.js"></script>
 	```
 	
-	```
+	```js
 	// contents of main.js:
 	require.config({
 	    paths: {
@@ -401,7 +396,7 @@ Asynchronous Module Definition(异步模块定义)
 	});
 	```
 	
-	```
+	```js
 	// contents of other.js:
 
 	// This code might be called before the require.config() in main.js
@@ -412,8 +407,9 @@ Asynchronous Module Definition(异步模块定义)
 	});
 	```
 
+	<br>
 
-6. 使用第三方基于require.js的框架（jquery）
+6. **使用第三方基于require.js的框架（jquery）**
 
 	jQuery支持AMD规范，在源码的最后几行，`define("jquery", [], function(){return jQuery;});` 这说明jQuery暴露了一个模块接口，并且标识名为jquery。
 	
@@ -421,7 +417,7 @@ Asynchronous Module Definition(异步模块定义)
 	
 	将jQuery库文件导入到项目的libs目录中，然后在main.js中配置jquery路径:
 	
-	```
+	```js
 	path: {
 		'jquery': './libs/jquery-1.10.1'
 	}
@@ -429,7 +425,7 @@ Asynchronous Module Definition(异步模块定义)
 
 	接下来就可以使用在module中了。
 	
-	```
+	```js
 	define(['module1', 'jquery'], function (module1, $) {
 	    var name = 'Tom';
 	    function showMsg() {
@@ -439,41 +435,67 @@ Asynchronous Module Definition(异步模块定义)
 	    return {showMsg}
 	})
 	```
+	<br>
+7. **使用第三方不基于require.js的框架（Angular）**
 
-7. 使用第三方不基于require.js的框架（angular）
-
-	将angular.js/angular-messages.js导入项目目录，然后在paths中添加angular路径。
+	将`angular.js/angular-ui-router.js/angular-message`等导入项目目录，然后在`paths`中添加`angular`路径。
 	
-	为了配置不兼容AMD的模块，需要在require.config中多添加:
+	为了配置不兼容AMD的模块，需要在`require.config`中多添加:
 	
-	```
+	```js
 	shim: {
 		'angular': {
 			exports: 'angular'
 		},
-		`angular-messages`: {
+		`angular-message`: {
 			exports: 'angular-message',
 			deps: ['angular']
 		}
 	}
 	```
-
+	如：
+	```js
+	require.config({
+	    //选择基础目录
+	    baseUrl: 'src/',
+	    //别名
+	    paths: {
+	        "angular": "lib/angular",
+	        "angular-ui-router": "lib/angular-ui-router"
+	    },
+	    //需要声明paths中元素暴露的接口和依赖（angular内置没有支持AMD）
+	    shim: {
+	        'angular': {exports: 'angular'},
+	        'angular-ui-router': {deps: ['angular']}
+	    }
+	});
+	
+	//核心入口
+	require(['angular', 'app-routes'], function(angular){
+	    angular.element(document).ready(function(){
+	        //angular.bootstrap是一个方法，表示将模块绑定给某个元素
+	        //这里相当于自动给html标签添加了一个ng-app属性，值为app
+	        //类似Vue中$mount挂载的概念
+	        angular.bootstrap(document, ['app']);
+	        //angular.element(document).find("html").addClass("ng-app");
+	    });
+	});
+	```
 
 ***
-<br>
 
 
 
-<a name="4c">
+<span id="4c">
 
 
 
-### CMD
+### 4.3 CMD
 
 
 专门应用于浏览器端，模块的加载是异步的。
 
-实现: `sea.js`，github: `https://github.com/seajs/seajs`
+实现: `sea.js`，github: https://github.com/seajs/seajs
 
 模块使用时才会加载执行。
 
@@ -484,7 +506,7 @@ Asynchronous Module Definition(异步模块定义)
 
 	- 定义没有依赖的模块
 	
-		```
+		```js
 		define(function(require, exports, module){
 			exports.xxx = value;
 			module.exports = value;
@@ -493,7 +515,7 @@ Asynchronous Module Definition(异步模块定义)
 	
 	- 定义有依赖的模块
 	
-		```
+		```js
 		define(function(require, exports, module){
 			//引入依赖模块（同步）
 			var module2 = require('./module2');
@@ -507,7 +529,7 @@ Asynchronous Module Definition(异步模块定义)
 
 2. 引入使用模块
 
-	```
+	```js
 	define(function(require){
 		var m1 = require('./module1');
 		var m4 = require('./module4');
@@ -543,7 +565,7 @@ CMD规范，定义模块类似AMD，暴露模块类似Commonjs。
 
 	- module1.js
 	
-		```
+		```js
 		define(function(require, exports, module) {
 			var data = "hello";
 			function show(){
@@ -556,7 +578,7 @@ CMD规范，定义模块类似AMD，暴露模块类似Commonjs。
 
 	- 主入口模块: main.js
 	
-		```
+		```js
 		define(function(require){
 			var m1 = require('./module1');
 			m1.show();
@@ -565,7 +587,7 @@ CMD规范，定义模块类似AMD，暴露模块类似Commonjs。
 
 4. 在index页面引入
 
-	```
+	```html
 	<script type="text/javascript" src="js/libs/sea.js"></script>
 	<script type="text/javascript">
 		seajs.use('./js/modules/main.js')
@@ -574,18 +596,17 @@ CMD规范，定义模块类似AMD，暴露模块类似Commonjs。
 
 
 ***
-<br>
 
 
 
-<a name="4d">
+<span id="4d">
 
 
 
-### ES6模块化规范
+### 4.4 ES6模块化规范
 
 
-ES6中内置了js模块化的实现。
+ES6中内置了js模块化的实现，静态加载模块（编译时加载）。
 
 **语法:**
 
@@ -599,7 +620,7 @@ ES6中内置了js模块化的实现。
 
 	- 暴露多个对象(常规暴露):
 	
-		```
+		```js
 		// 分别暴露
 		export var xxx = value1;
 		export let yyy = value2;
@@ -617,17 +638,23 @@ ES6中内置了js模块化的实现。
 
 	- 默认暴露的模块:
 		
-		```
+		```js
 		import xxx from '模块路径/模块名'
 		```
 
 	- 其他模块
 	
-		```
+		```js
 		import {xxx, yyy} from '模块路径/模块名'
 		
 		import * as module1 from '模块路径/模块名'
 		```
+
+**区别:**
+
+ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
+
+`CommonJS`则是运行时加载：`const {} = require('xxx')`
 
 
 **问题:**
@@ -643,7 +670,7 @@ ES6中内置了js模块化的实现。
 
 1. 定义package.json文件
 
-	```
+	```js
 	{
 		"name": "es6_babel_browserify-test",
 		"version": "1.0.0"
@@ -657,7 +684,7 @@ ES6中内置了js模块化的实现。
 
 3. 定义`.babelrc`配置文件（babel在执行之前会先读取该文件）
 
-	```
+	```js
 	{
 		"presets": ["es2015"] // 该命令决定了babel要去执行的任务，"es2015"表示ES6语法转换
 	}
@@ -671,7 +698,7 @@ ES6中内置了js模块化的实现。
 
 	- js/src/app.js
 	
-		```
+		```js
 		import {fun1, fun2} from './module1';
 		import $ from 'jquery';
 		
@@ -709,11 +736,3 @@ ES6中内置了js模块化的实现。
 **注意:**
 
 当改变了模块中的代码后，需要重新转换(Babel)、编译打包(Browserify)，再引入页面。
-
-
-
-
-
-
-
-
