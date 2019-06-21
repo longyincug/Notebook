@@ -685,7 +685,7 @@ ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
 
 3. 定义`.babelrc`配置文件（babel在执行之前会先读取该文件）
 
-	```json
+	```js
 	{
 	  "presets": [
 	    [
@@ -754,7 +754,7 @@ ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
 
 只需用到`babel`，大致和浏览器端一样，需要注意的是，如果`babel-cli`模块并未全局安装(`-g`)，而是开发环境依赖式安装(`--save-dev`)，那么可以在`package.json`的`scripts`中编写命令来运行`babel`。
 
-```json
+```js
 {
   "name": "babel-test",
   "version": "1.0.0",
