@@ -63,7 +63,7 @@
 
 看一段代码，认识http模块:
 
-```
+```js
 const http = require('http');
 
 var server = http.createServer(function(req, res){
@@ -87,7 +87,7 @@ server.listen(7788);
 ```
 
 一段官方的实例代码:
-```
+```js
 var http = require('http');
 http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'});
@@ -114,7 +114,7 @@ http.createServer(function (req, res) {
 
 - `fs.rename(旧名字, 新名字, function(err){});`
 
-```
+```js
 fs.readFile('aaa.txt', function (err, data) {
     if(err){
         console.log('读取失败');
