@@ -605,7 +605,6 @@ CMD规范，定义模块类似AMD，暴露模块类似Commonjs。
 
 ### 4.4 ES6模块化规范
 
-
 ES6中内置了js模块化的实现，静态加载模块（编译时加载）。
 
 **语法:**
@@ -650,7 +649,6 @@ ES6中内置了js模块化的实现，静态加载模块（编译时加载）。
 		import * as module1 from '模块路径/模块名'
 		```
 
-**区别:**
 
 ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
 
@@ -661,12 +659,13 @@ ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
 
 一些浏览器还不能直接识别ES6模块化的的语法。
 
-需要使用`Babel`来将ES6转换为ES5，但由于内部还使用了`CommonJS`，所以浏览器仍然不能直接执行。
+可以使用`Babel`来将ES6转换为ES5，如果内部还使用了`CommonJS`，浏览器仍然不能直接执行。
 
-接着再次使用`Browserify`来将文件打包处理，最终引入页面，浏览器可以直接运行。
+需要再次使用`Browserify`来将文件打包处理，最终引入页面，浏览器可以直接运行。
 
+<br>
 
-**js转换及打包方法:**
+**js编译转换及打包方法:**
 
 1. 定义package.json文件
 
@@ -677,16 +676,27 @@ ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
 	}
 	```
 
-2. 安装babel-cli, babel-preset-es2015和browserify
+2. 安装`babel-cli`, `babel-preset-env`和`browserify`
 
-	- `npm install babel-cli browserify -g`
-	- `npm install babel-preset-es2015 --save-dev`
+	```shell
+	npm install babel-cli browserify -g
+	npm install babel-preset-env --save-dev
+	```
 
 3. 定义`.babelrc`配置文件（babel在执行之前会先读取该文件）
 
-	```js
+	```json
 	{
-		"presets": ["es2015"] // 该命令决定了babel要去执行的任务，"es2015"表示ES6语法转换
+	  "presets": [
+	    [
+	      "env", //运行环境的描述
+	      {
+	        "targets": {
+	          "node": "current" //兼容当前系统版本的node
+	        }
+	      }
+	    ]
+	  ]
 	}
 	```
 
@@ -733,6 +743,49 @@ ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
 		`import $ from 'jquery'`
 
 
+
 **注意:**
 
 当改变了模块中的代码后，需要重新转换(Babel)、编译打包(Browserify)，再引入页面。
+
+<br>
+
+**nodejs中的编译转换：**
+
+只需用到`babel`，大致和浏览器端一样，需要注意的是，如果`babel-cli`模块并未全局安装(`-g`)，而是开发环境依赖式安装(`--save-dev`)，那么可以在`package.json`的`scripts`中编写命令来运行`babel`。
+
+```json
+{
+  "name": "babel-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  	// 如果直接写src，会自动寻找到其下的index.js文件并执行
+    "dev": "babel-node src --presets env",
+    // 将src目录中的代码全部编译转换至兼容当前node版本，并存放到build目录
+    "build": "babel src -d build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
+```
+然后`npm run dev`即可看到`src/index.js`经过`babel`编译后并执行的结果，`npm run build`则是将`src`下的代码都编译转换，放到`build`目录下，以便发布与迁移。
+
+**小技巧：**
+
+在`node`开发时为了实时预览代码执行结果，而不用反复运行`npm run dev`，可以借助`nodemon`，这是一个用来监视node.js应用程序中的任何更改并自动重启服务的模块。
+
+安装：
+```shell
+npm install nodemon -D
+```
+在`package.json`的`scripts`中配置：
+```
+"dev": "nodemon -w src --exec \"babel-node src --presets env\"",
+```
+这样当运行`npm run dev`就实时监控了`src`目录下的文件变化，并自动执行变化后的代码。
