@@ -144,7 +144,7 @@ fs.writeFile("bbb.txt", "hello world", function (err) {
 
 - options，配置参数
 
-```
+```js
 var ws = fs.createWriteStream('hello.txt');
 
 //可以通过监听流的open和close事件来监听流的打开和关闭
@@ -172,7 +172,7 @@ ws.end();
 
 流式文件读取适用于一些比较大的文件，分多次将文件读取到内存中。
 
-```
+```js
 //创建一个可读流
 var rs = fs.createReadStream("demo.mp3");
 
@@ -210,7 +210,7 @@ rs.pipe(ws);
 
     - 返回一个对象，这个对象中保存了当前文件状态的相关信息。
 
-    ```
+    ```js
     fs.stat('a.mp3',function(err, stat){
         //size 文件的字节大小
         //isFile() 是否是一个文件
@@ -225,7 +225,7 @@ rs.pipe(ws);
 
     - 同步的方法为:`fs.readdirSync(path[,options])`
     
-    ```
+    ```js
     fs.readdir('.', function(err, files){
         //files为一个字符串数组，每一个元素就是一个文件或文件夹的名字
         if(!err){
@@ -238,7 +238,7 @@ rs.pipe(ws);
 
     - 同步的方法为:`fs.truncateSync(path, len)`
     
-    ```
+    ```js
     //截取，只留下hello.txt文件中的前10个字节，如果是汉字，占3个字节，可能出现乱码
     fs.truncateSync('hello.txt', 10);
     ```
@@ -261,7 +261,7 @@ rs.pipe(ws);
     
     - 回调函数中的两个参数，`curr`是当前文件的状态，`prev`是修改前文件的状态，这两个状态都是`stat`对象。
 
-    ```
+    ```js
     fs.watchFile('hello.txt', {interval:1000}, function(curr, prev){
         console.log("修改前文件大小:"+prev.size);
         console.log("修改后文件大小:"+curr.size);
@@ -285,7 +285,7 @@ rs.pipe(ws);
 
 - `Buffer`中的一个元素，占内存中的一个字节
 
-```
+```js
 var str = 'Hello world';
 
 //将一个字符串保存到buffer中（可以再通过buf.toString()将缓冲区中的数据转换为字符串）
@@ -320,7 +320,7 @@ buf2[3] = 556; // 超过的位数会舍去，只留下最后8位
 处理GET请求，需要提取出查询字符串参数。
 
 用最笨的方法:
-```
+```js
 http.createServer(function (req, res) {
     var GET = {}; //存储查询参数键值对
     var url;
@@ -346,7 +346,7 @@ http.createServer(function (req, res) {
 
 当然，可以使用`querystring`模块来简化这一操作:
 
-```
+```js
 const querystring = require('querystring');
 var json = querystring.parse("user=hello&pass=123231&age=18");
 console.log(json);
@@ -366,7 +366,7 @@ console.log(json);
 
 `querystring`只能解析URL的查询参数部分，而对整个URL进行解析，就需要`url`模块了。
 
-```
+```js
 const urlLib = require('url');
 var obj = urlLib.parse("http://localhost:7788/index?a=123&b=abc");
 
@@ -405,7 +405,7 @@ console.log(obj.pathname, obj.query);
 
 一般用url模块获取pathname和解析GET请求数据，用querystring解析POST请求数据。
 
-```
+```js
 const http = require('http');
 // querystring用来解析post请求的数据，post过来的数据也是类似a=1&b=2的形式
 const querystring = require('querystring'); 
@@ -435,7 +435,7 @@ http.createServer(function (req, res) {
 
 **Node.js作为客户端向第三方接口发送请求:**
 
-```
+```js
 var http = require('http');
 var util = require('util');
 
@@ -453,9 +453,8 @@ http.get('http://www.xxx',function(res){
 }).on('error', (e)=>{console.log('错误')});
 ```
 
-
-
 ***
+
 <br>
 
 <a name="1f">
@@ -463,7 +462,7 @@ http.get('http://www.xxx',function(res){
 
 ### 实现了用户验证的HTTPServer
 
-```
+```js
 const http = require('http');
 const fs = require('fs');
 const querystring = require('querystring');
@@ -538,7 +537,7 @@ server.listen(7788);
 
 用户注册或登录验证，考虑采用ajax请求。需引入一个封装了ajax请求的工具包: [ajax](./nodejs/ajax.js) 。
 
-```
+```html
 // user.html
 <!doctype html>
 <html>
@@ -555,7 +554,9 @@ server.listen(7788);
             <input type="button" value="登录" id="log_btn">
     </body>
 </html>
+```
 
+```js
 // getAjax.js。调用ajax.js并获取响应数据
 window.onload = function(){
     var oTxtUser = document.getElementById('user');
@@ -635,14 +636,11 @@ window.onload = function(){
 
 由于是ajax交互，所以整个过程url不会变化。
 
-
-
-
 ***
+
 <br>
 
 <a name="2">
-
 
 
 ## Node.js模块化、包的制作发布
@@ -724,9 +722,8 @@ require引入顺序:
 
 `npm install -g cnpm --registry=https://registry.npm.taobao.org`
 
-
-
 ***
+
 <br>
 
 <a name="3">
@@ -745,6 +742,7 @@ require引入顺序:
 这是一个非侵入式的框架，保留了http原生的`res.write()`,`res.end()`等方法，并在此基础上增强了一些功能。
 
 比如: `res.write({a:1, b:2})`会报错，因为该方法只能传输`String`或`Buffer`数据。
+
 而Express中新增方法`res.send()`可以传输众多类型的数据，当然也可以传输对象。
 
 
@@ -756,7 +754,7 @@ Express有三种方法接收用户的请求:
 
 例如:
 
-```
+```js
 const express = require('express');
 var server = express();
 server.listen(7788);
@@ -783,8 +781,8 @@ server.get('/login', function (req, res) {
 });
 ```
 
-
 ***
+
 <br>
 
 <a name="3b">
@@ -794,7 +792,7 @@ server.get('/login', function (req, res) {
 
 Express中有许多中间件(类似于插件)，比如`express-static`，用来帮助处理静态文件:
 
-```
+```js
 const express = require('express');
 //中间件需要下载: npm install express-static
 const static = require('express-static');
@@ -811,9 +809,8 @@ server.use(static('./www'));
 
 注意中间件对象需要传递给`use()`作为参数，而不能是`get()`或`post()`，并且也只有use才能接收路由对象作为参数。
 
-
-
 ***
+
 <br>
 
 <a name="3c">
@@ -831,7 +828,7 @@ GET请求不需要中间件，直接`req.query`即可得到请求参数。
 
 介绍一个处理POST请求数据的中间件: `body-parser`:
 
-```
+```js
 //当然也需要安装:npm install body-parser
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -857,7 +854,7 @@ server.use('/', function(req, res){
 
 **链式操作原理(body-parser内部实现):**
 
-```
+```js
 // 其实每个方法还有一个next参数，这是一个函数，可以执行它来进行下一步链式操作。
 server.use(function(req, res, next){
     var str = '';
@@ -877,10 +874,8 @@ server.use(function(req, res, next){
 比如前一个操作是读取数据库，后一个操作是获取数据渲染页面，如果前一个操作失败了，就没有必要next，如果成功，理应next，进行链式操作。
 
 
-
-
-
 ***
+
 <br>
 
 <a name="4">
@@ -911,7 +906,7 @@ session: 保存数据，保存在服务端，安全。基于cookie，不能独�
 
 ### `cookie-parser`
 
-```
+```js
 const express = require('express');
 const cookieParser = require('cookie-parser');
 
@@ -958,7 +953,7 @@ server.use('/', function(req, res){
 
 `server.use(cookieParser('abcdefg'));`
 
-```
+```js
 console.log(req.cookies);// {session: 'eyJjb3VudCI6M30=','session.sig': '3jqK3jKkcSkWMWc-AQ00oFW3FY4'}
 console.log(req.signedCookies); // {user:'Tom'}
 
@@ -986,7 +981,7 @@ cookie一般不需要全部签名，否则占用太大空间，
 ### `cookie-session`
 
 
-```
+```js
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
@@ -1019,11 +1014,10 @@ server.use('/', function (req, res) {
 
 
 ***
+
 <br>
 
-
 <a name="5">
-
 
 
 ## 模板引擎
@@ -1032,8 +1026,9 @@ server.use('/', function (req, res) {
 
 两种常见的:
 
-- jade--破坏式、侵入式、强依赖
-- ejs--保留式、非侵入式、弱依赖
+- `jade` -- 破坏式、侵入式、强依赖
+
+- `ejs` -- 保留式、非侵入式、弱依赖
 
 
 <a name="5a">
@@ -1041,7 +1036,7 @@ server.use('/', function (req, res) {
 
 ### jade
 
-```
+```js
 const jade = require('jade');
 const fs = require('fs');
 
@@ -1086,7 +1081,7 @@ fs.writeFile('./build/jade1.html', str, function (err) {
 - `script alert('hello')`
 
 一个jade文件:
-```
+```js
 html
     head
         style
@@ -1128,17 +1123,17 @@ html
 
 
 ***
+
 <br>
 
 <a name="5ab">
-
 
 #### jade添加内容
 
 
 - 如果要在标签内加入多行内容，可以使用 `|`:
 
-    ```
+    ```js
     html
         head
             script
@@ -1150,7 +1145,7 @@ html
 
 - 也可以使用`.`，代表该标签内所有下一级内容都原样输出:
 
-    ```
+    ```js
     html
         head
             script.
@@ -1162,7 +1157,7 @@ html
 
 - 可以使用`include`来引入外部js，增加复用性:
 
-    ```
+    ```js
     html
         head
             script
@@ -1174,7 +1169,7 @@ html
 
 - 如果需要在模板内容中引入变量，在渲染时传入参数:
 
-    ```
+    ```js
     // demo.jade
     html
         head
@@ -1196,7 +1191,7 @@ html
 
 - 在jade模板中编写js代码:
 
-    ```
+    ```js
     // demo.jade
     html
         head
@@ -1235,7 +1230,7 @@ html
 
 - 向模板中输出不转义的html标签:
 
-    ```
+    ```js
     // demo.jade
     html
         head
@@ -1246,8 +1241,8 @@ html
     jade.renderFile('demo.jade', {pretty:true, content:'<h2>hello world<h2>'})
     ```
 
-
 ***
+
 <br>
 
 <a name="5ac">
@@ -1288,7 +1283,7 @@ html
 
 **jade.js:**
 
-```
+```js
 const jade = require('jade');
 const fs = require('fs');
 
@@ -1314,13 +1309,11 @@ fs.writeFile('./build/jade_demo.html', str, function (err) {
 ![jade_html](./nodejs/images/jade_html.png)
 
 
-
 ***
+
 <br>
 
-
 <a name="5b">
-
 
 
 ### ejs
@@ -1328,7 +1321,7 @@ fs.writeFile('./build/jade_demo.html', str, function (err) {
 
 demo.js:
 
-```
+```js
 const ejs = require('ejs');
 
 ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
@@ -1351,7 +1344,7 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 
 - ejs中插入js代码
 
-    ```
+    ```html
     <!doctype html>
     <html>
     <head>
@@ -1378,7 +1371,7 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 
 - ejs中引入外部文件
 
-    ```
+    ```html
     <!doctype html>
     <html>
     <head>
@@ -1399,14 +1392,12 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
     </html>
     ```
 
-
 ***
+
 <br>
 
 
 <a name="6">
-
-
 
 ## Express构建项目
 
@@ -1457,7 +1448,7 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 
 
 **upload_form.html:**
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1480,7 +1471,7 @@ ejs.renderFile('demo.ejs', {name: 'Tom'}, function(err, data){
 
 解决了数据的处理问题后，我们可以简单的把之前学过的整合到一起:
 
-```
+```js
 const express = require('express');
 const expressStatic = require('express-static');
 const cookieParser = require('cookie-parser');
@@ -1516,8 +1507,8 @@ server.use('/', function (req, res, next) {
 server.use(expressStatic('./www'));
 ```
 
-
 ***
+
 <br>
 
 <a name="6b">
@@ -1530,7 +1521,7 @@ server.use(expressStatic('./www'));
 
 通过一个中间件`consolidate`来整合所有的模板引擎，以便和Express进行交互。
 
-```
+```js
 // 配置模板引擎
 // 输出何种格式
 server.set('view engine', 'html');
@@ -1547,9 +1538,8 @@ server.use(function(req, res){
 
 **使用示例:** [consolidate](./nodejs/consolidate_demo.js)
 
-
-
 ***
+
 <br>
 
 <a name="6c">
@@ -1590,7 +1580,7 @@ Router可以看做一个迷你的server，它也可以get、post、use。
 
 **注意: Router中还可以嵌套Router**
 
-```
+```js
 var router = express.Router();
 server.use('/user', router);
 
@@ -1598,9 +1588,8 @@ var r = express.Router();
 router.use('/user_mod', r);
 ```
 
-
-
 ***
+
 <br>
 
 <a name="6d">
@@ -1624,7 +1613,7 @@ router.use('/user_mod', r);
 
 **使用示例:**
 
-```
+```js
 // 使用MySQL，安装后，下载Navicat来进行数据库操作
 
 // NodeJS默认不支持mysql，所以需要安装第三方模块: mysql
@@ -1653,12 +1642,13 @@ db.query("SELECT * FROM `user_table`;", function (err, data) {
 
 **注意: 一般为了避免频繁地建立连接，会创建一个数据库连接池，让连接缓存并可重新利用，提高效率。**
 
-```
+```js
 const db = mysql.createPool({});
 ```
 
 
 ***
+
 <br>
 
 <a name="6e">
@@ -1689,7 +1679,7 @@ const db = mysql.createPool({});
 
     - 配置模板引擎:
 
-        ```
+        ```js
         server.set('view engine', 'html');
         server.set('views', './templates');
         server.engine('html', consolidate.ejs);
@@ -1699,7 +1689,7 @@ const db = mysql.createPool({});
 
     - 用户进入首页时: 先查询banner数据、再查询article数据、最后渲染，需要设置成链式操作。
 
-        ```
+        ```js
         // 查询banner
         server.get('/', (req,res,next)=>{
             db.query('SELECT * FROM banner', (err,data)=>{
@@ -1732,7 +1722,7 @@ const db = mysql.createPool({});
 
     - 首页点击，进入文章详情页面
 
-        ```
+        ```js
         //文章详情页面，考虑将url请求设置为 /article?id=1 这种
         server.get('/article', function(req, res){
             //检查url是否带有id
@@ -1765,6 +1755,163 @@ const db = mysql.createPool({});
 
     `server.use(expressStatic('./www'));`
 
+
+***
+
+<br>
+
+## nodejs中异步操作的代码演进
+
+`node.js` 4.x版本增加了许多ES6语法特性（如`const`/`let`/`class`/箭头函数）的支持
+
+`node.js` 6.x版本囊括了绝大多数的ES6语法特性以及部分ES7特性
+
+`node.js` 8.x版本更支持了ES8语法（如`async`/`await`）
+
+此后的版本也在频繁不断地更新，纳入许多新特性。
+
+关于NodeJS中异步函数的写法，也在不断进行改善优化：
+
+
+### 1. 嵌套回调函数
+```js
+const fs = require('fs')
+
+fs.readFile('demo.json', (err, data) => {
+  if(err) return console.log(err)
+  data = JSON.parse(data)
+  console.log(data.name)
+})
+```
+这是`NodeJS`中比较原始的一种写法，将回调函数作为异步函数的参数，当异步操作过多，函数不断嵌套，很容易形成回调地狱。
+
+### 2. Promise
+```js
+function readFileAsync(path){
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, (err, data) => {
+      if(err) reject(err)
+      else resolve(data)
+    })
+  })
+}
+
+readFileAsync('demo.json')
+  .then(data => {
+    data = JSON.parse(data)
+    console.log(data.name)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+```
+当`NodeJS`中开始原生支持`Promise`，我们可以将异步函数封装成`Promise`，方便后续异步操作，摆脱了不断嵌套的回调函数。
+
+### 3. Promisify
+```js
+const util = require('util')
+
+util.promisify(fs.readFile)('demo.json')
+  .then(JSON.parse)
+  .then(data => {
+    console.log(data.name)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+```
+`NodeJS`8.x版本在`util`模块中新增了一个工具函数`promisify`，它将一个接收回调函数参数的函数转换成一个返回`Promise`的函数。这样一来我们可以省略自己封装`Promise`函数的过程，大大减少了代码体积。
+
+### 4. Generator
+`Promise`的出现解决了回调函数地狱问题，将函数嵌套改成了链式调用，但是紧接着又迎来了新的问题：`Promise`使用了`then`方法来加载执行回调函数，当业务比较复杂的时候，一连串的`then`让代码显得比较冗余，并且语义也不清楚。
+```js
+readFile(fileA)
+.then(function (data) {
+  console.log(data.toString())
+})
+.then(function () {
+  return readFile(fileB)
+})
+.then(function (data) {
+  console.log(data.toString())
+})
+.catch(function (err) {
+  console.log(err)
+})
+```
+
+ES6中的`generator`函数就是一个初步的解决方案，和`Promise`一起让异步代码能写得更加清晰明确。
+
+`generator`函数可以暂停执行和恢复执行，这是它能封装异步任务的根本原因。它可以交出函数的执行权，并与函数体内外进行数据交换。
+```js
+var fetch = require('node-fetch')
+
+// ----generator函数----
+function* gen(){
+  var url = 'https://api.github.com/users/github'
+  var result = yield fetch(url)
+  console.log(result.bio)
+}
+
+// ----执行器----
+//返回迭代器对象
+var g = gen()
+//执行next获取结果对象
+var result = g.next()
+//response对象是一个Promise
+result.value.then(function(data){
+  //data.json()也是一个Promise
+  return data.json()
+}).then(function(data){
+  // 往next()传入参数，会进入函数体，作为上阶段异步任务的返回结果（变量result）
+  g.next(data)
+})
+```
+
+从以上代码可以看出，虽然`generator`函数将异步操作表示得很清晰，但是需要编写执行器来进行流程管理，使其自动运行。
+
+著名程序员TJ Holowaychuk发布了`co`模块来帮助执行`generator`函数，模块内部针对`yield`命令后的各种数据类型分别编写了自动执行器，此时我们定义完`generator`函数后，只需要`co(gen)`即可自动执行。
+```js
+const co = require('co')
+
+var gen = function* (){
+  var f1 = yield readFile('demo1.json')
+  var f2 = yield readFile('demo2.json')
+  console.log(f1.toString())
+  console.log(f2.toString())
+}
+
+co(gen)
+```
+
+此后出现的`async`函数其实就是`generator`函数的语法糖，语义更加明确，并且内置执行器，不需要`co`模块或手动调用`next`方法，所以当`async/await`出现后，被称为是异步操作的终极解决方案，`generator`函数自然就被取代了。
+
+`co.js`也是著名`Node.js`框架`Koa1`的核心依赖库，而当`async/await`在`Node.js`中原生支持后，`co.js`也停止了维护，依赖于`async/await`的`Koa2`开始普及。
+
+关于`generator`详细请参考[Generator 函数的异步应用](http://es6.ruanyifeng.com/#docs/generator-async)。
+
+
+### 5. async/await
+随着ES8规范中明确了`async/await`的语法，`NodeJS`8.x版本也加入了相应特性的支持，我们可以使用这个异步操作的“终极解决方案”来让代码更加简洁、清晰、易读。
+```js
+const fs = require('fs')
+const util = require('util')
+const readAsync = util.promisify(fs.readFile)
+
+async function read(){
+  try {
+    let data = await readAsync('demo.json')
+    data = JSON.parse(data)
+    console.log(data.name)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+read()
+```
+
+如果服务器上的`NodeJS`版本较低，并不支持这些新的语法特性，那么我们可以使用`Babel`来将含有较新语法的代码向下编译为兼容运行环境的代码。
 
 
 
