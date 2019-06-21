@@ -52,7 +52,7 @@
 ## 每天一道面试题：1
 
 ### 下面代码输出什么？
-```
+```js
 var foo = 1;
 (function(){
     console.log(foo);
@@ -76,7 +76,7 @@ undefined
 
 ### 写一个按照下面方式调用都能正常工作的 sum 方法:
 
-```
+```js
 console.log(sum(2,3));   // Outputs 5
 console.log(sum(2)(3));  // Outputs 5
 ```
@@ -85,7 +85,7 @@ console.log(sum(2)(3));  // Outputs 5
 
 **答案:**
 
-```
+```js
 function sum() {
     var fir = arguments[0];
     if(arguments.length === 2) {
@@ -100,7 +100,7 @@ function sum() {
 
 或者这样:
 
-```
+```js
 function sum(x, y) {
     if(y !== undefined){
         return x + y;
@@ -121,7 +121,7 @@ function sum(x, y) {
 
 ### 下面的代码会输出什么？
 
-```
+```js
 console.log(1 + "2" + "2");
 console.log(1 + +"2" + "2");
 console.log(1 + -"1" + "2");
@@ -134,7 +134,7 @@ console.log("A" - "B" + 2);
 
 **答案:**
 
-```
+```js
 console.log(1 + "2" + "2"); // 122
 console.log(1 + +"2" + "2"); // 32
 console.log(1 + -"1" + "2"); // 02
@@ -149,7 +149,7 @@ console.log("A" - "B" + 2); // NaN
 
 ### 下面代码输出什么？
 
-```
+```js
 var a = {n:1}; 
 var b = a; 
 a.x = a = {n:2}; 
@@ -164,7 +164,7 @@ console.log(b.x);
 
 **尽量不要使用JS的连续赋值操作, 除非真的了解它的内部机制及可能会产生的后果。**
 
-```
+```js
 var a={n:1}; 
 var b=a; 
 a.x=a={n:2};
@@ -212,7 +212,7 @@ js内部为了保证赋值语句的正确, 会在一条赋值语句执行前, �
 
 ### 下面代码的输出是什么？
 
-```
+```js
 var myObject = {
     foo: "bar",
     func: function() {
@@ -251,7 +251,7 @@ bar bar undefined bar
 
 2. IIFE中定义的任何变量和函数, 都会在执行结束时被销毁。这种做法可以减少闭包占用的内存问题, 因为没有指向匿名函数的引用。只要函数执行完毕, 就可以立即销毁其作用域链了
 
-```
+```js
 var add = (function(){
     var counter = 0;
     return function(){
@@ -269,7 +269,7 @@ console.log(add())//2
 
 ### 使用 typeof obj === "object" 判断 obj 是不是一个对象有什么潜在的弊端？如何避免这种弊端？
 
-```
+```js
 var obj = {};
 var arr = [];
 console.log(typeof obj === 'object');  //true
@@ -287,7 +287,7 @@ console.log(typeof null === 'object');  //true
 
 **答案:**
 
-```
+```js
 var obj = {};
 var arr = [];
 console.log(Object.prototype.toString.call(obj));//[object Object]
@@ -303,7 +303,7 @@ console.log(Object.prototype.toString.call(null));//[object Null]
 
 ## 每天一道面试题：4
 
-```
+```js
 function Foo() {
     getName = function () { alert (1); };
     return this;
@@ -316,7 +316,7 @@ function getName() { alert (5);}
 
 ### 函数声明及表达式如上，请写出以下输出结果:
 
-```
+```js
 Foo.getName();
 getName();
 Foo().getName();
@@ -330,7 +330,7 @@ new new Foo().getName();
 
 **答案:**
 
-```
+```js
 Foo.getName();//2
 getName();//4
 Foo().getName();//1
@@ -402,7 +402,7 @@ new new Foo().getName();//3
 
 ### 下面两个函数的返回值是一样的吗？为什么？
 
-```
+```js
 function foo1()
 {
     return {
@@ -424,7 +424,7 @@ function foo2()
 
 在编程语言中, 基本都是使用分号（;）将语句分隔开, 这可以增加代码的可读性和整洁性。而在JS中, 如若语句各占独立一行, 通常可以省略语句间的分号（;）, JS 解析器会根据能否正常编译来决定是否自动填充分号：
 
-```
+```js
 var test = 1 + 
 2
 console.log(test);  //3
@@ -432,7 +432,7 @@ console.log(test);  //3
 
 在上述情况下，为了正确解析代码，就不会自动填充分号了，但是对于 `return` 、`break`、`continue` 等语句，如果后面紧跟换行，解析器一定会自动在后面填充分号(;)，所以上面的第二个函数就变成了这样：
 
-```
+```js
 function foo2()
 {
   return;
@@ -450,7 +450,7 @@ function foo2()
 
 ### 解释一下下面代码的输出:
 
-```
+```js
 console.log(0.1 + 0.2);   //0.30000000000000004
 console.log(0.1 + 0.2 == 0.3);  //false
 ```
@@ -472,7 +472,7 @@ JavaScript 中的 number 类型就是浮点型，JavaScript 中的浮点数采�
 
 **为了保证浮点数计算的正确性，可以先升幂再降幂:**
 
-```
+```js
 function add(num1, num2){
     let r1, r2, m;
     r1 = (''+num1).split('.')[1].length;
@@ -496,14 +496,14 @@ console.log(add(0.15,0.2256)); //0.3756
 
 可以将 x 转换成10进制，判断和本身是不是相等即可：
 
-```
+```js
 function isInteger(x) { 
     return parseInt(x, 10) === x; 
 }
 ```
 ES6 对数值进行了扩展，提供了静态方法 `isInteger()` 来判断参数是否是整数：
 
-```
+```js
 Number.isInteger(25) // true
 Number.isInteger(25.0) // true
 Number.isInteger(25.1) // false
@@ -527,7 +527,7 @@ JavaScript能够准确表示的整数范围在 -2^53 到 2^53 之间（不含两
 
 一种解决方案:
 
-```
+```js
 function isPalindrome(str) {
     var str = str.replace(/\W/g, '').toLowerCase();
     return str == str.split('').reverse().join('');
@@ -536,7 +536,7 @@ function isPalindrome(str) {
 
 另一种解决方案:
 
-```
+```js
 function isPalindrome(str) {
 	var str = str.replace(/[^A-Za-z]/g, '').toLowerCase();
 	return str == str.split('').reduceRight(function(sum, w) {return sum + w;});
@@ -549,7 +549,7 @@ function isPalindrome(str) {
 
 ### 在下面的代码中，数字 1-4 会以什么顺序输出？为什么会这样输出？
 
-```
+```js
 (function() {
     console.log(1); 
     setTimeout(function(){console.log(2)}, 1000); 
@@ -617,7 +617,7 @@ JavaScript语言的一大特点就是单线程。
 
 ### 根据下面的代码片段回答后面的问题
 
-```
+```js
 for (var i = 0; i < 5; i++) {
   var btn = document.createElement('button');
   btn.appendChild(document.createTextNode('Button ' + i));
@@ -642,7 +642,7 @@ for (var i = 0; i < 5; i++) {
 
 IIFE 有两个比较经典的使用场景，一是类似于在循环中定时输出数据项，二是类似于 JQuery/Node 的插件和模块开发。
 
-```
+```js
 for(var i = 0; i < 5; i++) {
     setTimeout(function() {
         console.log(i);  
@@ -652,7 +652,7 @@ for(var i = 0; i < 5; i++) {
 
 上面的输出并不是你以为的0 1 2 3 4，这时IIFE就有用了: 
 
-```
+```js
 for(var i=0; i<5; i++){
     (function(i){
         setTimeout(function(){
@@ -664,7 +664,7 @@ for(var i=0; i<5; i++){
 
 而在 JQuery/Node 的插件和模块开发中，为避免变量污染，也是一个大大的 IIFE：
 
-```
+```js
 (function($) { 
     //代码
 } )(jQuery);
@@ -672,7 +672,7 @@ for(var i=0; i<5; i++){
 
 **另一种解法，使用bind:**
 
-```
+```js
 for(var i = 0; i < 5; i++) {
     setTimeout(console.log.bind(console, i), i * 1000);
 }
@@ -685,7 +685,8 @@ ps: `bind(obj, *args)`方法返回的是一个柯里化的函数，所以可以�
 关于bind详情看:[bind的用法](#9a)
 
 **还有一种解法, 不用闭包:**
-```
+
+```js
 var num = 0;
 var timer = setTimeout(function func(){
     console.log(num++);
@@ -704,7 +705,7 @@ var timer = setTimeout(function func(){
 
 ### 下面的代码会输出什么？为什么？
 
-```
+```js
 var arr1 = "john".split(''); //j o h n
 var arr2 = arr1.reverse(); //n h o j
 var arr3 = "jones".split(''); //j o n e s
@@ -736,7 +737,7 @@ MDN 上对于 reverse() 的描述是这样的：
 
 ### 如果 list 很大，下面的这段递归代码会造成堆栈溢出，如何在不改变递归模式的前提下修缮这段代码？
 
-```
+```js
 var list = readHugeList();
 
 var nextListItem = function() {
@@ -751,7 +752,7 @@ var nextListItem = function() {
 
 **答案:**
 
-```
+```js
 var list = readHugeList();
 
 var nextListItem = function() {
@@ -768,7 +769,7 @@ var nextListItem = function() {
 利用 `setTimeout` 的异步性质，完美地去除了这个调用栈。
 
 简单举个例子:
-```
+```js
 var list = [0, 1];
  
 var nextListItem = function() {
@@ -784,7 +785,7 @@ nextListItem();
 上面的代码会依次输出0和1，因为程序中形成了一个调用栈，1被压到了栈底，最后出栈。
 
 把程序改成这样:
-```
+```js
 var list = [0, 1];
  
 var nextListItem = function() {
@@ -815,7 +816,7 @@ nextListItem();
 ## 每天一道面试题: 8
 
 ### 解释下列代码的输出
-```
+```js
 console.log("0 || 1 = "+(0 || 1));
 console.log("1 || 2 = "+(1 || 2));
 console.log("0 && 1 = "+(0 && 1));
@@ -828,7 +829,7 @@ console.log("1 && 2 = "+(1 && 2));
 
 - 逻辑**与**返回第一个是 `false` 的操作数 或者 最后一个是 `true` 的操作数
 	- 如果某个操作数为 `false`，则该操作数之后的操作数都不会被计算
-```
+```js
 console.log(1 && 2 && 0);  //0
 console.log(1 && 0 && 1);  //0
 console.log(1 && 2 && 3);  //3
@@ -836,14 +837,14 @@ console.log(1 && 2 && 3);  //3
 
 - 逻辑**或**返回第一个是 `true` 的操作数 或者 最后一个是 `false` 的操作数
 	- 如果某个操作数为 `true`，则该操作数之后的操作数都不会被计算
-```
+```js
 console.log(1 || 2 || 0); //1
 console.log(0 || 2 || 1); //2
 console.log(0 || 0 || false); //false
 ```
 
 - 如果**逻辑与**和**逻辑或**作混合运算，则逻辑**与**的优先级高：
-```
+```js
 console.log(1 && 2 || 0); //2
 console.log(0 || 2 && 1); //1
 console.log(0 && 2 || 1); //1
@@ -856,7 +857,7 @@ console.log(0 && 2 || 1); //1
 `0, '0', +0, -0, false, '', null, undefined, NaN`
 
 要注意**空数组([])**和**空对象({})**:
-```
+```js
 console.log([] == false) //true ([]会调用valueOf方法, 返回"", 是false)
 console.log({} == false) //false({}返回"[object Object]"字符串)
 console.log(Boolean([])) //true(都是对象，所以转化为Boolean，都是true)
@@ -875,7 +876,7 @@ console.log(Boolean({})) //true
 
 ### 解释下面代码的输出
 
-```
+```js
 var a={},
     b={key:'b'},
     c={key:'c'};
@@ -894,7 +895,7 @@ console.log(a[b]);
 
 `Javascript`中对象的`key`值，一定会是一个`string`值，如果不是，则会隐式地进行转换，当执行到`a[b]=123`时，b并不是一个`string`值，将b执行`toString()`方法转换(得到`[object Object]`), `a[c]`也是相同道理，所以代码可以看做这样执行：
 
-```
+```js
 var a={},
     b={key:'b'},
     c={key:'c'};
@@ -911,12 +912,14 @@ console.log(a["[object Object]"]);
 
 ### 解释下面代码的输出
 
-`console.log((function f(n){return ((n > 1) ? n * f(n-1) : n)})(10));`
+```js
+console.log((function f(n){return ((n > 1) ? n * f(n-1) : n)})(10));
+```
 
 **答案:**
 
 其实就是一个立即执行函数+递归，求个阶乘而已（10!），给立即执行函数加了个名字f，方便在递归里调用，其实完全可以用`arguments.callee`代替: 
-```
+```js
 var ans = (function(n){
     return ((n>1) ? n * arguments.callee(n-1): n)
 })(10);
@@ -938,7 +941,7 @@ console.log(ans);
 
 ### 解释下面代码的输出，并修复存在的问题
 
-```
+```js
 var hero = {
     _name: 'John Doe',
     getSecretIdentity: function (){
@@ -956,7 +959,7 @@ console.log(hero.getSecretIdentity());
 
 将 `getSecretIdentity` 赋给 `stoleSecretIdentity`，等价于定义了 `stoleSecretIdentity` 函数：
 
-```
+```js
 var stoleSecretIdentity =  function (){
     return this._name;
 }
@@ -966,7 +969,7 @@ var stoleSecretIdentity =  function (){
 
 若要输出 `John Doe`，则要通过 `call 、apply 和 bind` 等方式改变 `stoleSecretIdentity` 的`this` 指向(hero)：
 
-```
+```js
 var stoleSecretIdentity = hero.getSecretIdentity.bind(hero);
 ```
 
@@ -981,7 +984,7 @@ var stoleSecretIdentity = hero.getSecretIdentity.bind(hero);
 
 `bind`是`function`的一个函数扩展方法，但是不兼容`ie6~8`，兼容代码如下:
 
-```
+```js
 Function.prototype.bind = Funtion.prototype.bind || function(context) {
     var that = this,
     _args = Array.prototype.slice.call(arguments, 1);
@@ -1006,9 +1009,9 @@ Function.prototype.bind = Funtion.prototype.bind || function(context) {
 **答案:**
 
 
-原文利用 深度优先搜索(Depth-First-Search) 给了一个实现：
+利用深度优先搜索(Depth-First-Search) 可以实现：
 
-```
+```js
 function Traverse(p_element,p_callback) {
     p_callback(p_element);
     var list = p_element.children;
@@ -1032,7 +1035,7 @@ function Traverse(p_element,p_callback) {
 
 **答案:**
 
-```
+```js
 var a = [1, 2, 3, 6, 5, 4];
 var ans = Math.max.apply(null, a);
 //使用call，apply方法时，如果第一个参数传null/undefined，在浏览器中默认指向window对象，在node中指向global对象
@@ -1046,7 +1049,7 @@ var ans = Math.max.apply(null, a);
 `var ans = eval( 'Math.max(' + a.toString() + ')');`
 
 学习了 ES6 后，我们有了更简单的方法：
-```
+```js
 let a = [1, 2, 3, 6, 5, 4];
 let maxn = Math.max(...a);
 console.log(maxn); // 6
@@ -1064,7 +1067,7 @@ console.log(maxn); // 6
 
 这道题跟[第7天](#7)的第一题类似，用闭包保存变量到内存即可。
 
-```
+```js
 var a = [1, 2, 3, 4, 5, 6];
 
 for(var i=0; i<a.length; i++){
@@ -1091,7 +1094,7 @@ for(var i=0; i<a.length; i++){
 
 **答案:**
 
-```
+```js
 Object.prototype.getLength = function(){
 	var count = 0;
 	for(var key in this){
@@ -1130,7 +1133,7 @@ arr.sort(function(a, b){return a.getLength() - b.getLength(); });
 
 **一个使用映射改善排序的例子**
 
-```
+```js
 // 需要被排序的数组
 var list = ['Delta', 'alpha', 'CHARLIE', 'bravo'];
 
@@ -1168,7 +1171,7 @@ var result = mapped.map(function(el){
 
 利用递归实现:
 
-```
+```js
 (function(a, b){
 	
 	console.log(b);
@@ -1182,8 +1185,7 @@ var result = mapped.map(function(el){
 
 利用迭代实现:
 
-```
-
+```js
 function func(n) {
 	
 	var a = [0, 1];
@@ -1216,8 +1218,7 @@ func(5);
 
 直接在Number对象上加上扩展方法即可
 
-```
-
+```js
 Number.prototype.plus = function(a){
 	return this + a;
 };
@@ -1227,8 +1228,6 @@ Number.prototype.minus = function(a){
 };
 
 var a = (5).plus(3).minus(6);
-
-
 ```
 
 ***
@@ -1241,8 +1240,7 @@ var a = (5).plus(3).minus(6);
 
 **答案:**
 
-```
-
+```js
 function add(a){
 	
 	var temp = function(b){
@@ -1256,7 +1254,6 @@ function add(a){
 
 var ans = add(2)(3)(4);
 console.log(ans);
-
 ```
 
 先了解一下`valueOf`和`toString`方法:
@@ -1289,7 +1286,7 @@ console.log(ans);
 
 ### 下面代码输出什么(考察this)
 
-```
+```js
 var length = 10;
 function fn() {
   console.log(this.length);
@@ -1321,7 +1318,7 @@ obj.method(fn, 1);
 
 ### 下面代码输出什么？(var和函数的提前声明)
 
-```
+```js
 function fn(a) {
   console.log(a); 
   var a = 2;
@@ -1345,7 +1342,7 @@ function a() {}
 
 **函数声明优于变量声明**
 
-```
+```js
 if('a' in window) {
   var a = 10;
 }
@@ -1361,7 +1358,7 @@ alert(a);
 
 ### 下面代码输出什么？(局部变量和全局变量)
 
-```
+```js
 var f = true;
 if (f === true) {
   var a = 10;
@@ -1398,7 +1395,7 @@ console.log(c);
 
 ### 下面代码的输出是什么？
 
-```
+```js
 var a = 10;
 a.pro = 10;
 console.log(a.pro + a);
@@ -1436,7 +1433,7 @@ undefinedhello
 
 - **hash table方式:**
 
-```
+```js
 var s = 'aaabbbcccaaabbbaaa';
 var obj = {};
 var maxn = -1;
@@ -1444,16 +1441,12 @@ var letter;
 for(var i = 0; i < s.length; i++) {
   if(obj[s[i]]) {
     obj[s[i]]++;
-    if(obj[s[i]] > maxn) {
-      maxn = obj[s[i]];
-      letter = s[i];
-    }
   } else {
     obj[s[i]] = 1;
-    if(obj[s[i]] > maxn) {
-      maxn = obj[s[i]];
-      letter = s[i];
-    }
+  }
+  if(obj[s[i]] > maxn) {
+    maxn = obj[s[i]];
+    letter = s[i];
   }
 }
 
@@ -1464,7 +1457,7 @@ alert(letter + ': ' + maxn);
 
 - **正则方式:**
 
-```
+```js
 var s = 'aaabbbcccaaabbbaaabbbbbbbbbb';
 var a = s.split('');
 a.sort();
@@ -1484,7 +1477,7 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 
 ### 实现一段脚本，使得点击对应链接alert出相应的编号
 
-```
+```html
 
 <!-- 实现一段脚本，使得点击对应链接alert出相应的编号 -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -1502,7 +1495,7 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 
 - **dom污染法**
 
-```
+```html
 
 <script type="text/javascript">
     var lis = document.links;
@@ -1518,7 +1511,7 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 
 - **闭包**
 
-```
+```html
 
 <script type="text/javascript">
     var lis = document.links;
@@ -1547,12 +1540,12 @@ console.log(ans[0][0] + ': ' + ans[0].length);
 
 ### 下面的代码应该输出什么？（再谈声明提前、类型转换）
 
-```
+```js
 f = function () { return true; };
 g = function () { return false; };
 (function () {
     if (g() && [] == ![]) {
-        f = function f() { return false; };
+        f = function() { return false; };
         g = function() { return true; }
     }
 })();
@@ -1575,13 +1568,13 @@ alert(f());
 
 如果把代码变动一下呢？
 
-```
+```js
 
 f = function () { return true; };
 g = function () { return false; };
 (function () {
 	if (g() && [] == ![]) {
-		f = function f() { return false; };
+		f = function() { return false; };
 		function g() { return true; }  
 	}
 })();
@@ -1595,13 +1588,13 @@ alert(f());
 
 举个例子:
 
-```
+```js
 console.log(f)
 f();
 if(false){
-	function f(){
-	console.log("ok")
-	}
+  function f(){
+    console.log("ok")
+  }
 }
 ```
 
@@ -1625,7 +1618,7 @@ if(false){
 
 ### 请给出这段代码的运行结果
 
-```
+```js
 
 var bb = 1;
 function aa(bb) {
@@ -1651,7 +1644,7 @@ alert(bb);
 
 当然如果是下面这种情况，就是我们熟知的输出了，输出`2 2`:
 
-```
+```js
 var bb = 1;
 function aa(cc) {
     bb = 2;
@@ -1672,7 +1665,7 @@ alert(bb);
 
 ### 解释一下下面的代码
 
-```
+```js
 
 function JSClass() {
   this.m_Text = 'division element';
@@ -1721,7 +1714,7 @@ undefined
 
 **答案:**
 
-```
+```js
 function parseQueryString(str){
 	var argObj = {};
 	var arr = str.split("?");
@@ -1804,7 +1797,7 @@ IE9 开始跟 DOM 事件流是一样的，都是 addEventListener
 
 **答案:**
 
-```
+```js
 ev=ev||window.event 
 
 document.documentElement.clientWidth || document.body.clientWidth
@@ -1820,7 +1813,7 @@ target = ev.srcElement||ev.target
 
 **答案:**
 
-```
+```js
 function b(){}
 
 b.prototype = new a;
@@ -1876,7 +1869,7 @@ this: 指向调用上下文
 
 **答案:**
 
-```
+```js
 obj.appendChild()
 obj.insertBefore() // 原生的js不提供insertAfter()
 obj.replaceChild() // 替换
@@ -1930,7 +1923,7 @@ obj.removeChild() // 删除
 
 **答案:**
 
-```
+```js
 
 function clrRepeat(arr){
 
@@ -1967,7 +1960,7 @@ function clrRepeat(arr){
 2. 方法二，在ES5中定义了新方法: `Array.isArray()`, 保证其兼容性
 
 3. 最佳方案:
-```
+```js
 if(typeof Array.isArray === "undefined"){
 	Array.isArray = function(arg){
 		return Object.prototype.toString.call(arg) === "[object Array]"
@@ -1991,7 +1984,7 @@ if(typeof Array.isArray === "undefined"){
 
 **答案:**
 
-```
+```js
 var domList = document.getElementsByTagName('input')
 var checkBoxList = [];//返回的所有的 checkbox
 var len = domList.length; //缓存到局部变量
@@ -2042,7 +2035,7 @@ undefined会在以下三种情况下产生:
 
 **答案:**
 
-```
+```js
 function combo(msg){
 	var arr = msg.split("-"); //[get,element,by,id]
 	for(var i = 1; i < arr.length; i++){
@@ -2056,7 +2049,7 @@ function combo(msg){
 
 也可以直接用正则:
 
-```
+```js
 var foo = "get-element-by-id";
 
 var newFoo = s.replace(/-([a-z])/g, function(m, p1){return p1.toUpperCase();});
@@ -2071,7 +2064,7 @@ var newFoo = s.replace(/-([a-z])/g, function(m, p1){return p1.toUpperCase();});
 
 **答案:**
 
-```
+```js
 var d = new Date();
 
 // 获取年，getFullYear()返回4位的数字
@@ -2116,23 +2109,23 @@ alert(year + '-' + month + '-' + day);
 
 **答案:**
 
-```
+```js
 function escapeHtml(str) {
 	return str.replace(/[<>"&]/g, function(match){
 	
 		switch (match) {
 		
-		case "<":
-			return "&lt;";
-		
-		case ">":
-			return "&gt;";
-		
-		case "&":
-			return "&amp;";
-		
-		case "\"":
-			return "&quot;";
+			case "<":
+				return "&lt;";
+
+			case ">":
+				return "&gt;";
+
+			case "&":
+				return "&amp;";
+
+			case "\"":
+				return "&quot;";
 		
 		}
 	
@@ -2149,7 +2142,7 @@ function escapeHtml(str) {
 
 **答案:**
 
-```
+```js
 function getRand(start, end) {
 	var rand = end - start;
 	return Math.floor(Math.random() * rand + start);
@@ -2190,6 +2183,7 @@ arr.sort();
 
 
 ***
+
 <br>
 
 ### 正则表达式构造函数 var reg=new RegExp(“xxx”)与正则表达字面量 var reg=//有什么不同？匹配邮箱的正则表达式？
@@ -2202,6 +2196,7 @@ arr.sort();
 邮箱的正则匹配: `/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]{2,5}){1,2}$/`
 
 ***
+
 <br>
 
 ### 写一个 function，清除字符串前后的空格。（兼容所有浏览器）
@@ -2209,7 +2204,7 @@ arr.sort();
 **答案:**
 
 使用自带接口`trim()`，考虑兼容性:
-```
+```js
 if(!String.prototype.trim) {
 	String.prototype.trim = function() {
 		return this.replace(/^\s*|\s*$/, "");
@@ -2230,12 +2225,12 @@ if(!String.prototype.trim) {
 
 **答案:**
 
-- arguments.callee：获得当前函数的引用
-- caller 是返回一个对函数的引用，该函数调用了当前函数；
-- callee 是返回正在被执行的 function 函数，也就是所指定的 function 对象的正文。
+- `arguments.callee`：获得当前函数的引用
+- `caller` 是返回一个对函数的引用，该函数调用了当前函数；
+- `callee` 是返回正在被执行的 function 函数，也就是所指定的 function 对象的正文。
 
 
-```
+```js
 var result = [];
 
 function fn(n) {
@@ -2256,6 +2251,7 @@ console.log(result); //,1,1,2,3,5,8,13
 ```
 
 ***
+
 <br>
 
 <a name="20">
@@ -2268,7 +2264,7 @@ console.log(result); //,1,1,2,3,5,8,13
 
 **答案:**
 
-```
+```js
 for(var i=0; i < document.forms.length; i++) {
 	for(var j=0; j < document.forms[i].elements.length; j++) {
 		if(document.forms[i].elements[j].type == "text") {
@@ -2280,28 +2276,12 @@ for(var i=0; i < document.forms.length; i++) {
 ```
 
 ***
-<br>
 
-### 写出下面程序运行的结果
-
-```
-for(i=0, j=0; i<10, j<6; i++, j++) {
-
-	k = i + j;
-
-}
-```
-
-**答案:**
-
-`10 // i=5, j=5`
-
-***
 <br>
 
 ### 阅读以下代码，分析出结果:
 
-```
+```js
 var arr = new Array(1,3,5);
 arr[4] = 'z';
 arr2 = arr.reverse();
@@ -2319,6 +2299,7 @@ alert(arr3);
 之前也做过这种题: [关于reverse方法](#7a)
 
 ***
+
 <br>
 
 ### 写出简单描述html标签(不带属性的开始标签和结束标签)的正则表达式，并将以下字符串中的html标签去除
@@ -2328,14 +2309,14 @@ alert(arr3);
 
 **答案:**
 
-```
+```js
 var reg = /<\/?\w+\/?>/gi;
 var res = str.replace(reg, "");
 ```
 
 为了加深对于正则的理解，试着将题目扩展。如何取出一对标签中的内容？如何将一对标签除去？
 
-```
+```js
 var str = "<div>这里是div<p>里面的段落</p></div>";
 
 var pattern = /(\<(\w+\>))(.*?)(\<\/\2)/gi;
@@ -2367,8 +2348,8 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 关于正则表达式，请看JS高级程序设计中的详细解读: [正则表达式](./JavaScript高级程序设计.md/#5d)
 
 
-
 ***
+
 <br>
 
 <a name="21">
@@ -2393,10 +2374,9 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 4. 函数对象方式
 `var sum3 = new Function("num1","num2","return num1 + num2");`
 
-
 ***
-<br>
 
+<br>
 
 ### JavaScript创建对象的几种方式
 
@@ -2408,7 +2388,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 3. 工厂模式 : 用函数来封装以特定接口创建对象的细节
 
-	```
+	```js
 	function createPerson(name, age, job) {
 		var o = new Object();
 		o.name = name;
@@ -2429,7 +2409,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 4. 构造函数模式 : 自定义构造函数，创建特定类型的对象，同一个构造函数创建出来的对象属于一类
 	
-	```
+	```js
 	function Person(name, age, job) {
 		this.name = name;
 		this.age = age;
@@ -2447,7 +2427,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 5. 原型模式 : 让所有的对象实例共享原型对象所包含的属性和方法，不必在构造函数中定义然后多次在实例对象中创建了，只需要添加给原型即可
 
-	```
+	```js
 	function Person() {
 	}
 	
@@ -2473,7 +2453,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 6. 混合构造函数原型模式 : 最常见的创建自定义类型方式，构造函数中定义实例属性，原型对象中添加共享属性和方法
 
-	```
+	```js
 	function Person(name, age, job) {
 		this.name = name;
 		this.age = age;
@@ -2503,7 +2483,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	
 
 7. 动态原型模式 : 将构造函数和原型对象等定义统一到一个函数中，封装性更强，并且通过检测必要情况来决定是否初始化原型，效率更高
-	```
+	```js
 	function Person(name, age, job){
 
 		//属性
@@ -2524,13 +2504,12 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	friend.sayName(); 
 	```
 
-
 	> 评价: 原型方法的添加只执行一次，对原型所做的修改也能立即在实例中反映，可以说相当完美，但是需要注意不能使用对象字面量重写原型，否则会切断现有实例与新原型的联系。
 	
 
 8. 寄生构造函数模式 : 当有特殊需求比如说创建一个具有额外方法的数组，由于不能直接修改Array，就可以使用这个模式
 	
-	```
+	```js
 	function SpecialArray(){
 
 		//创建数组
@@ -2562,7 +2541,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 9. 稳妥构造函数模式 : 用来创建没有公共属性，不引用this的安全稳妥对象
 
-	```
+	```js
 	function Person(name, age, job){
 
 		//创建要返回的对象
@@ -2592,9 +2571,8 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 详细解读请见笔记: [JavaScript高级程序设计: 创建对象](./JavaScript高级程序设计.md/#6b)
 
-
-
 ***
+
 <br>
 
 ### JavaScript如何实现继承？
@@ -2616,7 +2594,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 	> 为了解决原型中包含引用类型值的问题，开始使用借用构造函数，也叫伪造对象或经典继承
 
-	```
+	```js
 	function SuperType() {
 		this.colors = ["red", "blue", "green"];
 	}
@@ -2642,11 +2620,9 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 3. 组合继承
 
-
 	> 也叫伪经典继承，将原型链和借用构造函数的技术组合到一块。使用原型链实现对原型属性和方法的继承，而通过构造函数来实现对实例属性的继承。
 	
-	
-	```
+	```js
 	function SuperType(name) {
 		this.name = name;
 		this.colors = ["red", "blue", "green"];
@@ -2700,7 +2676,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 不自定义类型的情况下，临时创建一个构造函数，借助已有的对象作为临时构造函数的原型，然后在此基础实例化对象，并返回。
 	
 	
-	```
+	```js
 	function object(o){
 	 function F(){}
 	 F.prototype = o;
@@ -2710,7 +2686,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	
 	- 本质上是object()对传入其中的对象执行了一次浅复制
 	
-	```
+	```js
 	var person = {
 	 name: "Nicholas",
 	 friends: ["Shelby", "Court", "Van"]
@@ -2738,7 +2714,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 其实就是在原型式继承得到对象的基础上，在内部再以某种方式来增强对象，然后返回。
 	
 	
-	```
+	```js
 	function createAnother(original) {
 		var clone = object(original);
 		clone.sayHi = function() {
@@ -2765,8 +2741,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 	> 
 	> 寄生组合式继承就解决了上述问题，被认为是最理想的继承范式
 	
-	
-	```
+	```js
 	function object(o) {
 		function F(){}
 		F.prototype = o;
@@ -2816,8 +2791,8 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 详细解读请见笔记: [JavaScript高级程序设计: 继承](./JavaScript高级程序设计.md/#6c)
 
 
-
 ***
+
 <br>
 
 ### js延迟加载的方式有哪些？
@@ -2831,6 +2806,7 @@ console.log(s.replace(pattern, function(m,p1,p2,p3,p4){return p3})); // 这里�
 
 
 ***
+
 <br>
 
 
@@ -2854,7 +2830,7 @@ JS中的垃圾收集器跟踪每个变量，对不再有用的变量打上标记
 
 1. 意外的全局变量引起的内存泄漏
 
-	```
+	```js
 	function leak() {
 		leak = "xxx"; //leak成为一个全局变量，不会被回收
 	}
@@ -2862,7 +2838,7 @@ JS中的垃圾收集器跟踪每个变量，对不再有用的变量打上标记
 
 2. 闭包引起的内存泄漏
 
-	```
+	```js
 	function bindEvent() {
 		var obj = document.createElement("xxx");
 		obj.onclick = function() {
@@ -2882,7 +2858,7 @@ JS中的垃圾收集器跟踪每个变量，对不再有用的变量打上标记
 
 3. 没有清理的DOM元素引用
 
-	```
+	```js
 	var elements={  
 	    button: document.getElementById("button"),  
 	    image: document.getElementById("image"),  
@@ -2905,7 +2881,7 @@ JS中的垃圾收集器跟踪每个变量，对不再有用的变量打上标记
 
 4. 被遗忘的定时器或者回调
 
-	```
+	```js
 	var someResouce=getData();  
 	setInterval(function(){  
 	    var node=document.getElementById('Node');  
@@ -2929,16 +2905,17 @@ JS中的垃圾收集器跟踪每个变量，对不再有用的变量打上标记
 
 2. 注意程序逻辑，避免“死循环”之类的 ；
 
-3. 避免创建过多的对象  原则：不用了的东西要及时归还。
+3. 避免创建过多的对象，原则：不用了的东西要及时归还。
 
 
 ***
+
 <br>
 
 
 ### 下面代码的输出是什么？
 
-```
+```js
 function changeObjectProperty(o) {
 	o.siteUrl = "http://www.csser.com/";
 	o = new Object();
@@ -2969,11 +2946,12 @@ console.log(CSSer.siteUrl);
 
 
 ***
+
 <br>
 
 ### 下面代码输出结果是什么？
 
-```
+```js
 function  foo() {
 	foo.a = function(){alert(1)};
 	this.a = function(){alert(2)};
@@ -2983,7 +2961,7 @@ function  foo() {
 
 foo.prototype.a = function(){alert(5)};
 foo.a = function(){alert(6)};
-foo.a();
+foo.a(); 
 var obj = new foo();
 obj.a();
 foo.a();
@@ -2992,7 +2970,7 @@ foo.a();
 
 **答案:**
 
-```
+```js
 function  foo() {
 	foo.a = function(){alert(1)};
 	this.a = function(){alert(2)};
@@ -3010,6 +2988,7 @@ foo.a(); // 1
 ```
 
 ***
+
 <br>
 
 
@@ -3036,6 +3015,7 @@ foo.a(); // 1
 
 
 ***
+
 <br>
 
 ### readonly和disable的区别？
@@ -3085,6 +3065,7 @@ readonly只针对input(text/password)和textarea有效，而disabled对于所有
 
 
 ***
+
 <br>
 
 
@@ -3108,6 +3089,7 @@ readonly只针对input(text/password)和textarea有效，而disabled对于所有
 
 
 ***
+
 <br>
 
 ### 如何获取对象 a 拥有的所有属性（可枚举的、不可枚举的，不包括继承来的属性）
@@ -3117,13 +3099,13 @@ readonly只针对input(text/password)和textarea有效，而disabled对于所有
 
 `Object.keys`——IE9+ (获取所有可枚举实例属性)
 
-或者使用 for…in 并过滤出继承的可枚举属性
+或者使用 for…in 过滤出继承的可枚举属性
 
-```
+```js
 for(o in obj){
-	if(obj.hasOwnproperty(o)){
-	//把 o 这个属性放入到一个数组中
-	}
+  if(obj.hasOwnproperty(o)){
+    //把 o 这个属性放入到一个数组中
+  }
 }
 ```
 
@@ -3132,6 +3114,7 @@ for(o in obj){
 
 
 ***
+
 <br>
 
 ### 只允许使用 + - * / 和 Math.* ，求一个函数 y = f(x, a, b);当 x > 100时返回 a 的值，否则返回 b 的值，不能使用 if else 等条件语句，也不能使用|,?:,数组。
@@ -3139,7 +3122,7 @@ for(o in obj){
 
 **答案:**
 
-```
+```js
 function f(x, a, b) {
 	var temp = Math.ceil(Math.max(Math.min(x-100, 1), 0));
 
@@ -3149,6 +3132,7 @@ function f(x, a, b) {
 ```
 
 ***
+
 <br>
 
 <a name="25">
@@ -3177,8 +3161,8 @@ B选项，错误。应该是location.reload()或者window.location.reload()。
 C选项和D选项，正确。
 
 
-
 ***
+
 <br>
 
 ### 下面描述错误的是:
@@ -3198,6 +3182,7 @@ A正确，B正确。当onload事件触发时，页面上所有的DOM，样式表
 C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，localStorage存储的数据没有时间限制。
 
 ***
+
 <br>
 
 ### 列出 3 条以上 ff 和 IE 的脚本兼容问题
@@ -3205,7 +3190,7 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 **答案:**
 
-1、childNodes和children
+1、`childNodes`和`children`
 
 2、模拟点击事件
 
@@ -3217,9 +3202,10 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 6、鼠标滚轮事件
 
-7、currentStyle和getComputedStyle
+7、`currentStyle`和`getComputedStyle`
 
 ***
+
 <br>
 
 <a name="26">
@@ -3236,7 +3222,7 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 伪数组（类数组）: 无法调用数组方法或期望length属性有什么特殊的行为，但仍可以用对真正数组遍历方法来遍历它们。
 
-典型的是函数的arguments参数，还有调用getElementByTagName，document.childNodes之类，它们都返回NodeList对象，属于伪数组。
+典型的是函数的`arguments`参数，还有调用`getElementByTagName`，`document.childNodes`之类，它们都返回`NodeList`对象，属于伪数组。
 
 
 **如何将伪数组转化为标准数组？**
@@ -3245,10 +3231,8 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 3. 使用原型继承，`nodes.__proto__ = Array.prototype`
 4. 使用ES6中数组的新方法:`Array.from()`，`var arg = Array.from(arguments)`
 
-
-
-
 ***
+
 <br>
 
 ### 请写一个正则表达式：要求最短 6 位数，最长 20 位，阿拉伯数和英文字母（不区分大小写）组成
@@ -3276,11 +3260,12 @@ C正确，IE8及以下不支持事件捕获，支持事件冒泡。D错误，loc
 
 
 ***
+
 <br>
 
 ### 下列 JavaScript 代码执行后，依次 alert 的结果是？
 
-```
+```js
 var obj = {proto: {a:1,b:2}};
 function F(){};
 F.prototype = obj.proto;
@@ -3297,7 +3282,7 @@ alert(obj.proto.a);
 
 **答案:**
 
-```
+```js
 var obj = {proto: {a:1,b:2}};
 function F(){};
 F.prototype = obj.proto; // 指向的是同一个对象{a:1, b:2}
@@ -3312,6 +3297,7 @@ alert(obj.proto.a); // -1
 ```
 
 ***
+
 <br>
 
 <a name="27">
@@ -3323,7 +3309,7 @@ alert(obj.proto.a); // -1
 
 ### 下面代码的输出结果是什么？
 
-```
+```js
 alert(a)
 a();
 var a=3;
@@ -3338,7 +3324,7 @@ a();
 
 **答案:**
 
-```
+```js
 alert(a); // 因为变量声明提前优于函数声明，因此变量a被覆盖，打印整个函数a的代码
 a(); // 10
 var a=3; // 这里a被重新赋值为3
@@ -3351,6 +3337,7 @@ a(); // a不是函数，因此报错，number is not a function
 ```
 
 ***
+
 <br>
 
 ### 你做的页面在哪些浏览器测试过？这些浏览器的内核分别是什么？
@@ -3402,6 +3389,7 @@ Chrome: Blink内核，基于webkit
 易于搜索引擎检索，排名更容易靠前。
 
 ***
+
 <br>
 
 <a name="28">
@@ -3423,6 +3411,7 @@ strong: 粗体强调标签，表示内容的重要性。
 em: 斜体强调标签，表示内容的强调点。
 
 ***
+
 <br>
 
 ### 为什么利用多个域名来存储网站资源会更有效？
@@ -3445,6 +3434,7 @@ em: 斜体强调标签，表示内容的强调点。
 
 
 ***
+
 <br>
 
 ### 简述一下 src 与 href 的区别
@@ -3452,15 +3442,18 @@ em: 斜体强调标签，表示内容的强调点。
 
 **答案:**
 
-src用于替换当前元素，href用于在当前文档和引用资源之间确定联系。
+`src`用于替换当前元素，`href`用于在当前文档和引用资源之间确定联系。
 
-src是source的缩写，指向外部资源的位置，指向的内容将会被嵌入到文档中当前标签所在的位置。在请求src资源时，会将指向的资源下载并应用到文档内，例如js脚本、img图片等。
+`src`是source的缩写，指向外部资源的位置，指向的内容将会被嵌入到文档中当前标签所在的位置。在请求src资源时，会将指向的资源下载并应用到文档内，例如js脚本、img图片等。
+
 当浏览器解析到该元素时，会暂停其他资源的下载和处理，直到将该资源加载、编译、执行完毕，图片和框架等元素也是如此。
 
-href是Hypertext Reference的缩写，指向网络资源所在位置，建立和当前元素（锚点）或当前文档（链接）之间的联系。
+`href`是Hypertext Reference的缩写，指向网络资源所在位置，建立和当前元素（锚点）或当前文档（链接）之间的联系。
+
 `<link href="common.css" rel="stylesheet" />`如果在文档中添加这个，那么浏览器会识别文档为css文件，并行下载资源而不会停止对当前文档的处理。这也是为什么建议使用link方式来加载css而不是使用@import方式。
 
 ***
+
 <br>
 
 <a name="29">
@@ -3488,6 +3481,7 @@ href是Hypertext Reference的缩写，指向网络资源所在位置，建立和
 
 
 ***
+
 <br>
 
 ### 你如何理解HTML结构的语义化？
@@ -3510,6 +3504,7 @@ HTML 标签语义化，简单来说，就是让标签有含义，给某块内容
 
 
 ***
+
 <br>
 
 ### CSS中可以通过哪些属性定义，使得一个DOM元素不显示在浏览器可视范围内？
@@ -3523,6 +3518,7 @@ HTML 标签语义化，简单来说，就是让标签有含义，给某块内容
 隐藏文字可以设置text-indent为-9999px。
 
 ***
+
 <br>
 
 ### 什么是 Css Hack？ie6,7,8 的 hack 分别是什么？
@@ -3557,10 +3553,10 @@ background-color: yellow\9;
 ```
 
 ***
+
 <br>
 
 <a name="30">
-
 
 
 ## 每天一道面试题: 30
@@ -3580,6 +3576,7 @@ background-color: yellow\9;
 如: `<input>`、`<img>`、`<button>`、`<textarea>`、`<label>`
 
 ***
+
 <br>
 
 ### rgba()和opacity的透明效果有什么不同？
@@ -3590,6 +3587,7 @@ rgba()和opacity都能实现透明效果，但最大的不同是opacity作用于
 而rgba()只作用于元素的颜色或其背景色，设置rgba透明的元素的子元素不会继承透明效果。
 
 ***
+
 <br>
 
 ### 如何垂直居中一个浮动元素？
@@ -3637,10 +3635,16 @@ rgba()和opacity都能实现透明效果，但最大的不同是opacity作用于
 	display:table-cell;
 	text-align:center;
 	vertical-align:middle;
+	height:300px;
+	width:300px
+}
+#container img {
+	vertical-align:middle;
 }
 ```
 
 ***
+
 <br>
 
 ### Sass、Less是什么？为什么要使用他们？
@@ -3656,6 +3660,7 @@ Less既可以在客户端上运行，也可以在服务器上运行（借助Node
 
 
 ***
+
 <br>
 
 <a name="31">
@@ -3670,11 +3675,12 @@ Less既可以在客户端上运行，也可以在服务器上运行（借助Node
 
 **答案:**
 
-可继承: `font-size`、`font-family`、`color`、`ul`、`li`、`dl`、`dd`、`dt`
+可继承: `font-size`、`font-family`、`color`
 
 不可继承: `border`、`padding`、`margin`、`width`、`height`
 
 ***
+
 <br>
 
 
@@ -3718,8 +3724,8 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 	- 这个样式只在IE中支持，其他浏览器都不支持
 - 如果为元素指定了宽度，则自动开启`hasLayout`。
 
-
 ***
+
 <br>
 
 ### 谈谈iframe的优缺点
@@ -3744,8 +3750,8 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 现在基本都用ajax来代替iframe，iframe已经淡出了前端开发。
 
 
-
 ***
+
 <br>
 
 <a name="32">
@@ -3799,8 +3805,6 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 每个域 5MB；没有过期数据，它将保留直到用户从浏览器清除或者使用 Javascript 代码移除。
 
 
-***
-
 #### `session`、`cookie`和`sessionStorage`、`localStorage`的区别:
 
 
@@ -3841,7 +3845,7 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 	4、存储内容类型：localStorage和sessionStorage只能存储字符串类型，对于复杂的对象可以使用ECMAScript提供的JSON对象的stringify和parse来处理
 
-	5、获取方式：localStorage：window.localStorage;；sessionStorage：window.sessionStorage;。
+	5、获取方式：localStorage：window.localStorage；sessionStorage：window.sessionStorage;。
 
 	6、应用场景：localStoragese：常用于长期登录（+判断用户是否已登录），适合长期保存在本地的数据。sessionStorage：敏感账号一次性登录；
 
@@ -3871,9 +3875,9 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 		- `key (index)` —— 获取某个索引的key。
 
 参考资料: [浅谈session,cookie,sessionStorage,localStorage的区别及应用场景](https://www.cnblogs.com/cencenyue/p/7604651.html)
-参考资料: [浅谈session,cookie,sessionStorage,localStorage的区别及应用场景](https://www.cnblogs.com/cencenyue/p/7604651.html)
 
 ***
+
 <br>
 
 
@@ -3888,7 +3892,7 @@ BFC(块级格式化上下文)，是指浏览器中创建了一个独立的渲染
 
 localStorage在一个标签页里被添加、修改或删除时，都会触发一个storage事件，通过在另一个标签页里监听storage事件，即可得到localStorage存储的值，实现不同标签之间的通信。
 
-```
+```js
 $("#btn").click(function(){    
     var name=$("#name").val();    
     localStorage.setItem("name", name);   
@@ -3905,7 +3909,7 @@ window.addEventListener("storage", function(event){
 
 使用cookie+setInterval，将要传递的信息存储在cookie中，每隔一定时间读取cookie信息，即可随时获取要传递的信息。
 
-```
+```js
 $("#btn").click(function(){    
     var name=$("#name").val();    
     document.cookie="name="+name;    
@@ -3920,14 +3924,12 @@ setInterval(function(){
 }, 10000);
 ```
 
-
-
 ***
+
 <br>
 
 
 <a name="33">
-
 
 
 ## 每天一道面试题: 33
@@ -3941,6 +3943,7 @@ setInterval(function(){
 响应式设计是让网站在所有的设备上运行正常。
 
 ***
+
 <br>
 
 ### Ajax 是什么? 如何创建一个 Ajax？
@@ -3952,7 +3955,7 @@ Ajax全称asynchronous javascript and xml，主要用来实现客户端与服务
 
 使用ajax原生方式发送请求主要通过XMLHttpRequest（标准浏览器）、ActiveXObject（IE浏览器）对象实现异步通信效果。
 
-```
+```js
 function createXHR(){
 	if (typeof XMLHttpRequest != "undefined"){
 		return new XMLHttpRequest();
@@ -4008,9 +4011,8 @@ xhr.send();
 
 
 ***
+
 <br>
-
-
 
 
 <a name="34">
@@ -4032,6 +4034,7 @@ xhr.send();
 这是跨域问题的主流解决方案。
 
 ***
+
 <br>
 
 ### 页面编码和被请求的资源编码如果不一致如何处理？
@@ -4042,11 +4045,9 @@ xhr.send();
 对于ajax请求传递的参数，如果是get请求方式，参数如果传递中文，在有些浏览器会乱码，不同的浏览器对参数编码的处理方式不同，所以对于get请求的参数需要使用`encodeURIComponent`函数对参数进行编码处理，
 后台开发语言都有相应的解码api，所以对于post请求不需要进行编码。
 
-
-
 ***
-<br>
 
+<br>
 
 ### ajax的缺点
 
@@ -4058,11 +4059,9 @@ xhr.send();
 3. 对搜索引擎的支持较弱
 4. 破坏了程序的异常机制
 
-
 ***
+
 <br>
-
-
 
 ### 阐述一下异步加载的方式
 
@@ -4078,6 +4077,7 @@ xhr.send();
 
 
 ***
+
 <br>
 
 
@@ -4102,8 +4102,8 @@ JSONP是一种用来跨域获取数据的解决方案，具体是通过动态创
 详细介绍请见笔记: [JavaScript高级程序设计:JSONP](./JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1.md#21d)
 
 
-
 ***
+
 <br>
 
 ### 什么是Ajax和JSON，它们的优缺点是什么？
@@ -4122,6 +4122,7 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 优点: 轻量级、易于人的阅读和编写，便于JS解析，支持复合数据类型，支持多语言，传输速度快。
 
 ***
+
 <br>
 
 ### 什么是repaint和reflow？
@@ -4190,11 +4191,11 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 
 
 ***
+
 <br>
 
 
 <a name="36">
-
 
 
 ## 每天一道面试题: 36
@@ -4212,6 +4213,7 @@ JSON是一种轻量级的数据交换格式，ECMA的一个子集。
 
 
 ***
+
 <br>
 
 ### CSS实现：一个矩形内容，有投影，有圆角，hover状态慢慢变透明
@@ -4226,6 +4228,7 @@ div:hover {opacity: 0;}
 ```
 
 ***
+
 <br>
 
 ### 用CSS写一个简单的幻灯片
@@ -4235,7 +4238,7 @@ div:hover {opacity: 0;}
 
 
 方法一: 使用`display`和`checked`
-```
+```html
 <style>
     img {
       display: none;
@@ -4271,7 +4274,7 @@ div:hover {opacity: 0;}
 
 
 方法二: 使用`z-index`和`target`
-```
+```html
 #cont {
 	position: relative;
 	height: 100px;
@@ -4300,7 +4303,7 @@ img:target {
 
 方法三: 还可以利用CSS3的动画效果实现
 
-```
+```css
 .items {
 	-webkit-animation: slider 15s linear infinite alternate;
 	animation: slider 15s linear infinite alternate;
@@ -4326,6 +4329,7 @@ img:target {
 
 
 ***
+
 <br>
 
 
@@ -4358,9 +4362,8 @@ img:target {
 6. 浏览器关闭tcp链接，即4次挥手
 
 
-
-
 ***
+
 <br>
 
 ### HTTP 协议中 ， header信息里面，怎么控制页面失效时间（last-modified,cache-control,Expires 分别代表什么）
@@ -4414,12 +4417,9 @@ img:target {
 服务器收到请求后会将内容重新传给浏览器，不管内容是否变化，就像是浏览器第一次请求一样。
 响应码是`200 ok`。
 
-
-
 ***
+
 <br>
-
-
 
 
 <a name="38">
@@ -4434,7 +4434,7 @@ img:target {
 
 **答案:**
 
-```
+```js
 Object.prototype.clone = function(){
 	var o = this.constructor === Array ? []:{};
 	for(var i in this){
@@ -4447,7 +4447,7 @@ Object.prototype.clone = function(){
 
 **实现对象深拷贝的函数:**
 
-```
+```js
 function deepCopy(p, o){
 	var o = o || {};
 	for(var i in p){
@@ -4465,11 +4465,12 @@ function deepCopy(p, o){
 ```
 
 ***
+
 <br>
 
 ### 小贤是一条可爱的小狗(Dog)，它的叫声很好听(wow)，每次看到主人的时候就会乖乖叫一声(yelp)。从这段描述可以得到以下对象：
 
-```
+```js
 function Dog() {
 	this.wow = function() {
 		alert('Wow');
@@ -4486,7 +4487,7 @@ function Dog() {
 
 **答案:**
 
-```
+```js
 function MadDog(){
 	this.yelp = function(){
 		var self = this;
@@ -4506,11 +4507,11 @@ madDog.yelp();
 ```
 
 ***
+
 <br>
 
 
 <a name="39">
-
 
 
 ## 每天一道面试题: 39
@@ -4521,7 +4522,7 @@ madDog.yelp();
 
 **答案:**
 
-```
+```js
 function ready(fn){
 	if(document.addEventListener) {
 		document.addEventListener("DOMContentLoaded", function(){
@@ -4540,11 +4541,12 @@ function ready(fn){
 ```
 
 ***
+
 <br>
 
 ### 说出以下函数的作用是？空白区域应该填写什么？
 
-```
+```js
 //define
 (function(window){
 	function fn(str){
@@ -4574,6 +4576,7 @@ function ready(fn){
 第一个空是arguments，第二个空是`/\{(\d+)\}/ig`
 
 ***
+
 <br>
 
 
@@ -4609,7 +4612,7 @@ CMD 是 SeaJS 在推广过程中对模块定义的规范化产出。
 
 	看代码：
 	
-	```
+	```js
 	// CMD
 	define(function(require, exports, module) {  
 		var a = require('./a')   
@@ -4644,6 +4647,7 @@ CMD 是 SeaJS 在推广过程中对模块定义的规范化产出。
 
 
 ***
+
 <br>
 
 <a name="41">
