@@ -790,3 +790,45 @@ npm install nodemon -D
 "dev": "nodemon -w src --exec \"babel-node src --presets env\"",
 ```
 这样当运行`npm run dev`就实时监控了`src`目录下的文件变化，并自动执行变化后的代码。
+
+**注意:**
+
+前面使用到的`babel-cli`只是一个命令行工具，某些时候我们会发现，将代码编译转换输出到`build`目录后，使用`node build`来运行，会报错`regeneratorRuntime is not defined`，这是因为原代码中包含了`generator`等一些较新的语法特性，即使经过`babel`转换，还是由于欠缺`polyfill`而无法运行。
+
+此时我们就需要使用到`babel`运行环境(模拟ES2015+环境)以及相关的一些插件，来让`babel`应用到项目的生产环境。
+
+安装：
+```
+npm install babel-plugin-transform-runtime -D
+npm install babel-runtime -S
+```
+配置`.babelrc`：
+```js
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "polyfill": false,
+        "regenerator": true
+      }
+    ]
+  ]
+}
+```
+
+配置完毕后再执行`npm run build`，然后就可以`node build`顺利执行编译后的代码了。其实之前用到的`babel-node`命令在执行代码时会自动加载`polyfill`，但是一般只在开发环境下使用。
+
+`babel-polyfill` 和 `babel-runtime`是达成同一种功能（模拟ES2015环境，包括`global keywords`，`prototype methods`，都基于`core-js`提供的一组`polyfill`和一个`regenerator runtime`）的两种方式，具体区别参考官方文档。
+
+详细操作及相关配置请见[官方文档](https://babeljs.io/docs/en/6.26.3/babel-plugin-transform-runtime)。
