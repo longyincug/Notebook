@@ -689,7 +689,7 @@ ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
 	{
 	  "presets": [
 	    [
-	      "env", //运行环境的描述
+	      "env", //所使用的preset名称
 	      {
 	        "targets": {
 	          "node": "current" //兼容当前系统版本的node
@@ -763,14 +763,15 @@ ES6模块是静态加载(编译时加载)：`import {} from 'xxx'`
   "scripts": {
     // 如果直接写src，会自动寻找到其下的index.js文件并执行
     "dev": "babel-node src --presets env",
-    // 将src目录中的代码全部编译转换至兼容当前node版本，并存放到build目录
-    "build": "babel src -d build"
+    // 用rimraf清空build目录，再将src目录中的代码编译转换并存放到build目录
+    "build": "rimraf build && babel src -d build --presets env"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+	"rimraf": "^2.6.3"
   }
 }
 ```
